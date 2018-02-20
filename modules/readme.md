@@ -13,7 +13,7 @@ To make interactive youtube transcripts work in your own web pages, you must fol
 4. Embed a youtube video as you normally do, but change the following in the iframe code:
   * a) Add an id that equals the id of the video.
   * b) Add ?enablejsapi=1 at the end of the youtube src.
-5. Create a <div> element with 
+5. Create a `<div>` element with 
   * a) an id equal to "videoTranscript" + the video id.
   * b) specify the class "mmoocVideoTranscript".
   * c) add the language of the subitle you want as a "data-language" parameter.
