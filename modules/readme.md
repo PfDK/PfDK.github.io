@@ -27,4 +27,4 @@ If you follow the steps above, your iframe code should look something like this:
 <div id="videoTranscriptLm0m4VtZ3Us" class="mmocVideoTranscript" data-language="no" data-name="bokm&aring;l"></div>
 ~~~~
 
-The code should normally support embedding several youtube videos and transcripts on the same page (althoug I have not tested it yet...), but not with the same video id, i.e. not the same video twice on the same page.
+The code should normally support embedding several youtube videos and transcripts on the same page (although I have not tested it yet...), but not with the same video id, i.e. not the same video twice on the same page.
