@@ -1,5 +1,12 @@
-See ytexample.html for an example on how to make interactive youtube transcript work. Basically you need to follow these steps:
+# Interactive YouTube transcripts
+If you download the files in this directory and open ytexample.html, you should have a working example. You can also have a look at [http://www.erlendthune.com/yt/ytexample.html](http://www.erlendthune.com/yt/ytexample.html) where these files are unpacked, showing a working example.
 
+To make interactive youtube transcripts work in your own web pages, you must follow these steps:
+
+## If you use Canvas LMS:
+1. Upload youtube.css and youtube.js in your [custom theme editor](https://community.canvaslms.com/docs/DOC-10862).
+
+## In other cases:
 1. Make sure you have loaded jquery.
 2. Load youtube.js
 3. Include youtube.css
@@ -19,3 +26,5 @@ If you follow the steps above, your iframe code should look something like this:
 <iframe id="Lm0m4VtZ3Us" src="https://www.youtube.com/embed/Lm0m4VtZ3Us?enablejsapi=1" width="560" height="315" allowfullscreen="allowfullscreen"></iframe></p>
 <div id="videoTranscriptLm0m4VtZ3Us" class="mmocVideoTranscript" data-language="no" data-name="bokm&aring;l"></div>
 ~~~~
+
+The code should normally support embedding several youtube videos and transcripts on the same page (althoug I have not tested it yet...), but not with the same video id, i.e. not the same video twice on the same page.
