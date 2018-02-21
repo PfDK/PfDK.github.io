@@ -1,6 +1,6 @@
 # Interactive YouTube transcripts
 
-##Features
+## Features
 * Show complete transcript for subtitles in selected language.
 * Highlight the subtitle that is being spoken.
 * Click on text in transcript to jump to the corresponding place in the video.
