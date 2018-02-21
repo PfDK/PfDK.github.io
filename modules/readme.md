@@ -1,4 +1,11 @@
 # Interactive YouTube transcripts
+
+##Features
+* Show complete transcript for subtitles in selected language.
+* Highlight the subtitle that is being spoken.
+* Click on text in transcript to jump to the corresponding place in the video.
+* Place transcript anywhere on the page where the youtube video is.
+
 If you download the files in this directory and open ytexample.html, you should have a working example. You can also have a look at [http://www.erlendthune.com/yt/ytexample.html](http://www.erlendthune.com/yt/ytexample.html) where these files are unpacked, showing a working example.
 
 To make interactive youtube transcripts work in your own web pages, you must follow these steps:
