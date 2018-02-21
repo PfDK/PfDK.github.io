@@ -12,6 +12,7 @@ To make interactive youtube transcripts work in your own web pages, you must fol
 
 ## If you use Canvas LMS:
 1. Upload youtube.css and youtube.js in your [custom theme editor](https://community.canvaslms.com/docs/DOC-10862).
+2. Follow step 4 and on in the section below.
 
 ## In other cases:
 1. Make sure you have loaded jquery.
