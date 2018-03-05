@@ -1,7 +1,7 @@
 # PfDK files for inclusion in Canvas.
 
 
-To include new javascript/css files, edit the modules/modules.js and/or modules7modules.css files and add your files as shown below:
+To include new javascript/css files, edit the [modules/modules.js](https://github.com/PfDK/PfDK.github.io/blob/master/modules/modules.js) and/or [modules/modules.css](https://github.com/PfDK/PfDK.github.io/blob/master/modules/modules.css) files and add your files as shown below:
 
 ## JS files inclusion
 
