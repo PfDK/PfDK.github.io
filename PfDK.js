@@ -33,5 +33,5 @@ jQuery.extend({
 });
 
 jQuery( document ).ready(function( $ ) {
-    $.getScript("https://raw.githubusercontent.com/PfDK/PfDK.github.io/master/frontend/mmooc-min.js");
+    $.getScript("https://pfdk.github.io/frontend/mmooc-min.js");
 });
