@@ -8,7 +8,7 @@ canvas.height = 400;
 var CANVAS_WIDTH = canvas.width;
 var CANVAS_HEIGHT = canvas.height;
 
-document.body.appendChild(canvas);
+document.getElementById("bounce").appendChild(canvas);
 var ctx = canvas.getContext("2d");
 
 // Handle inputs ------------------------------------------------------------
