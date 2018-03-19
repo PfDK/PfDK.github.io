@@ -1,2 +1,2 @@
-$.getScript("https://pfdk.github.io/frontend/youtube.js");
-//$.getScript("https://pfdk.github.io/frontend/yourfile.js");
+$.getScript("https://pfdk.github.io/modules/youtube.js");
+//$.getScript("https://pfdk.github.io/modules/yourfile.js");
