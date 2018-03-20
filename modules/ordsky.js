@@ -72,7 +72,7 @@ function printOrdsky()
 			});
 
 			d3.wordcloud()
-				.size([800, 800])
+				.size([400, 400])
 				.fill(d3.scale.ordinal().range(['#884400', '#448800', '#888800', '#444400']))
 				.selector('#wordcloud')
 				.words(words)
