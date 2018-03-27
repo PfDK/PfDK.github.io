@@ -20,11 +20,6 @@ $(document).ready(function(){
 	if (wordcloud !=  null) {
 		getWordcloudWords();
 	}
-
-	$("#wordcloud").resize(function() {
-  		printWordCloud();
-	});
-
 });
 
 function printWordcloud()
@@ -289,7 +284,7 @@ function handleFormSubmit(event) {  // handles form submit withtout any jquery
 
 // fire off the request to /form.php
 	request = $.ajax({
-		url: "https://script.google.com/macros/s/AKfycbxW1qHugD1K4adTjGAEt1KqbcbAn1LlaCoWx6GtlNdsNO_E-rTO/exec",
+		url: actionScript,
 		type: "post",
 		data: serializedData,
 
@@ -305,6 +300,7 @@ function handleFormSubmit(event) {  // handles form submit withtout any jquery
 
 		success: function (result) {
 			console.log("success");
+			getWordcloudWords();
 			printWordcloud();
 		},
 
