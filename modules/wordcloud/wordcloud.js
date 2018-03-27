@@ -79,6 +79,7 @@ function printWordcloud()
 
 function getWordcloudWords()
 {
+	words = [];
 	$.ajax({
 		url: actionScript,
 		dataType: 'json',
@@ -155,7 +156,7 @@ function printWordcloudInput(wordcloudInput)
    html += actionScript;
    html +=' <fieldset class="pure-group">';
    html +='   <label for="name">Ord: </label>';
-   html +='   <input id="name" name="name" placeholder="Hva tenker du på?" />';
+   html +='   <input id="name" name="name" size="50" placeholder="Hva tenker du på?" />';
    html +=' </fieldset>';
 
    html +=' <button class="button-success pure-button button-xlarge">';
