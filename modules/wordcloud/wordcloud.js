@@ -302,7 +302,6 @@ function handleFormSubmit(event) {  // handles form submit withtout any jquery
 		success: function (result) {
 			console.log("success");
 			getWordcloudWords();
-			printWordcloud();
 		},
 
 		complete: function () {
