@@ -33,6 +33,6 @@ jQuery.extend({
 });
 
 jQuery( document ).ready(function( $ ) {
-    $.getScript("https://pfdk.github.io/frontend/mmooc-min.js");
+    $.getScript("https://pfdk.github.io/frontend/pfdk-min.js");
     $.getScript("https://pfdk.github.io/modules/modules.js");
 });
