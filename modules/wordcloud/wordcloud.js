@@ -38,6 +38,7 @@ function printWordcloud()
 
 
 //https://github.com/jasondavies/d3-cloud/pull/128
+//http://thenewcode.com/744/Make-SVG-Responsive
 
 	var fill = d3.scale.category20();
 
@@ -55,10 +56,7 @@ function printWordcloud()
 	function draw(words) {
 
 	  d3.select("#wordcloud").append("svg")
-		  .attr("width", layout.size()[0])
-		  .attr("height", layout.size()[1])
 		  .attr('viewBox', '0 0 ' + layout.size()[0] + ' ' + layout.size()[1])
-		  .style('width', '100%')
 		  .append("g")
 		  .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
 		  .selectAll("text")
