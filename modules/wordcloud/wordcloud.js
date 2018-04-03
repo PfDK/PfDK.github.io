@@ -11,11 +11,12 @@ $(document).ready(function(){
 	}
     console.log("Contact form submission handler loaded successfully.");
     // bind to the submit event of our form
-    var form = document.getElementById("gform");
+    var form = $( "#send" );
     if(form != null)
     {
-    	form.addEventListener("submit", handleFormSubmit, false);
+		form.click(handleFormSubmit);
     }
+
 	var wordcloud = document.getElementById('wordcloud');
 	if (wordcloud !=  null) {
 		getWordcloudWords();
@@ -149,25 +150,12 @@ function getWordcloudWords()
 	});
 }
 
-//https://stackoverflow.com/questions/10839570/how-does-stackoverflow-make-its-tag-input-field
+
 function printWordcloudInput(wordcloudInput)
 {
-   html = '<form id="gform" method="POST" ';
-   html += actionScript;
-   html +=' <fieldset class="pure-group">';
-   html +='   <label for="name">Ord: </label>';
-   html +='   <input type="text" id="name" name="name" size="50" placeholder="Hva tenker du på?" value="html,input,tag" data-role="tagsinput"/>';
-   html +=' </fieldset>';
+   html = '<input id="name" type="text" size="50" data-role="tagsinput"></input>';
+   html +=' <button id="send" class="button-success">Send</button>';
 
-   html +=' <button class="button-success pure-button button-xlarge">';
-   html +='   <i class="fa fa-paper-plane"></i>&nbsp;Send</button>';
-
-   html +='</form>';
-
-   html +='<div style="display:none;" id="thankyou_message">';
-   html +=' <h2>Takk for ditt bidrag!</h2>';
-   html +='</div>';
-   
    wordcloudInput.innerHTML=html;
 }
 
@@ -230,64 +218,17 @@ function getAllUrlParams(url) {
   return obj;
 }
 
-// get all data in form and return object
-function getFormData() {
-  var form = document.getElementById("gform");
-  var elements = form.elements; // all form elements
-  var fields = Object.keys(elements).filter(function(k) {
-        // the filtering logic is simple, only keep fields that are not the honeypot
-        return (elements[k].name !== "honeypot");
-  }).map(function(k) {
-    if(elements[k].name !== undefined) {
-      return elements[k].name;
-    // special case for Edge's html collection
-    }else if(elements[k].length > 0){
-      return elements[k].item(0).name;
-    }
-  }).filter(function(item, pos, self) {
-    return self.indexOf(item) == pos && item;
-  });
-  var data = {};
-  fields.forEach(function(k){
-    data[k] = elements[k].value;
-    var str = ""; // declare empty string outside of loop to allow
-                  // it to be appended to for each item in the loop
-    if(elements[k].type === "checkbox"){ // special case for Edge's html collection
-      str = str + elements[k].checked + ", "; // take the string and append 
-                                              // the current checked value to 
-                                              // the end of it, along with 
-                                              // a comma and a space
-      data[k] = str.slice(0, -2); // remove the last comma and space 
-                                  // from the  string to make the output 
-                                  // prettier in the spreadsheet
-    }else if(elements[k].length){
-      for(var i = 0; i < elements[k].length; i++){
-        if(elements[k].item(i).checked){
-          str = str + elements[k].item(i).value + ", "; // same as above
-          data[k] = str.slice(0, -2);
-        }
-      }
-    }
-  });
-
-  // add form-specific values into the data
-  data.formDataNameOrder = JSON.stringify(fields);
-  data.formGoogleSheetName = form.dataset.sheet || "responses"; // default sheet name
-  data.formGoogleSendEmail = form.dataset.email || ""; // no email by default
-
+function handleFormSubmit(event) { 
+  var data = $("#name").val();
   console.log(data);
-  return data;
-}
-
-function handleFormSubmit(event) {  // handles form submit withtout any jquery
-  event.preventDefault();           // we are submitting via xhr below
-  var serializedData = $("#gform").serialize();
+  var postData = "name="+data;
+  console.log(postData);
 
 // fire off the request to /form.php
 	request = $.ajax({
 		url: actionScript,
 		type: "post",
-		data: serializedData,
+		data: postData,
 
 		beforeSend: function () {
 			console.log("Loading");
@@ -301,6 +242,7 @@ function handleFormSubmit(event) {  // handles form submit withtout any jquery
 
 		success: function (result) {
 			console.log("success");
+			$("#wordcloud").show();
 			getWordcloudWords();
 		},
 
