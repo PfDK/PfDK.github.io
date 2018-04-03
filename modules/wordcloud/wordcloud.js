@@ -149,14 +149,14 @@ function getWordcloudWords()
 	});
 }
 
-
+//https://stackoverflow.com/questions/10839570/how-does-stackoverflow-make-its-tag-input-field
 function printWordcloudInput(wordcloudInput)
 {
    html = '<form id="gform" method="POST" ';
    html += actionScript;
    html +=' <fieldset class="pure-group">';
    html +='   <label for="name">Ord: </label>';
-   html +='   <input id="name" name="name" size="50" placeholder="Hva tenker du på?" />';
+   html +='   <input type="text" id="name" name="name" size="50" placeholder="Hva tenker du på?" value="html,input,tag" data-role="tagsinput"/>';
    html +=' </fieldset>';
 
    html +=' <button class="button-success pure-button button-xlarge">';
