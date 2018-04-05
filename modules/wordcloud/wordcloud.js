@@ -57,6 +57,7 @@ function printWordcloud()
 
 	  d3.select("#wordcloud").append("svg")
 		  .attr('viewBox', '0 0 ' + layout.size()[0] + ' ' + layout.size()[1])
+		  .attr('class','svg-content')
 		  .append("g")
 		  .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
 		  .selectAll("text")
