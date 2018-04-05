@@ -70,13 +70,13 @@ function sparqlQuery(sokeOrd)
 
 function presentLaereplan(binding)
 {
-  var s = "<h2><a href='" + binding.laereplan.value + "'>" + binding.kmkode.value + ":" + binding.laereplantittel.value + "</a></h2>";
+  var s = "<tr><td><a href='" + binding.laereplan.value + "'>" + binding.kmkode.value + ":" + binding.laereplantittel.value + "</a></td>";
   console.log(s);
   return s;
 }
 function presentLaereplanmaal(binding)
 {
-  var s ="<p>" + binding.kmtekst.value + "</p>";
+  var s ="<td>" + binding.kmtekst.value + "</td></tr>";
   console.log(s);
   return s;
 }
@@ -93,7 +93,7 @@ function present(data)
 		  return 1;
 		return 0;
 	});
-	var html = "";
+	var html = "<table><tr><th>Læreplan</th><th>Kompetansemål</th></tr>";
 	var previousLaereplan = "";
 	var laereplan = "";
 
@@ -101,13 +101,19 @@ function present(data)
 	{
 		laereplan = bindings[i].kmkode.value;
 		console.log(laereplan);
+		html += "<tr>";
 		if(previousLaereplan != laereplan)
 		{
 			console.log(laereplan + "!=" + previousLaereplan);
 		    html += presentLaereplan(bindings[i]);
 			previousLaereplan = laereplan;
 		}
+		else
+		{
+			html += "<td></td>";
+		}
 		html += presentLaereplanmaal(bindings[i]);
 	}
+	html += "</table>";
 	updateResultDiv(html);	
 }
