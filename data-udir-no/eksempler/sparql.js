@@ -13,9 +13,19 @@ $(document).ready(function(){
 	  sparqlQuery(sokeOrd);
 	});
 });
+
+function updateResultDiv(html)
+{
+	$("#resultat").html(html);	
+}
 function sparqlQuery(sokeOrd)
 {
-	var baseURL="http://data.udir.no/kl06/sparql";
+	if(sokeOrd == "")
+	{
+		updateResultDiv("<b>Vær vennlig å skrive inn et ord eller en setning du vil søke etter.</b>");
+		return;
+	}
+	var baseURL="https://data.udir.no/kl06/sparql";
 	var	format="application/json";
 	var debug="on";
 	var timeout="0"
@@ -29,9 +39,12 @@ function sparqlQuery(sokeOrd)
 	u:kode ?kmkode ;\
 	r:har-kompetansemaal ?kms .\
 	?kms r:har-kompetansemaalsett ?laereplan .\
-	?laereplan u:tittel ?laereplantittel .\
-	FILTER regex(?kmtekst, "i forhold til", "i")\
-	FILTER (lang(?kmtekst) = "")\
+	?laereplan u:tittel ?laereplantittel .';
+	
+	//i betyr at man ikke bryr seg om det er store eller små bokstaver.
+	query += 'FILTER regex(?kmtekst, "' + sokeOrd + '", "i")';
+	
+	query += 'FILTER (lang(?kmtekst) = "")\
 	FILTER (lang(?laereplantittel) = "") .\
 	} ORDER BY ?laereplan ?kmkode';
 
@@ -47,6 +60,8 @@ function sparqlQuery(sokeOrd)
 		querypart+=k+"="+encodeURIComponent(params[k])+"&";
 	}
 	var queryURL=baseURL + '?' + querypart;
+
+	updateResultDiv('<img src="loading.gif"/>');
 
 	$.getJSON(queryURL,{}, function(data) {
 	 present(data);
@@ -94,5 +109,5 @@ function present(data)
 		}
 		html += presentLaereplanmaal(bindings[i]);
 	}
-	$("#resultat").html(html);	
+	updateResultDiv(html);	
 }
