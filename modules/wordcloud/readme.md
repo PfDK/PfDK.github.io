@@ -18,7 +18,7 @@ Make a copy of [this spreadsheet template](https://docs.google.com/spreadsheets/
 3. Still in the script tab, select "Publish->Deploy as web app".
 4. In the dialog that opens, check that the google account above is selected under "Execute the app as". In "Who has access to the app", select "Anyone, even anonymous". Finally, press "Deploy".
 5. You are now told that you need to give permissions to the script. Press "Review permissions" and log in with the same google account as above. A message tells you that you should only allow this script to run if you trust the developer. Click on "Advanced" and click on the link at the bootom. Click allow.
-6.
+6. 
 In the new dialog that appears, copy the address of the "Current web app url".
 
 ## Display your Wordcloud
