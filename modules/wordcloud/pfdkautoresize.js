@@ -7,7 +7,7 @@ function receiveMessage(evt)
 	{
 		return;
 	}
-    var PfDKiframes = document.getElementsByClassName("PfDKAutoResize");
+    var PfDKiframes = document.getElementsByTagName('iframe');
     for( var i = 0; i < PfDKiframes.length; i++) {
     	var iFrame = PfDKiframes[i];
 		if (iFrame.contentWindow === evt.source) {
