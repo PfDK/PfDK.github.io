@@ -1,27 +1,7 @@
 <html>
 <head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript">
-
-function resizeIFramesToFitContent() {
-    var PfDKiframes = document.getElementsByClassName("PfDKAutoResize");
-    for( var i = 0; i < PfDKiframes.length; i++) {
-    	var iFrame = PfDKiframes[i];
-	    iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
-    }
-}
-
-window.addEventListener('message', receiveMessage, false);
-
-function receiveMessage(evt)
-{
-    console.log("got message: " + evt.data);
-    resizeIFramesToFitContent();
-}
-$(document).ready(function(){
-    resizeIFramesToFitContent();
-});
-</script>
+<script src="pfdkautoresize.js"></script>
 </head>
 <body>
 Here is some text explaining what words to enter in the wordcloud and that you can enter 

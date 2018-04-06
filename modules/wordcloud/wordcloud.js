@@ -39,7 +39,9 @@ $(document).ready(function(){
 //https://gist.github.com/pbojinov/8965299
 function sendResizeMessageToParent()
 {
-	window.parent.postMessage("PfDK Resize", '*');
+	var obj = { "Sender":"pfdkautoresize", "Height":document.body.scrollHeight};
+ 	var myJSON = JSON.stringify(obj);
+	window.parent.postMessage(myJSON, '*');
 };
 
 $(window).resize(function() {
