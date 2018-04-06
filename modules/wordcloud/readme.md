@@ -39,6 +39,7 @@ height="100%">
 </iframe>
 ```
 
-To make the iframe responsive, we need to add some [javascript](https://github.com/PfDK/PfDK.github.io/blob/master/modules/wordcloud/pfdkautoresize.js).
+To make the iframe responsive, you need to add some [javascript](https://github.com/PfDK/PfDK.github.io/blob/master/modules/wordcloud/pfdkautoresize.js).
 
 If you use the Canvas learning platform, you must ask your administrator to add the javascript above. If you cannot do that, you should set the ```height```parameter in the iframe to a number of pixels that is large enough to display the wordcloud.
+2. [testWordcloud.html](https://pfdk.github.io/modules/wordcloud/testWordcloud.html) shows a respnsive html file with a wordcloud embedded using the javascript above.
