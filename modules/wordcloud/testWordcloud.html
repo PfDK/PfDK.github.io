@@ -1,0 +1,32 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+
+function resizeIFramesToFitContent() {
+    var PfDKiframes = document.getElementsByClassName("PfDKAutoResize");
+    for( var i = 0; i < PfDKiframes.length; i++) {
+    	var iFrame = PfDKiframes[i];
+	    iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
+    }
+}
+
+window.addEventListener('message', receiveMessage, false);
+
+function receiveMessage(evt)
+{
+    console.log("got message: " + evt.data);
+    resizeIFramesToFitContent();
+}
+$(document).ready(function(){
+    resizeIFramesToFitContent();
+});
+</script>
+</head>
+<body>
+Here is some text explaining what words to enter in the wordcloud and that you can enter 
+several words, separated by ,.
+<iframe class="PfDKAutoResize" src="http://localhost:8888/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbx1PUclOqxfO_Ac10Vs2E9MtI8DbCosiAm8a5nPy9Q1wzcpyiQ_/exec&hide" width="100%" height="100%""></iframe>
+Here is some text below the responsive iframe.
+</body>
+</html>
