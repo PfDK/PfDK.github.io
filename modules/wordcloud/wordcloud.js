@@ -12,25 +12,38 @@ if (params.hide != null)
 var words = [];
 
 $(document).ready(function(){
-	var wordcloudInput = document.getElementById('wordcloudInput');
+	var wordcloudInput = $('#wordcloudInput');
 	if (wordcloudInput !=  null) {
 		printWordcloudInput(wordcloudInput);
 	}
-    var sendButton = $( "#send" );
+    var sendButton = $("#send");
     if(sendButton != null)
     {
 		sendButton.click(handleSend);
     }
 
-	var wordcloud = document.getElementById('wordcloud');
+	var wordcloud = $('#wordcloud');
 	if (wordcloud !=  null) {
 		if(hide)
 		{
 			wordcloud.hide();
 		}
-		
-		getWordcloudWords();
+		else
+		{
+			getWordcloudWords();
+		}
 	}
+});
+
+// Send a resize message to the parent.
+//https://gist.github.com/pbojinov/8965299
+function sendResizeMessageToParent()
+{
+	window.parent.postMessage("PfDK Resize", '*');
+};
+
+$(window).resize(function() {
+	sendResizeMessageToParent();
 });
 
 function printWordcloud()
@@ -153,6 +166,7 @@ function getWordcloudWords()
 				return 0;
 			});
 			printWordcloud();
+			sendResizeMessageToParent();
 		},
 
 		complete: function () {
@@ -167,7 +181,7 @@ function printWordcloudInput(wordcloudInput)
    html = '<input id="name" type="text" size="50" data-role="tagsinput"></input>';
    html +=' <button id="send" class="button-success">Send</button>';
 
-   wordcloudInput.innerHTML=html;
+   wordcloudInput.html(html);
 }
 
 function getAllUrlParams(url) {
