@@ -7,8 +7,7 @@ Follow these steps to create your own wordcloud:
 ## Make a Google spreadsheet which can store the words in your wordcloud:
 
 1. In a web browser, login with the google account which should own the spreadsheet. You could create a separate google account for your project if you do not want to mix your personal google account into this.
-2.
-Make a copy of [this spreadsheet template](https://docs.google.com/spreadsheets/d/1r9KzJnUbArV5OFP2uB-KVUmgDMg0BMtbEU8at_KL6cc/edit#gid=1547094774) by opening it and selecting "File->Make a copy...".
+2. Make a copy of [this spreadsheet template](https://docs.google.com/spreadsheets/d/1r9KzJnUbArV5OFP2uB-KVUmgDMg0BMtbEU8at_KL6cc/edit#gid=1547094774) by opening it and selecting "File->Make a copy...".
 3. You can remove the words already present in the column when you like, but you might want to leave them to see that things work.
 
 ## Connect a Google web app to the spreadsheets
@@ -18,8 +17,7 @@ Make a copy of [this spreadsheet template](https://docs.google.com/spreadsheets/
 3. Still in the script tab, select "Publish->Deploy as web app".
 4. In the dialog that opens, check that the google account above is selected under "Execute the app as". In "Who has access to the app", select "Anyone, even anonymous". Finally, press "Deploy".
 5. You are now told that you need to give permissions to the script. Press "Review permissions" and log in with the same google account as above. A message tells you that you should only allow this script to run if you trust the developer. Click on "Advanced" and click on the link at the bootom. Click allow.
-6. 
-In the new dialog that appears, copy the address of the "Current web app url".
+6. In the new dialog that appears, copy the address of the "Current web app url".
 
 ## Display your Wordcloud
 
