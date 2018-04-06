@@ -31,22 +31,24 @@ function sparqlQuery(sokeOrd)
 	var timeout="0"
 
 	var query='prefix u: <http://psi.udir.no/ontologi/kl06/> \
-	prefix r: <http://psi.udir.no/ontologi/kl06/reversert/> \
-	prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \
-	SELECT ?kmkode ?kmtekst ?laereplantittel ?laereplan WHERE { \
-	?kompetansemaal rdf:type u:kompetansemaal ;\
-	u:tittel ?kmtekst ;\
-	u:kode ?kmkode ;\
-	r:har-kompetansemaal ?kms .\
-	?kms r:har-kompetansemaalsett ?laereplan .\
-	?laereplan u:tittel ?laereplantittel .';
+prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>\
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
+SELECT ?kmkode ?kmtekst ?laereplantittel ?laereplan WHERE {\
+?kompetansemaal rdf:type u:kompetansemaal ;\
+u:tittel ?kmtekst ;\
+u:kode ?kmkode ;\
+r:har-kompetansemaal ?kms .\
+?kms r:har-kompetansemaalsett ?laereplan .\
+?laereplan u:tittel ?laereplantittel .';
 	
 	//i betyr at man ikke bryr seg om det er store eller små bokstaver.
 	query += 'FILTER regex(?kmtekst, "' + sokeOrd + '", "i")';
 	
 	query += 'FILTER (lang(?kmtekst) = "")\
-	FILTER (lang(?laereplantittel) = "") .\
-	} ORDER BY ?laereplan ?kmkode';
+FILTER (lang(?laereplantittel) = "") .\
+?laereplan u:status ?status .\
+FILTER regex(?status, "publisert", "i")\
+} ORDER BY ?laereplan ?kmkode';
 
 	var params={
 		"query": query,

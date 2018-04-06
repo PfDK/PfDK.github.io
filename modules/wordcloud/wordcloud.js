@@ -1,7 +1,14 @@
 //var actionScript = "https://script.google.com/macros/s/AKfycbxW1qHugD1K4adTjGAEt1KqbcbAn1LlaCoWx6GtlNdsNO_E-rTO/exec";
 //https://www.sitepoint.com/get-url-parameters-with-javascript/
 //http://plnkr.co/edit/AZIi1gFuq1Vdt06VIETn?p=preview
-var actionScript = getAllUrlParams(window.location.href).scriptUrl;
+var params = getAllUrlParams(window.location.href);
+var actionScript = params.scriptUrl;
+var hide = false;
+if (params.hide != null)
+{
+	hide = true;
+}
+
 var words = [];
 
 $(document).ready(function(){
@@ -9,16 +16,19 @@ $(document).ready(function(){
 	if (wordcloudInput !=  null) {
 		printWordcloudInput(wordcloudInput);
 	}
-    console.log("Contact form submission handler loaded successfully.");
-    // bind to the submit event of our form
-    var form = $( "#send" );
-    if(form != null)
+    var sendButton = $( "#send" );
+    if(sendButton != null)
     {
-		form.click(handleFormSubmit);
+		sendButton.click(handleSend);
     }
 
 	var wordcloud = document.getElementById('wordcloud');
 	if (wordcloud !=  null) {
+		if(hide)
+		{
+			wordcloud.hide();
+		}
+		
 		getWordcloudWords();
 	}
 });
@@ -80,6 +90,8 @@ function printWordcloud()
 function getWordcloudWords()
 {
 	words = [];
+    displayLoadingIcon();
+
 	$.ajax({
 		url: actionScript,
 		dataType: 'json',
@@ -217,7 +229,13 @@ function getAllUrlParams(url) {
   return obj;
 }
 
-function handleFormSubmit(event) { 
+function displayLoadingIcon()
+{
+  $("#wordcloud").html('<img width="200" src="loading.gif"/>');
+}
+
+function handleSend(event) { 
+  displayLoadingIcon();
   var data = $("#name").val();
   console.log(data);
   var postData = "name="+data;
