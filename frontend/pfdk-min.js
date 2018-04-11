@@ -4889,12 +4889,27 @@ function program2(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n                        <li class=\"mmooc-module-item-icon\"><a class=\"mmooc-module-items-icons-";
+  buffer += "\n                      ";
+  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), "SubHeader", options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.type), "SubHeader", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                    ";
+  return buffer;
+  }
+function program4(depth0,data) {
+  
+  
+  return "\n                      ";
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n                             <li class=\"mmooc-module-item-icon\"><a class=\"mmooc-module-items-icons-";
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + " ";
-  stack1 = (helper = helpers.ifItemIsCompleted || (depth0 && depth0.ifItemIsCompleted),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.completion_requirement), options) : helperMissing.call(depth0, "ifItemIsCompleted", (depth0 && depth0.completion_requirement), options));
+  stack1 = (helper = helpers.ifItemIsCompleted || (depth0 && depth0.ifItemIsCompleted),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.completion_requirement), options) : helperMissing.call(depth0, "ifItemIsCompleted", (depth0 && depth0.completion_requirement), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" href=\"";
   if (helper = helpers.html_url) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -4908,18 +4923,18 @@ function program3(depth0,data) {
     + escapeExpression((helper = helpers.lowercase || (depth0 && depth0.lowercase),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "lowercase", (depth0 && depth0.type), options)))
     + escapeExpression((helper = helpers.overrideIconClassByTitle || (depth0 && depth0.overrideIconClassByTitle),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "overrideIconClassByTitle", (depth0 && depth0.title), options)))
     + "\"></i>";
-  stack1 = (helper = helpers.ifItemTypeDiscussion || (depth0 && depth0.ifItemTypeDiscussion),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifItemTypeDiscussion", (depth0 && depth0.type), options));
+  stack1 = (helper = helpers.ifItemTypeDiscussion || (depth0 && depth0.ifItemTypeDiscussion),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifItemTypeDiscussion", (depth0 && depth0.type), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a></li>\n                    ";
+  buffer += "</a></li>\n                      ";
   return buffer;
   }
-function program4(depth0,data) {
+function program7(depth0,data) {
   
   
   return "done";
   }
 
-function program6(depth0,data) {
+function program9(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "<div class=\"discussion-unread-tag discussion-id-"
