@@ -2,13 +2,12 @@
 
 var canvas = document.createElement("canvas");
 canvas.style.border = "2px solid black";
-canvas.width = 600;
-canvas.height = 400;
+canvas.style.width = "100%";
 
 var CANVAS_WIDTH = canvas.width;
 var CANVAS_HEIGHT = canvas.height;
 
-document.getElementById("bounce").appendChild(canvas);
+document.body.appendChild(canvas);
 var ctx = canvas.getContext("2d");
 
 // Handle inputs ------------------------------------------------------------
@@ -37,6 +36,17 @@ document.addEventListener('mousemove', function(event) {
     var rect = canvas.getBoundingClientRect();
     mouse.x = event.clientX - rect.left;
     mouse.y = event.clientY - rect.top;
+});
+
+function sendResizeMessageToParent()
+{
+	var obj = { "Sender":"pfdkautoresize", "Height":document.body.scrollHeight};
+ 	var myJSON = JSON.stringify(obj);
+	window.parent.postMessage(myJSON, '*');
+};
+
+window.addEventListener('resize', function() {
+	sendResizeMessageToParent();
 });
 
 function keyPressed(str) {

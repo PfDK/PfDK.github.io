@@ -1,25 +1,49 @@
 //Denne javascriptfilen gjør SparQL spørringer mot læreplanene.
 //Den ble laget på inspirasjon fra lenkene nedenfor.
 
-//http://grepwiki.udir.no/index.php?title=SPARQL-sp%C3%B8rringer#Teksts.C3.B8k_i_kompetansem.C3.A5l_for_.C3.A5_finne_l.C3.A6replan
-//https://www.openlinksw.com/blog/~kidehen/index.vspx?page=&id=1653
-//https://stackoverflow.com/questions/7163639/how-to-use-json-output-from-external-sparql-request-directly-from-browser
-//http://biohackathon.org/d3sparql/
-//https://stackoverflow.com/questions/15298091/d3-sparql-how-to-query-sparql-endpoints-directly-from-d3js
+//Gjør endringer i SpqrQL queriet nedenfor
+function getSparQLquery(sokeOrd)
+{
+	var query='\
+prefix u: <http://psi.udir.no/ontologi/kl06/> \
+prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>\
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
+SELECT ?kmkode ?kmtekst ?laereplantittel ?lareplan ?laereplan WHERE {\
+?kompetansemaal rdf:type u:kompetansemaal ;\
+u:tittel ?kmtekst ;\
+u:kode ?kmkode ;\
+r:har-kompetansemaal ?kms .\
+?kms r:har-kompetansemaalsett ?lareplan .\
+?lareplan u:tittel ?laereplantittel ;\
+u:kode ?laereplan .';
+	
+	//i betyr at man ikke bryr seg om det er store eller små bokstaver.
+	query += 'FILTER regex(?kmtekst, "' + sokeOrd + '", "i")';
+	
+	query += 'FILTER (lang(?kmtekst) = "")\
+FILTER (lang(?laereplantittel) = "") .\
+?lareplan u:status ?status .\
+FILTER regex(?status, "publisert", "i")\
+} ORDER BY ?laereplan ?kmkode';
+	return query;
+}
 
+// Denne funksjonen knytter "Søk" knappen til sparqlQuery funksjonen
 $(document).ready(function(){
 	$("#sok").click(function() {
-	  var sokeOrd = $("#sokeOrd").val();
-	  sparqlQuery(sokeOrd);
+	  sparqlQuery();
 	});
+  $('#sokeOrd').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            sparqlQuery();
+        }
+    });
 });
 
-function updateResultDiv(html)
+function sparqlQuery()
 {
-	$("#resultat").html(html);	
-}
-function sparqlQuery(sokeOrd)
-{
+  var sokeOrd = $("#sokeOrd").val();
 	if(sokeOrd == "")
 	{
 		updateResultDiv("<b>Vær vennlig å skrive inn et ord eller en setning du vil søke etter.</b>");
@@ -29,26 +53,11 @@ function sparqlQuery(sokeOrd)
 	var	format="application/json";
 	var debug="on";
 	var timeout="0"
-
-	var query='prefix u: <http://psi.udir.no/ontologi/kl06/> \
-prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>\
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
-SELECT ?kmkode ?kmtekst ?laereplantittel ?laereplan WHERE {\
-?kompetansemaal rdf:type u:kompetansemaal ;\
-u:tittel ?kmtekst ;\
-u:kode ?kmkode ;\
-r:har-kompetansemaal ?kms .\
-?kms r:har-kompetansemaalsett ?laereplan .\
-?laereplan u:tittel ?laereplantittel .';
-	
-	//i betyr at man ikke bryr seg om det er store eller små bokstaver.
-	query += 'FILTER regex(?kmtekst, "' + sokeOrd + '", "i")';
-	
-	query += 'FILTER (lang(?kmtekst) = "")\
-FILTER (lang(?laereplantittel) = "") .\
-?laereplan u:status ?status .\
-FILTER regex(?status, "publisert", "i")\
-} ORDER BY ?laereplan ?kmkode';
+	//i den originale spørringen hentet ?laereplan psi-adressen til læreplanen
+	//den har jeg byttet navn til ?lareplan
+	//så har jeg skutt inn en ny linje som henter læreplankoden, og
+	//kalt den ?laereplan. Slik blir det lettere å trikse med URL-en i href nedenfor
+	var query = getSparQLquery(sokeOrd);
 
 	var params={
 		"query": query,
@@ -63,16 +72,20 @@ FILTER regex(?status, "publisert", "i")\
 	}
 	var queryURL=baseURL + '?' + querypart;
 
-	updateResultDiv('<img src="loading.gif"/>');
+	updateResultDiv('<img src="https://pfdk.github.io/data-udir-no/eksempler/loading.gif"/>');
 
 	$.getJSON(queryURL,{}, function(data) {
 	 present(data);
 	});
 }
-
+function updateResultDiv(html)
+{
+	$("#resultat").html(html);	
+}
 function presentLaereplan(binding)
 {
-  var s = "<tr><td><a href='" + binding.laereplan.value + "'>" + binding.kmkode.value + ":" + binding.laereplantittel.value + "</a></td>";
+	//Her har jeg satt inn http://www.udir.no/kl06/ foran læreplankoden som jeg har har kalt ?laereplan i spørringen.
+  var s = "<tr><td><a target=top href='http://www.udir.no/kl06/" + binding.laereplan.value + "'>" + binding.kmkode.value + ":" + binding.laereplantittel.value + "</a></td>";
   console.log(s);
   return s;
 }
@@ -119,3 +132,10 @@ function present(data)
 	html += "</table>";
 	updateResultDiv(html);	
 }
+
+//Finn mer inspirasjon her
+//http://grepwiki.udir.no/index.php?title=SPARQL-sp%C3%B8rringer#Teksts.C3.B8k_i_kompetansem.C3.A5l_for_.C3.A5_finne_l.C3.A6replan
+//https://www.openlinksw.com/blog/~kidehen/index.vspx?page=&id=1653
+//https://stackoverflow.com/questions/7163639/how-to-use-json-output-from-external-sparql-request-directly-from-browser
+//http://biohackathon.org/d3sparql/
+//https://stackoverflow.com/questions/15298091/d3-sparql-how-to-query-sparql-endpoints-directly-from-d3js
