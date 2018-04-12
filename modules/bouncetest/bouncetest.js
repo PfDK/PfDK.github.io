@@ -10,6 +10,8 @@ var CANVAS_HEIGHT = canvas.height;
 document.body.appendChild(canvas);
 var ctx = canvas.getContext("2d");
 
+resize();
+
 // Handle inputs ------------------------------------------------------------
 var keydown = {};
 var keypress = {};
@@ -40,7 +42,16 @@ document.addEventListener('mousemove', function(event) {
 
 function sendResizeMessageToParent()
 {
-	var obj = { "Sender":"pfdkautoresize", "Height":document.body.scrollHeight};
+    var h =  document.documentElement.offsetHeight;
+    console.log("pfdkautoresize:" + h);
+    console.log("canvas.clientheight:" + canvas.clientHeight);
+    console.log("canvas.height:" + canvas.height);
+    console.log("canvas.offsetHeight:" + canvas.offsetHeight);
+    console.log("canvas.scrollHeight:" + canvas.scrollHeight);
+    console.log("document.body.offsetHeight:" + document.body.offsetHeight);
+    console.log("document.documentElement.offsetHeight:" + document.documentElement.offsetHeight);
+    
+	var obj = { "Sender":"pfdkautoresize", "Height":h};
  	var myJSON = JSON.stringify(obj);
 	window.parent.postMessage(myJSON, '*');
 };
@@ -48,6 +59,24 @@ function sendResizeMessageToParent()
 window.addEventListener('resize', function() {
 	sendResizeMessageToParent();
 });
+
+function resize() {
+  // Lookup the size the browser is displaying the canvas.
+  var displayWidth  = canvas.clientWidth;
+  var displayHeight = canvas.clientHeight;
+ 
+  // Check if the canvas is not the same size.
+  if (canvas.width  != displayWidth ||
+      canvas.height != displayHeight) {
+ 
+    // Make the canvas the same size
+    canvas.width  = displayWidth;
+    canvas.height = displayHeight;
+    CANVAS_WIDTH = canvas.width;
+    CANVAS_HEIGHT = canvas.height;
+  }
+  sendResizeMessageToParent();
+}
 
 function keyPressed(str) {
     var result = keypress[str];
