@@ -2,29 +2,30 @@
 //Den ble laget på inspirasjon fra lenkene nedenfor.
 
 //Gjør endringer i SpqrQL queriet nedenfor
+//Bruk f.ex. {{sokeOrd}} og bruk replace i Javascript til å bytte ut med variabler.
 function getSparQLquery(sokeOrd)
 {
-	var query='\
-prefix u: <http://psi.udir.no/ontologi/kl06/> \
-prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>\
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
-SELECT ?kmkode ?kmtekst ?laereplantittel ?lareplan ?laereplan WHERE {\
-?kompetansemaal rdf:type u:kompetansemaal ;\
-u:tittel ?kmtekst ;\
-u:kode ?kmkode ;\
-r:har-kompetansemaal ?kms .\
-?kms r:har-kompetansemaalsett ?lareplan .\
-?lareplan u:tittel ?laereplantittel ;\
-u:kode ?laereplan .';
+    var queryTemplate	= (function(){ /*
+prefix u: <http://psi.udir.no/ontologi/kl06/> 
+prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?kmkode ?kmtekst ?laereplantittel ?lareplan ?laereplan WHERE {
+?kompetansemaal rdf:type u:kompetansemaal ;
+u:tittel ?kmtekst ;
+u:kode ?kmkode ;
+r:har-kompetansemaal ?kms .
+?kms r:har-kompetansemaalsett ?lareplan .
+?lareplan u:tittel ?laereplantittel ;
+u:kode ?laereplan .
+FILTER regex(?kmtekst, "{{sokeOrd}}", "i")
+FILTER (lang(?kmtekst) = "")
+FILTER (lang(?laereplantittel) = "") .
+?lareplan u:status ?status .
+FILTER regex(?status, "publisert", "i")
+} ORDER BY ?laereplan ?kmkode
+*/}).toString().split('\n').slice(1, -1).join('\n');	
 	
-	//i betyr at man ikke bryr seg om det er store eller små bokstaver.
-	query += 'FILTER regex(?kmtekst, "' + sokeOrd + '", "i")';
-	
-	query += 'FILTER (lang(?kmtekst) = "")\
-FILTER (lang(?laereplantittel) = "") .\
-?lareplan u:status ?status .\
-FILTER regex(?status, "publisert", "i")\
-} ORDER BY ?laereplan ?kmkode';
+	query = queryTemplate.replace("{{sokeOrd}}", sokeOrd);
 	return query;
 }
 
