@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../d3.js" charset="utf-8"></script>
+    <script src="../d3.layout.cloud.js"></script>
+	<script src='../grepjsapi.js'></script>  
+	<script src='tverrfaglig.js'></script>  
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+th {
+    text-align: left;
+}
+</style>	
+</head>
+
+<body>
+Denne siden viser en ordsky over hvilke ord læreplanen i engelsk har til felles med læreplanen
+for norsk for 1. og 2. trinn. Under ordskyen vil du finne hvilke kompetansemål ordene
+finnes i.
+
+<div id="status"></div>
+<div id="wordcloud" class="svg-container"></div>
+<div id="ordtabell"></div>
+
+</body>
+</html>
+
+

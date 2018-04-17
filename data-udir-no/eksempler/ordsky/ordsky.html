@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="d3.js" charset="utf-8"></script>
+    <script src="d3.layout.cloud.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src='../grepjsapi.js'></script>  
+	<script src='ordsky.js'></script>  
+	<style>
+	.svg-container { 
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%; 
+	vertical-align: middle; 
+	overflow: hidden; 
+}
+.svg-content { 
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+	</style>
+</head>
+
+<body style="background-color:transparent">
+<div id="wordcloud" class="svg-container"></div>
+<div id="ordtabell"></div>
+
+</body>
+</html>
+
+
