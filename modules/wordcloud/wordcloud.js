@@ -255,13 +255,14 @@ function handleSend(event) {
   var data = $("#name").val();
   console.log(data);
   var postData = "name="+data;
+  base64postData = window.btoa(data);
   console.log(postData);
 
 // fire off the request to /form.php
 	request = $.ajax({
 		url: actionScript,
 		type: "post",
-		data: postData,
+		data: base64postData,
 
 		beforeSend: function () {
 			console.log("Loading");
