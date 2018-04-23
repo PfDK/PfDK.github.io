@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../jquery.min.js"></script>
 	<script src="../d3.js" charset="utf-8"></script>
     <script src="../d3.layout.cloud.js"></script>
 	<script src='../grepjsapi.js'></script>  
@@ -23,9 +23,11 @@ th {
 </head>
 
 <body>
-Denne siden viser en ordsky over hvilke ord læreplanen i engelsk har til felles med læreplanen
-for norsk for 1. og 2. trinn. Under ordskyen vil du finne hvilke kompetansemål ordene
-finnes i.
+Denne siden viser en ordsky over hvilke ord læreplanene du velger har til felles. Under ordskyen vil du finne hvilke kompetansemål ordene
+finnes i. Følgende ord blir ignorert:
+<div id="info"></div>
+<input id="laereplaner" type="text" size="100"/>
+<button id="sammenlign">Søk</button>
 
 <div id="status"></div>
 <div id="wordcloud" class="svg-container"></div>

@@ -1,10 +1,7 @@
 $(document).ready(function(){
     displayLoadingIcon();
 
-    var query = getLaereplanQueryForKodeOgTrinn("MAT1-04", "Andre")
-	
-    sparqlQuery(query, function(data){
-    	var words = [];
+    hentLaereplan("MAT1-04", "Andre", function(data) {
         var km = parseKompetanseMaal(data);
         var kmWordsArray = getKompetanseMaalWords(km);
         kmWordsArray.sort();
