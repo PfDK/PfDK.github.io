@@ -253,16 +253,15 @@ function displayLoadingIcon()
 function handleSend(event) { 
   displayLoadingIcon();
   var data = $("#name").val();
-  console.log(data);
-  var postData = "name="+data;
-  base64postData = window.btoa(data);
+  var data2 =   encodeURIComponent( data );
+  console.log(data2);
+  var postData = "name="+data2;
   console.log(postData);
 
-// fire off the request to /form.php
 	request = $.ajax({
 		url: actionScript,
 		type: "post",
-		data: base64postData,
+		data: postData,
 
 		beforeSend: function () {
 			console.log("Loading");
