@@ -17,8 +17,8 @@
 
 <body>
 <p>
-Denne siden viser en ordsky over hvilke ord læreplanene du velger har til felles. Under ordskyen vil du finne hvilke kompetansemål ordene
-finnes i. Foreløpig må du oppgi læreplanene med koder på formatet NOR1-05, MAT1-01, osv. Oversikt over disse kodene finner du 
+Denne siden viser en tabell og en ordsky over hvilke ord læreplanene du velger har til felles. 
+Foreløpig må du oppgi læreplanene med koder på formatet NOR1-05, MAT1-01, osv. Oversikt over disse kodene finner du 
 <a target="_blank" href="https://data.udir.no/kl06/sparql?default-graph-uri=&query=prefix+u%3A+%3Chttp%3A%2F%2Fpsi.udir.no%2Fontologi%2Fkl06%2F%3E+%0D%0Aprefix+rdf%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0D%0ASELECT++%3Ftittel+%3Fkode+WHERE+%7B%0D%0A%3Furi+rdf%3Atype+u%3Alaereplan+%3B%0D%0Au%3Atittel+%3Ftittel+%3B%0D%0Au%3Aurl-data+%3Fkode+.%0D%0AFILTER+%28lang%28%3Ftittel%29+%3D+%22%22%29%0D%0A%7D+ORDER+BY+%3Fkode+%3Ftittel&format=text%2Fhtml&timeout=0&debug=on">
 her</a>.
 </p>
