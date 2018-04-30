@@ -1,29 +1,34 @@
-var ignoreWords=["og", "fra", "for", "av", "å", "på", "etter", "med", "gjennom", "noen", "til", "i"];
+//For å teste kan dette flagget settes til true. Da brukes et par testlæreplaner definert nederst i javascript filen.
+var offline = false;
 
-var offline = true;
+var ignoreWords = "og, fra, for, av, å, på, etter, med, gjennom, noen, til, i";
 
-function printIgnoredWords()
+function getIgnorerOrd()
 {
-    var html = "";
-	for(var i = 0; i< ignoreWords.length; i++)
-	{
-	    html += ignoreWords[i] + " ";
-	}
-	return html;
+    return ignoreWords;
+}
+
+function addIgnorerOrd(s)
+{
+    ignoreWords += ",";
+    ignoreWords += s;
 }
 
 function hentLaereplan(kode, trinn, callback)
 {
-    var query = getLaereplanQueryForKodeOgTrinn("MAT1-04", "Andre")
+    var query = getLaereplanQueryForKodeOgTrinn(kode, trinn)
 	
     sparqlQuery(query, function(data){
         callback(data);
     }); 
 }
 
-function getLps(lpKoder, callback)
+function getLps(lpKoder, trinn, updateStatus, callback)
 {
     var lps = [];
+
+    //Hvis vi er offline bruker vi læreplanene definert nederst i javascriptet.
+    //Foreløpig ligger det bare et part stykker der slik at vi kan teste at det virker.
     if(offline)
     {
         var noOfLp = lpKoder.length;
@@ -34,48 +39,42 @@ function getLps(lpKoder, callback)
 
             lps.push(lpObject);
         }
+        callback(lps);
     }
     else
     {
         var asyncsDone = 0;
         var noOfLp = lpKoder.length;
+        var s = ".";
+        updateStatus(s);
         for (var i = 0; i < lpKoder.length; i++) 
         {
             var lpKode = lpKoder[i];
-            var trinn = "andre";
-            if(offline)
-            {
-                lps[lpKode] = offlineLp[lpKode];
-            }
-            else
-            {
-                getLaereplanQueryForKodeOgTrinn(lpKode, trinn);
-                var href= "/api/v1/courses/" + cid + "/modules/" + m.id + "/items?per_page=100";
-                $.getJSON(
-                    href,
-                    (function(j) {
-                        return function(items) {
-                            modules[j].items = items;
-                            asyncsDone++;
+            var query = getLaereplanQueryForKodeOgTrinn(lpKode, trinn);
+            sparqlQuery(
+                query, 
+                (function(i) {
+                    return function(data) {
+                        var lpObject = {lpKode: lpKoder[i], lp: data};
+                        lps.push(lpObject);
 
-                            if(asyncsDone === noOfModules) {
-                                callback(modules);
-                            }
-                        };
-                    }(i)) // calling the function with the current value
-                );
-            }
-        };
-    }
-    callback(lps);
+                        s += ".";
+                        updateStatus(s);
+                        
+                        asyncsDone ++;
+
+                        if(asyncsDone === noOfLp) {
+                            callback(lps);
+                        }
+                    };
+                }(i)) // calling the function with the current value
+            ); //
+        } //end for lpKoder
+    } //endif offline
 }
 
 function sparqlQuery(query, callback)
 {
-    if(offline)
-    {
-        
-    }
 	var baseURL="https://data.udir.no/kl06/sparql";
 	var	format="application/json";
 	var debug="on";
@@ -126,7 +125,7 @@ FILTER regex(?trinn, "{{trinn}}", "i")
 FILTER (lang(?trinn) = '')
 }
 ?km u:tittel ?kmtittel .
-FILTER (lang(?kmtittel) = '')
+FILTER (lang(?kmtittel) = 'nob')
  
 ?km r:har-kompetansemaal ?kms .
  
@@ -141,7 +140,19 @@ ORDER BY ?lp ?trinnorder ?kms ?km
     return query;
 }
 
-function getKompetanseMaalWords(lps)
+function getKompetanseMaalWordsInArray(wordMap)
+{
+    var words = [];
+    
+    //Løp gjennom alle ordene. Dersom ordet har lenker til alle læreplanene så tar vi vare på det.
+    Object.keys(wordMap).forEach(function(key) {
+        value = wordMap[key];
+        words.push(value);
+    });
+    return words;
+}
+
+function getKompetanseMaalWords(lps, ignoreWords)
 {
     var kmWordsArray = [];
 	for(var j = 0; j < lps.length; j++)
@@ -155,7 +166,9 @@ function getKompetanseMaalWords(lps)
             var km = bindings[i].kmtittel.value; 
             var kmt = km.trim(); 
             var kmWords = kmt.split(" ");
-            var cleanWordArray = getCleanWordArray(kmWords);
+            
+            var cleanWordArray = getCleanWordArray(kmWords, ignoreWords);
+            
             var uniqueWordArray = getUniqueWords(cleanWordArray);
             for(var k = 0; k < uniqueWordArray.length; k++)
             {
@@ -174,7 +187,7 @@ function getKompetanseMaalWords(lps)
                     kmLp = kmWord.lps[lps[j].lpKode] = lpObject;
                 }
 
-                kmWord.size += uniqueWordArray[j].size;
+                kmWord.size += uniqueWordArray[k].size;
                 if(!kmLp)
                 {
                     console.log("kmLp er ikke definert.");
@@ -186,12 +199,13 @@ function getKompetanseMaalWords(lps)
     return kmWordsArray;
 }
 
-function getCleanWordArray(kmWords)
+//Ignorer alle tegn som ikke er 0-9 og a-å.
+function getCleanWordArray(kmWords, ignoreWords)
 {
     var kmWordsArray = [];
     for(var j = 0; j< kmWords.length; j++)
     {
-        var ord = kmWords[j].replace(/[^a-åA-Å0-9]/g,'')
+        var ord = kmWords[j].toLowerCase().replace(/[^a-åA-Å0-9]/g,'')
         if(!ignoreWords.includes(ord))
         {
             kmWordsArray.push(ord);
@@ -235,6 +249,18 @@ function getUniqueWords(kmWordsArray)
     }
     var wordObject = {text: word, size: size};
     words.push(wordObject);
+    return words;
+}
+
+function sortWordObjectsBySize(words)
+{
+    words.sort(function(item1, item2){
+        if (item1.size < item2.size)
+          return -1;
+        if ( item1.size > item2.size)
+          return 1;
+        return 0;
+    });
     return words;
 }
 

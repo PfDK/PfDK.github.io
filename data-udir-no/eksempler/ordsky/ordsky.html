@@ -3,33 +3,59 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="d3.js" charset="utf-8"></script>
-    <script src="d3.layout.cloud.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">   
+	<link rel="stylesheet" href="ordsky.css">   
+	<link rel="stylesheet" href="../wordcloud.css">   
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../d3.js" charset="utf-8"></script>
+    <script src="../d3.layout.cloud.js"></script>
 	<script src='../grepjsapi.js'></script>  
 	<script src='ordsky.js'></script>  
-	<style>
-	.svg-container { 
-	display: inline-block;
-	position: relative;
-	width: 100%;
-	padding-bottom: 100%; 
-	vertical-align: middle; 
-	overflow: hidden; 
-}
-.svg-content { 
-	display: inline-block;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-	</style>
 </head>
 
 <body style="background-color:transparent">
-<div id="wordcloud" class="svg-container"></div>
-<div id="ordtabell"></div>
+<p>
+Denne siden viser en en tabell og en ordsky for ordene i læreplanen du spesifiserer. 
+Foreløpig må du oppgi læreplanen med kode på formatet NOR1-05. Oversikt over disse kodene finner du 
+<a target="_blank" href="https://data.udir.no/kl06/sparql?default-graph-uri=&query=prefix+u%3A+%3Chttp%3A%2F%2Fpsi.udir.no%2Fontologi%2Fkl06%2F%3E+%0D%0Aprefix+rdf%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0D%0ASELECT++%3Ftittel+%3Fkode+WHERE+%7B%0D%0A%3Furi+rdf%3Atype+u%3Alaereplan+%3B%0D%0Au%3Atittel+%3Ftittel+%3B%0D%0Au%3Aurl-data+%3Fkode+.%0D%0AFILTER+%28lang%28%3Ftittel%29+%3D+%22%22%29%0D%0A%7D+ORDER+BY+%3Fkode+%3Ftittel&format=text%2Fhtml&timeout=0&debug=on">
+her</a>.
+</p>
+<p>
+Følgende ord blir ignorert:
+<input id="ignorer" size="100"  data-role="tagsinput" value=""/>
+</p>
+Læreplan: 
+<input id="koder" type="text" size="50" value="NOR1-05">
 
+Trinn:
+<select id="trinn">
+<option value='Andre årstrinn'>Andre årstrinn</option>
+<option value='Fjerde årstrinn'>Fjerde årstrinn</option>
+<option value='Syvende årstrinn'>Syvende årstrinn</option>
+<option value='Tiende årstrinn'>Tiende årstrinn</option>
+<option value='Videregående trinn 1'>Videregående trinn 1</option>
+<option value='Videregående trinn 2'>Videregående trinn 2</option>
+<option value='Videregående trinn 3'>Videregående trinn 3</option>
+<option value='Videregående trinn 2 og 3 særløp'>Videregående trinn 2 og 3 særløp</option>
+<option value='Påbygning til generell studiekompetanse'>Påbygning til generell studiekompetanse</option>
+<option value='Opplæring i bedrift'>Opplæring i bedrift</option>
+</select>
+
+<button id="vis" class="button-success">Vis</button>
+
+
+<div id="status"></div>
+<p/>
+<table><tr><td>
+<div id="ordtabell"></div>
+</td>
+<td width="80%">
+<div id="wordcloud" class="svg-container"></div>
+</td>
+</tr>
+</table>
+<script src="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 </body>
 </html>
 

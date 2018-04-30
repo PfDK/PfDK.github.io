@@ -7,25 +7,69 @@ I denne javascriptfilen implementerer jeg følgende algoritme.
 4. Skriv ut alle ordene i den nye listen sammen med fagene og kompetansemålene de finnes i.
 */
 
+/*
+Hent ut alle læreplaner på norsk bokmål med SparQL:
+prefix u: <http://psi.udir.no/ontologi/kl06/> 
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT  ?tittel ?kode WHERE {
+?uri rdf:type u:laereplan ;
+u:tittel ?tittel ;
+u:url-data ?kode .
+FILTER (lang(?tittel) = "nob")
+} ORDER BY ?kode ?tittel
+
+
+*/
+
+var bTest = false;
 
 $(document).ready(function(){
+    var sammenlignButton = $("#sammenlign");
+    if(sammenlignButton != null)
+    {
+		sammenlignButton.click(sammenlignLaereplaner);
+    }
+    var ignorerOrd = getIgnorerOrd();
+    $("#ignorer").val(ignorerOrd);
+});
+
+
+function sammenlignLaereplaner()
+{
     displayLoadingIcon();
     
-    $("#info").html(printIgnoredWords());
+    $("#ordtabell").html("");
+    $("#wordcloud").html("");
+    
+    var regex = new RegExp(" ","g");
 
-    var koder = ["NOR1-05", "ENG1-03"];
+    var koder = $("#koder").val().trim().replace(regex,"").split(',');
 
-    //Hent ut ordene i læreplanene
-    getLps(koder, function(lps){
-        var kmWords = getKompetanseMaalWords(lps);
+    var trinn = $('#trinn :selected').text();
+
+    var ignorerOrd = $("#ignorer").val().trim().replace(regex,"").split(','); 
+
+
+    if(bTest)
+    {
+        koder = ["NOR1-05", "ENG1-03"];
+        trinn = "Andre";
+    }
+    
+    //Henter ut ordene i læreplanene vi sender inn.
+    //Ordene lenkes opp til læreplanene de finnes i.
+    getLps(koder, trinn, updateStatus, function(lps){
+        var kmWords = getKompetanseMaalWords(lps, ignorerOrd);
         printTverrfaglighet(lps, kmWords);
     });
-});
+}
 
 
 function printTverrfaglighet(lps, kmWords)
 {
     var words = [];
+    
+    //Løp gjennom alle ordene. Dersom ordet har lenker til alle læreplanene så tar vi vare på det.
     Object.keys(kmWords).forEach(function(key) {
         value = kmWords[key];
         if(Object.keys(value.lps).length == lps.length)
@@ -34,12 +78,14 @@ function printTverrfaglighet(lps, kmWords)
         }
     });
 
+    words = sortWordObjectsBySize(words);
 
-    printTverrfagligeOrd(words);
-    printWordCloud("wordcloud", words);
+    //Skriv ut en liste over de tverrfaglige ordene
+    var html = printTverrfagligeOrd(words);
+    $("#ordtabell").html(html);
     
-    $("#status").html("");
-
+    //Skriv ordene som ordsky i div med id wordcloud.
+    printWordCloud("wordcloud", words);
 }
 
 function myOutput(html)
@@ -47,16 +93,19 @@ function myOutput(html)
     var e = $("#ordtabell");
     e.append(html);
 }
-function printBindings(bindings, ord)
+function printBindings(bindings, key, ord)
 {
-    var html = "<td>";
-    for(var i = 0; i< b.length; i++)
+    var html = "";
+    for(var i = 0; i< bindings.length; i++)
     {
+        html += "<tr><td width='10%'>" + key + "</td>";
         var s = "<b>" + ord + "</b>";
-        var merkOrd = bindings[i].kmtittel.value.replace(ord, s);
-        html += merkOrd + "<br/>";
+        var find = ord + "\\b";
+        var regex = new RegExp(find,"g");
+        var merkOrd = bindings[i].kmtittel.value.replace(regex, s);
+        html += "<td>" + merkOrd + "</td>";
+        html += "</tr>";
     }
-    html += "</td>";
     return html;
 }
 
@@ -64,17 +113,18 @@ function printTverrfagligeOrd(words)
 {
     if(words.length == 0)
     {
-        $("#status").html("<h1>Fant ingen felles ord</h1>");
+        updateStatus("<h1>Fant ingen felles ord</h1>");
         return;
     }
+    var html = "";
     for(var i = 0; i < words.length; i++)
     {
-        html = "<table><tr><th>" + words[i].text + "</th></tr><tr>;
+        html += "<br/><table class='ord'><tr><th colspan='2'>" + words[i].text + ": " + words[i].size + "</th></tr>";
+        //Skriv ut kompetansemålene som inneholder ordet, for hver læreplan.
         Object.keys(words[i].lps).forEach(function(key) {
             value = words[i].lps[key];  
-            html += printBindings(value.bindings, word);
+            html += printBindings(value.bindings, key, words[i].text);
         });
-        html += "</tr>";
         html += "</table>";
     }
     return html;
@@ -88,9 +138,14 @@ function printTverrfagligeOrd(words)
     }
 }
 
+function updateStatus(s)
+{
+    $("#status").html(s);
+}
+
 function displayLoadingIcon()
 {
-  $("#status").html('<img width="30" src="../loading.gif"/>');
+  updateStatus('<img width="30" src="../loading.gif"/>');
 }
 
 
