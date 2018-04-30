@@ -179,6 +179,10 @@ function getKompetanseMaalWords(lps, ignoreWords)
                     kmWord = kmWordsArray[w] = uniqueWordArray[k];
                     kmWord.lps = [];
                 }
+                else
+                {
+                    kmWord.size += uniqueWordArray[k].size;
+                }                
                 
                 var kmLp = kmWord.lps[lps[j].lpKode];
                 if(!kmLp)
@@ -187,7 +191,6 @@ function getKompetanseMaalWords(lps, ignoreWords)
                     kmLp = kmWord.lps[lps[j].lpKode] = lpObject;
                 }
 
-                kmWord.size += uniqueWordArray[k].size;
                 if(!kmLp)
                 {
                     console.log("kmLp er ikke definert.");
