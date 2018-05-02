@@ -4,8 +4,8 @@ $(document).ready(function(){
     {
 		visButton.click(visLaereplan);
     }
-    addIgnorerOrd("om");
-    var ignorerOrd = getIgnorerOrd();
+    GrepAPI.addIgnorerOrd("om");
+    var ignorerOrd = GrepAPI.getIgnorerOrd();
     $("#ignorer").val(ignorerOrd);
 });
 
@@ -20,11 +20,11 @@ function visLaereplan()
     var ignorerOrd = $("#ignorer").val().trim().replace(regex,"").split(','); 
     var trinn = $('#trinn :selected').text();
 
-    getLps(koder, trinn, updateStatus, function(lps)
+    GrepAPI.getLps(koder, trinn, function(lps)
     {
-        var wordMap = getKompetanseMaalWords(lps, ignorerOrd);
-        var words = getKompetanseMaalWordsInArray(wordMap);
-        words = sortWordObjectsBySize(words);
+        var wordMap = GrepAPI.getKompetanseMaalWords(lps, ignorerOrd);
+        var words = GrepAPI.getKompetanseMaalWordsInArray(wordMap);
+        words = GrepAPI.sortWordObjectsBySize(words);
 
         if(!words.length)
         {
@@ -32,10 +32,10 @@ function visLaereplan()
         }
         else
         {
-            printWords("ordtabell",words);
-            printWordCloud("wordcloud", words);
+            GrepAPI.printWords("ordtabell",words);
+            GrepAPI.printWordCloud("wordcloud", words);
         }
-    });
+    }, updateStatus);
 }
 
 function updateStatus(s)

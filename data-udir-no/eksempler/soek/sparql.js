@@ -1,5 +1,4 @@
 //Denne javascriptfilen gjør SparQL spørringer mot læreplanene.
-//Den ble laget på inspirasjon fra lenkene nedenfor.
 
 //Gjør endringer i SpqrQL queriet nedenfor
 //Bruk f.ex. {{sokeOrd}} og bruk replace i Javascript til å bytte ut med variabler.
@@ -45,37 +44,16 @@ $(document).ready(function(){
 function sparqlQuery()
 {
   var sokeOrd = $("#sokeOrd").val();
-	if(sokeOrd == "")
-	{
-		updateResultDiv("<b>Vær vennlig å skrive inn et ord eller en setning du vil søke etter.</b>");
-		return;
-	}
-	var baseURL="https://data.udir.no/kl06/sparql";
-	var	format="application/json";
-	var debug="on";
-	var timeout="0"
-	//i den originale spørringen hentet ?laereplan psi-adressen til læreplanen
-	//den har jeg byttet navn til ?lareplan
-	//så har jeg skutt inn en ny linje som henter læreplankoden, og
-	//kalt den ?laereplan. Slik blir det lettere å trikse med URL-en i href nedenfor
+  if(sokeOrd == "")
+  { 
+	updateResultDiv("<b>Vær vennlig å skrive inn et ord eller en setning du vil søke etter.</b>");
+	return;
+  }
 	var query = getSparQLquery(sokeOrd);
 
-	var params={
-		"query": query,
-		"debug": debug, 
-		"timeout": timeout, 
-		"format": format
-	};
+	updateResultDiv('<img width="50" src="https://pfdk.github.io/data-udir-no/eksempler/loading.gif"/>');
 
-	var querypart="";
-	for(var k in params) {
-		querypart+=k+"="+encodeURIComponent(params[k])+"&";
-	}
-	var queryURL=baseURL + '?' + querypart;
-
-	updateResultDiv('<img src="https://pfdk.github.io/data-udir-no/eksempler/loading.gif"/>');
-
-	$.getJSON(queryURL,{}, function(data) {
+	GrepAPI.sparqlQuery(query, function(data) {
 	 present(data);
 	});
 }

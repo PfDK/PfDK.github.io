@@ -29,7 +29,7 @@ $(document).ready(function(){
     {
 		sammenlignButton.click(sammenlignLaereplaner);
     }
-    var ignorerOrd = getIgnorerOrd();
+    var ignorerOrd = GrepAPI.getIgnorerOrd();
     $("#ignorer").val(ignorerOrd);
 });
 
@@ -56,8 +56,8 @@ function sammenlignLaereplaner()
     
     //Henter ut ordene i læreplanene vi sender inn.
     //Ordene lenkes opp til læreplanene de finnes i.
-    getLps(koder, trinn, function(lps){
-        var kmWords = getKompetanseMaalWords(lps, ignorerOrd);
+    GrepAPI.getLps(koder, trinn, function(lps){
+        var kmWords = GrepAPI.getKompetanseMaalWords(lps, ignorerOrd);
         printTverrfaglighet(lps, kmWords);
     }, updateStatus);
 }
@@ -76,14 +76,14 @@ function printTverrfaglighet(lps, kmWords)
         }
     });
 
-    words = sortWordObjectsBySize(words);
+    words = GrepAPI.sortWordObjectsBySize(words);
 
     //Skriv ut en liste over de tverrfaglige ordene
     var html = printTverrfagligeOrd(words);
     $("#ordtabell").html(html);
     
     //Skriv ordene som ordsky i div med id wordcloud.
-    printWordCloud("wordcloud", words);
+    GrepAPI.printWordCloud("wordcloud", words);
 }
 
 function myOutput(html)
