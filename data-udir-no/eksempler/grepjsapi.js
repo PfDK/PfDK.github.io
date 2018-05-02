@@ -23,8 +23,21 @@ function hentLaereplan(kode, trinn, callback)
     }); 
 }
 
-function getLps(lpKoder, trinn, updateStatus, callback)
+function isFunction(possibleFunction) {
+  return typeof(possibleFunction) === typeof(Function);
+}
+
+function getLps(lpKoder, trinn, callback, updateStatusCallback)
 {
+    var updateStatus = 0;
+    if(isFunction(updateStatusCallback)) { 
+        updateStatus = updateStatusCallback;
+    }
+    else
+    {
+        updateStatus = function (){return;}
+    }
+    
     var lps = [];
 
     //Hvis vi er offline bruker vi læreplanene definert nederst i javascriptet.

@@ -36,8 +36,6 @@ $(document).ready(function(){
 
 function sammenlignLaereplaner()
 {
-    displayLoadingIcon();
-    
     $("#ordtabell").html("");
     $("#wordcloud").html("");
     
@@ -58,10 +56,10 @@ function sammenlignLaereplaner()
     
     //Henter ut ordene i læreplanene vi sender inn.
     //Ordene lenkes opp til læreplanene de finnes i.
-    getLps(koder, trinn, updateStatus, function(lps){
+    getLps(koder, trinn, function(lps){
         var kmWords = getKompetanseMaalWords(lps, ignorerOrd);
         printTverrfaglighet(lps, kmWords);
-    });
+    }, updateStatus);
 }
 
 
@@ -143,9 +141,5 @@ function updateStatus(s)
     $("#status").html(s);
 }
 
-function displayLoadingIcon()
-{
-  updateStatus('<img width="30" src="../loading.gif"/>');
-}
 
 
