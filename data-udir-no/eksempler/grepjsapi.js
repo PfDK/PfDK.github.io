@@ -5,7 +5,7 @@ var GrepAPI = (function() {
     //For å teste kan dette flagget settes til true. Da brukes et par testlæreplaner definert nederst i javascript filen.
     var offline = false;
 
-    var ignoreWords = "og, fra, for, av, å, på, etter, med, gjennom, noen, til, i";
+    var ignoreWords = "og, fra, for, av, å, på, etter, med, gjennom, noen, til, i, om";
 
     return {
         getIgnorerOrd : function ()
