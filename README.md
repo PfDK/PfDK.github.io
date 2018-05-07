@@ -1,21 +1,3 @@
-# PfDK files for inclusion in Canvas.
+# PfDK
 
-
-To include new javascript/css files, edit the [modules/modules.js](https://github.com/PfDK/PfDK.github.io/blob/master/modules/modules.js) and/or [modules/modules.css](https://github.com/PfDK/PfDK.github.io/blob/master/modules/modules.css) files and add your files as shown below:
-
-## JS files inclusion
-
-At the bottom of the modules.js file you will find the code below. Add a $.getScript line for your javascript file. Make sure it resides on a secure (https) server.
-
-```
-$.getScript("https://pfdk.github.io/frontend/youtube.js");
-//$.getScript("https://pfdk.github.io/frontend/yourfile.js");
-```
-## CSS files inclusion
-Add your css file with a new @import statement to the modules.css file. Make sure it resides on a secure (https) server.
-```
-@import "https://pfdk.github.io/modules/youtube.css";
-/*
-@import "https://pfdk.github.io/modules/yourfile.css";
-*/
-```
+Dette nettstedet brukes til å hoste ting som ble laget i forbindelse med videreutdanningen i Profesjonsfaglig Digital Kompetanse.
