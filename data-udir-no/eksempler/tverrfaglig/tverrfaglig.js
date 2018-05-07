@@ -8,6 +8,8 @@ I denne javascriptfilen implementerer jeg følgende algoritme.
 */
 
 /*
+Kan bruke kallet nedenfor hvis man skal lage en dropdown liste med fag i stedet for
+at man må legge inn fagkodene manuelt.
 Hent ut alle læreplaner på norsk bokmål med SparQL:
 prefix u: <http://psi.udir.no/ontologi/kl06/> 
 prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -21,8 +23,8 @@ FILTER (lang(?tittel) = "nob")
 
 */
 
-var bTest = false;
-
+//Når html-filen er åpnet hekter vi oss på sammenlignknappen og fyller inn hvilke ord
+//som skal ignoreres.
 $(document).ready(function(){
     var sammenlignButton = $("#sammenlign");
     if(sammenlignButton != null)
@@ -39,23 +41,17 @@ function sammenlignLaereplaner()
     $("#ordtabell").html("");
     $("#wordcloud").html("");
     
+    //Hent ut hvilke ord som skal ignoreres samt hvilke læreplaner brukeren
+    //vil vi skal finne tverrfaglighet for. Vi fjerner alle mellomrom og
+    //deler opp i ord/fag der det er komma.
     var regex = new RegExp(" ","g");
-
     var koder = $("#koder").val().trim().replace(regex,"").split(',');
-
     var trinn = $('#trinn :selected').text();
-
     var ignorerOrd = $("#ignorer").val().trim().replace(regex,"").split(','); 
 
-
-    if(bTest)
-    {
-        koder = ["NOR1-05", "ENG1-03"];
-        trinn = "Andre";
-    }
-    
-    //Henter ut ordene i læreplanene vi sender inn.
-    //Ordene lenkes opp til læreplanene de finnes i.
+    //Henter ut læreplanene vi ber om.
+    //Deretter får vi en liste over ordene i læreplanene uten de ignorerte ordene.
+    //Til slutt skriver vi ut tverrfagligheten.
     GrepAPI.getLps(koder, trinn, function(lps){
         var kmWords = GrepAPI.getKompetanseMaalWords(lps, ignorerOrd);
         printTverrfaglighet(lps, kmWords);
@@ -67,21 +63,28 @@ function printTverrfaglighet(lps, kmWords)
 {
     var words = [];
     
-    //Løp gjennom alle ordene. Dersom ordet har lenker til alle læreplanene så tar vi vare på det.
+    //Løp gjennom alle ordene. 
+    //Dersom ordet har lenker til alle læreplanene så tar vi vare på det.
     Object.keys(kmWords).forEach(function(key) {
         value = kmWords[key];
-        if(Object.keys(value.lps).length == lps.length)
+        var antallLpForOrd = Object.keys(value.lps).length;
+        var antallLpSpesifisert = lps.length;
+        if(antallLpForOrd == antallLpSpesifisert)
         {
             words.push(value);
         }
     });
 
-    words = GrepAPI.sortWordObjectsBySize(words);
+    words = GrepAPI.sortWordObjectsBySizeDescending(words);
 
     //Skriv ut en liste over de tverrfaglige ordene
     var html = printTverrfagligeOrd(words);
     $("#ordtabell").html(html);
     
+    //Før vi skriver ut ordene som ordsky, må de være sortert fra minst
+    //til mest forekommende ord.
+    words = GrepAPI.sortWordObjectsBySize(words);
+
     //Skriv ordene som ordsky i div med id wordcloud.
     GrepAPI.printWordCloud("wordcloud", words);
 }

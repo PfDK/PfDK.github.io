@@ -32,6 +32,11 @@ var GrepAPI = (function() {
           return typeof(possibleFunction) === typeof(Function);
         },
 
+        //Hent læreplanene for oppgitte læreplankoder og trinn.
+        //Kall callback funksjonen når resultatet er klart.
+        //Dersom updateStatusCallback er definert, kaller vi den
+        //underveis. Dersom man har mange læreplaner som skal hentes ut
+        //er det lurt å bruke updateStatusCallback.
         getLps : function (lpKoder, trinn, callback, updateStatusCallback)
         {
             var updateStatus = 0;
@@ -91,6 +96,8 @@ var GrepAPI = (function() {
             } //endif offline
         },
 
+        //Send SparqlQuery til Grep serveren og kall den spesifiserte
+        //callback funksjonen når resultatet er klart.
         sparqlQuery : function (query, callback)
         {
             var baseURL="https://data.udir.no/kl06/sparql";
@@ -116,6 +123,7 @@ var GrepAPI = (function() {
             });
         },
 
+        //Lag en sparqlquery for en læreplan for et trinn.
         getLaereplanQueryForKodeOgTrinn : function (kode, trinn)
         {
             var queryTemplate	= (function(){ /*
@@ -158,11 +166,11 @@ var GrepAPI = (function() {
             return query;
         },
 
+        //Konverter map til array.
         getKompetanseMaalWordsInArray : function (wordMap)
         {
             var words = [];
     
-            //Løp gjennom alle ordene. Dersom ordet har lenker til alle læreplanene så tar vi vare på det.
             Object.keys(wordMap).forEach(function(key) {
                 value = wordMap[key];
                 words.push(value);
@@ -170,6 +178,9 @@ var GrepAPI = (function() {
             return words;
         },
 
+        //Lag et array over ordene i de tilstendte læreplanene der ordene bare er med en gang
+        //og size settes til antall ganger et ord er med i de spesifiserte læreplanene.
+        //Ignorer ord som er i ignoreWords listen som sendes inn.
         getKompetanseMaalWords : function (lps, ignoreWords)
         {
             var kmWordsArray = [];
@@ -220,13 +231,14 @@ var GrepAPI = (function() {
             return kmWordsArray;
         },
 
-        //Ignorer alle tegn som ikke er 0-9 og a-å.
+        //Returner et array med ord der alle tegn som ikke er 0-9 og a-å er fjernet
+        //og returnern bare ord som ikke er med i ignoreWords listen.
         getCleanWordArray : function (kmWords, ignoreWords)
         {
             var kmWordsArray = [];
             for(var j = 0; j< kmWords.length; j++)
             {
-                var ord = kmWords[j].toLowerCase().replace(/[^a-åA-Å0-9]/g,'')
+                var ord = kmWords[j].toLowerCase().replace(/[^a-zA-Z0-9æøåÆØÅ]/g,'')
                 if(!ignoreWords.includes(ord))
                 {
                     kmWordsArray.push(ord);
@@ -235,7 +247,8 @@ var GrepAPI = (function() {
             return kmWordsArray;
         },
 
-
+        //Returner et array med ord der ordene bare er med en gang og size er 
+        //satt til antall ganger ordet finnes i det innsendte arrayet.
         getUniqueWords : function (kmWordsArray)
         {   
             var words = [];
@@ -284,21 +297,26 @@ var GrepAPI = (function() {
             });
             return words;
         },
-
-        GetKmWordsForWordCloud : function (kmWordsArray)
+        sortWordObjectsBySizeDescending : function (words)
         {
-            var words = getUniqueWords(kmWordsArray);
-    
             words.sort(function(item1, item2){
-                if (item1.size < item2.size)
+                if (item1.size > item2.size)
                   return -1;
-                if ( item1.size > item2.size)
+                if ( item1.size < item2.size)
                   return 1;
                 return 0;
             });
             return words;
         },
 
+        GetKmWordsForWordCloud : function (kmWordsArray)
+        {
+            var words = getUniqueWords(kmWordsArray);
+            words = this.sortWordObjectsBySize(words);
+            return words;
+        },
+
+        //Skriv de angitte ordene i en tabell i elementet med id elementId.
         printWords : function (elementId,words)
         {
             var e = $('#' + elementId);

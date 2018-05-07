@@ -4,7 +4,7 @@
 //Bruk f.ex. {{sokeOrd}} og bruk replace i Javascript til å bytte ut med variabler.
 function getSparQLquery(sokeOrd)
 {
-    var queryTemplate	= (function(){ /*
+    var queryTemplate    = (function(){ /*
 prefix u: <http://psi.udir.no/ontologi/kl06/> 
 prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>
 prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -22,11 +22,13 @@ FILTER (lang(?laereplantittel) = "") .
 ?lareplan u:status ?status .
 FILTER regex(?status, "publisert", "i")
 } ORDER BY ?laereplan ?kmkode
-*/}).toString().split('\n').slice(1, -1).join('\n');	
-	
-	query = queryTemplate.replace("{{sokeOrd}}", sokeOrd);
-	return query;
+*/}).toString().split('\n').slice(1, -1).join('\n');    
+                
+    query = queryTemplate.replace("{{sokeOrd}}", sokeOrd);
+    console.log(query);
+    return query;
 }
+
 
 // Denne funksjonen knytter "Søk" knappen til sparqlQuery funksjonen
 $(document).ready(function(){
@@ -79,8 +81,8 @@ function present(data)
 {
 	var bindings = data.results.bindings;
 	bindings.sort(function(item1, item2){
-		var value1 = item1.kmkode.value;
-		var value2 = item2.kmkode.value;
+		var value1 = item1.laereplan.value;
+		var value2 = item2.laereplan.value;
 		if (value1 < value2)
 		  return -1;
 		if ( value1 > value2)
@@ -93,7 +95,7 @@ function present(data)
 
 	for(var i = 0; i< bindings.length; i++)
 	{
-		laereplan = bindings[i].kmkode.value;
+		laereplan = bindings[i].laereplan.value;
 		console.log(laereplan);
 		html += "<tr>";
 		if(previousLaereplan != laereplan)
