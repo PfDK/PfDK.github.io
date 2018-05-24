@@ -8,20 +8,24 @@ function getSparQLquery(sokeOrd)
 prefix u: <http://psi.udir.no/ontologi/kl06/> 
 prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>
 prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?kmkode ?kmtekst ?laereplantittel ?lareplan ?laereplan WHERE {
+SELECT ?kmkode ?trinn ?kmtekst ?laereplantittel ?lareplan ?laereplan WHERE {
 ?kompetansemaal rdf:type u:kompetansemaal ;
 u:tittel ?kmtekst ;
 u:kode ?kmkode ;
 r:har-kompetansemaal ?kms .
-?kms r:har-kompetansemaalsett ?lareplan .
+?kms r:har-kompetansemaalsett ?lareplan ;
+u:har-etter-aarstrinn ?aarstrinn .
+?aarstrinn u:rekkefoelge ?rekkefoelge ;
+u:tittel ?trinn .
 ?lareplan u:tittel ?laereplantittel ;
 u:kode ?laereplan .
+FILTER (lang(?trinn) = "")
 FILTER regex(?kmtekst, "{{sokeOrd}}", "i")
 FILTER (lang(?kmtekst) = "")
 FILTER (lang(?laereplantittel) = "") .
 ?lareplan u:status ?status .
 FILTER regex(?status, "publisert", "i")
-} ORDER BY ?laereplan ?kmkode
+} ORDER BY ?trinn ?laereplan ?kmkode
 */}).toString().split('\n').slice(1, -1).join('\n');    
                 
     query = queryTemplate.replace("{{sokeOrd}}", sokeOrd);
@@ -70,6 +74,13 @@ function presentLaereplan(binding)
   console.log(s);
   return s;
 }
+function presentAarstrinn(binding)
+{
+  var s ="<td>" + binding.trinn.value + "</td>";
+  console.log(s);
+  return s;
+}
+
 function presentLaereplanmaal(binding)
 {
   var s ="<td>" + binding.kmtekst.value + "</td></tr>";
@@ -77,19 +88,11 @@ function presentLaereplanmaal(binding)
   return s;
 }
 
+
 function present(data)
 {
 	var bindings = data.results.bindings;
-	bindings.sort(function(item1, item2){
-		var value1 = item1.laereplan.value;
-		var value2 = item2.laereplan.value;
-		if (value1 < value2)
-		  return -1;
-		if ( value1 > value2)
-		  return 1;
-		return 0;
-	});
-	var html = "<table><tr><th>Læreplan</th><th>Kompetansemål</th></tr>";
+	var html = "<table><tr><th>Læreplan</th><th>Årstrinn</th><th>Kompetansemål</th></tr>";
 	var previousLaereplan = "";
 	var laereplan = "";
 
@@ -108,6 +111,7 @@ function present(data)
 		{
 			html += "<td></td>";
 		}
+		html += presentAarstrinn(bindings[i]);
 		html += presentLaereplanmaal(bindings[i]);
 	}
 	html += "</table>";
