@@ -7572,6 +7572,62 @@ this.mmooc.pages = function() {
             container.removeClass("is-done");
         }
     }
+    function getHeaderBarJson()
+    {
+        var headerBarPosition = "after";
+
+        //Content page
+        var headerBar = $("#wiki_page_show > div.header-bar-outer-container > div > div.header-bar.flex-container > div.header-bar-right.header-right-flex");
+
+        //Quiz
+        if ( !headerBar.length )
+        {
+            headerBar = $("#quiz_show > div.header-bar > div");
+        }
+        //Assignment
+        if ( !headerBar.length )
+        {
+            headerBar = $("#assignment_show > div.assignment-title > div.assignment-buttons");
+        }
+        //Discussion
+        if ( !headerBar.length )
+        {
+            headerBar = $("#discussion-managebar > div > div > div.pull-right");
+        }
+        //File
+        if ( !headerBar.length )
+        {
+            headerBar = $("#content");
+            headerBarPosition = "before";
+        }
+        var headerBarJson = { "headerBar":headerBar, "position":headerBarPosition }
+
+        return headerBarJson;
+    }
+
+    function addButton(targetHref)
+    {
+        var headerBarJson = getHeaderBarJson();
+        if ( headerBarJson.headerBar.length )
+        {
+            var html = "<a class='btn' href='" + targetHref + "'>Gå til modul</a>";
+
+            if(headerBarJson.position == "after")
+            {
+                headerBarJson.headerBar.append(html);
+            }
+            else
+            {
+                headerBarJson.headerBar.before(html);
+            }
+        }
+        else
+        {
+            setTimeout(function(){
+                addButton(targetHref);
+            }, 500);
+        }
+    }
 
     return {
         modifyMarkAsDoneButton: function() {
@@ -7591,6 +7647,13 @@ this.mmooc.pages = function() {
                 container.show();
             });
         },
+        addGotoModuleButton: function() {
+            var moduleItemId = mmooc.api.getCurrentModuleItemId();
+            var courseId = mmooc.api.getCurrentCourseId();
+            var targetHref = "/courses/" + courseId + "/modules#context_module_item_" + moduleItemId;
+            addButton(targetHref);
+        },
+
 
         updateSidebarWhenMarkedAsDone: function() {
           $("body").on("click", "#mark-as-done-checkbox", function() {
@@ -9229,6 +9292,7 @@ jQuery(function($) {
 
     mmooc.routes.addRouteForPath(/\/profile\/settings$/, function() {
 		var notificationButtonHTML = mmooc.util.renderTemplateWithData("notifications", {});
+        mmooc.menu.showLeftMenu();
 		document.getElementById('confirm_email_channel').insertAdjacentHTML('beforebegin', notificationButtonHTML);
     });
 
@@ -9333,7 +9397,13 @@ jQuery(function($) {
         mmooc.pages.duplicateMarkedAsDoneButton();
         mmooc.util.callWhenElementIsPresent(".sikt-diploma-button", mmooc.greeting.enableGreetingButtonIfNecessary);
         // mmooc.pages.changeTranslations();
+        if(mmooc.util.isTeacherOrAdmin())
+        {
+            mmooc.pages.addGotoModuleButton();
+        }
     });
+
+
     
     // example route: /courses/54/assignments/369 - assignment which may be a peer review (hverandrevurdering)
     mmooc.routes.addRouteForPath(/\/courses\/\d+\/assignments\/\d+/, function() {
