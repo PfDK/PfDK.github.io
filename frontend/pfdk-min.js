@@ -3433,11 +3433,22 @@ function uobAddComponents() {
 		// ================================================================================
 		// Boxes
 		//
-		// Create boxes from all tables with the codes: uob-tip, uob-info, uob-warning,
-		// uob-header,pfdk-info, pfdk-important, pfdk-tid, pfdk-verktoy and uob-question.
+		// Create boxes
 		// --------------------------------------------------------------------------------
 
-		aBoxTags = ["uob-tip", "uob-read", "uob-info", "uob-warning", "uob-header", "uob-question", "uob-quote", "uob-box", "pfdk-info", "pfdk-important", "pfdk-tid", "pfdk-verktoy"];
+		aBoxTags = [
+		"uob-tip", "pfdk-tips", 
+		"uob-read", "pfdk-les",
+		"uob-info", "pfdk-info",
+		"uob-warning", "pfdk-advarsel",
+		"uob-header", 
+		"uob-question", "pfdk-spsm", 
+		"uob-quote", "pfdk-sitat",
+		"uob-box", "pfdk-boks",
+		"pfdk-info", "pfdk-maal", 
+		"pfdk-important", "pfdk-viktig",
+		"pfdk-tid", 
+		"pfdk-verktoy"];
 
 		for (var i = 0; i < aBoxTags.length; i++) {
 			var strTag = aBoxTags[i];
@@ -9390,7 +9401,11 @@ jQuery(function($) {
         }
     });
 
-    mmooc.routes.addRouteForPathOrQueryString([/\/courses\/\d+\/assignments\/\d+/, /\/courses\/\d+\/quizzes\/\d+/], /module_item_id=/, function() {
+    mmooc.routes.addRouteForPathOrQueryString([
+        /\/courses\/\d+\/assignments\/\d+/,
+        /\/courses\/\d+\/pages\/.*$/, 
+        /\/courses\/\d+\/quizzes\/\d+/], 
+        /module_item_id=/, function() {
         mmooc.menu.showLeftMenu();
         mmooc.menu.listModuleItems();
         mmooc.pages.modifyMarkAsDoneButton();
