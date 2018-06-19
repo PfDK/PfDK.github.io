@@ -3236,7 +3236,6 @@ function uobAddComponents() {
 
 		if ($accordion.length) {
 			$accordion.accordion({
-				icons: null,
 				heightStyle: "content",
 				header: "> h4",
 				collapsible: true,
@@ -4769,7 +4768,7 @@ function program1(depth0,data) {
 this["mmooc"]["templates"]["moduleitems"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+  var buffer = "", stack1, helper, options, self=this, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
@@ -4778,7 +4777,7 @@ function program1(depth0,data) {
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\n        </div>\n\n        ";
+    + "\n        </div>\n        ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.items), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    ";
@@ -4787,17 +4786,17 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <ul class=\"mmooc-module-items\">\n                ";
+  buffer += "\n            <nav aria-label=\"content\" role=\"navigation\">\n            <ul class=\"mmooc-module-items\">\n                ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.items), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </ul>\n        ";
+  buffer += "\n            </ul>\n            </nav>\n        ";
   return buffer;
   }
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n                    ";
-  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.program(6, program6, data),fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), "SubHeader", options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.type), "SubHeader", options));
+  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.program(22, program22, data),fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), "SubHeader", options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.type), "SubHeader", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                ";
   return buffer;
@@ -4805,19 +4804,97 @@ function program3(depth0,data) {
 function program4(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                        <li class=\"mmooc-module-item\">\n                            <span class=\"mmooc-module-item-header\">";
+  buffer += "\n                        </ul>\n                        <ul class=\"mmooc-module-items \n                        ";
+  stack1 = helpers['if'].call(depth0, (data == null || data === false ? data : data.first), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                        \"/>\n                            <li class=\"mmooc-module-item mmooc-module-item-icon\">\n                                <a class=\"mmooc-reveal-trigger\"\n                                    ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isCurrentHeader), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "  \n                                    href=\"#mmooc-reveal-";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n                                    <span class=\"mmooc-module-item-title mmooc-module-item-header-title\">";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span>\n                        </li>\n                    ";
+    + "</span>\n                                    <span class=\"mmooc-module-items-icons-page ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.done), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n                                    ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isCurrentHeader), {hash:{},inverse:self.program(18, program18, data),fn:self.program(16, program16, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                                        </i>\n                                    </span>\n                                </a>\n                            </li>\n                        </ul>\n                        <ul ";
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.isCurrentHeader), {hash:{},inverse:self.noop,fn:self.program(20, program20, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " id=\"mmooc-reveal-";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"mmooc-module-items\">\n                    ";
   return buffer;
   }
+function program5(depth0,data) {
+  
+  
+  return " mmooc-module-items-header-first\n                        ";
+  }
 
-function program6(depth0,data) {
+function program7(depth0,data) {
+  
+  var buffer = "", stack1;
+  stack1 = helpers['if'].call(depth0, (data == null || data === false ? data : data.last), {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                        ";
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  
+  return " mmooc-module-items-header-last\n                          ";
+  }
+
+function program10(depth0,data) {
+  
+  
+  return " mmooc-module-items-header\n                            ";
+  }
+
+function program12(depth0,data) {
+  
+  
+  return "\n                                        id=\"mmooc-module-item-active-header\"\n                                    ";
+  }
+
+function program14(depth0,data) {
+  
+  
+  return "done";
+  }
+
+function program16(depth0,data) {
+  
+  
+  return "\n                                        <i class=\"icon-mini-arrow-down\">\n                                    ";
+  }
+
+function program18(depth0,data) {
+  
+  
+  return "\n                                        <i class=\"icon-mini-arrow-right\">\n                                    ";
+  }
+
+function program20(depth0,data) {
+  
+  
+  return "style=\"display:none\"";
+  }
+
+function program22(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n                        <li class=\"mmooc-module-item mmooc-module-item-icon\">\n                            <a class=\"";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isCurrent), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isCurrent), {hash:{},inverse:self.noop,fn:self.program(23, program23, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" href=\"";
   if (helper = helpers.html_url) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -4831,7 +4908,7 @@ function program6(depth0,data) {
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1);
-  stack1 = (helper = helpers.ifItemIsCompleted || (depth0 && depth0.ifItemIsCompleted),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.completion_requirement), options) : helperMissing.call(depth0, "ifItemIsCompleted", (depth0 && depth0.completion_requirement), options));
+  stack1 = (helper = helpers.ifItemIsCompleted || (depth0 && depth0.ifItemIsCompleted),options={hash:{},inverse:self.noop,fn:self.program(25, program25, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.completion_requirement), options) : helperMissing.call(depth0, "ifItemIsCompleted", (depth0 && depth0.completion_requirement), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\"\n                                   href=\"";
   if (helper = helpers.html_url) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -4843,19 +4920,19 @@ function program6(depth0,data) {
     + "\"></i>\n                                </span>\n                            </a>\n                        </li>\n                    ";
   return buffer;
   }
-function program7(depth0,data) {
+function program23(depth0,data) {
   
   
   return "active";
   }
 
-function program9(depth0,data) {
+function program25(depth0,data) {
   
   
   return " done";
   }
 
-  buffer += "<nav aria-label=\"content\" role=\"navigation\">\n\n    <div class=\"mmooc-module-items-back-to-course-button mmooc-back-button\">\n        <a href=\""
+  buffer += "\n    <div class=\"mmooc-module-items-back-to-course-button mmooc-back-button\">\n        <a href=\""
     + escapeExpression((helper = helpers.urlForCourseId || (depth0 && depth0.urlForCourseId),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.courseId), options) : helperMissing.call(depth0, "urlForCourseId", (depth0 && depth0.courseId), options)))
     + "\">";
   if (helper = helpers.backToCoursePage) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -4864,7 +4941,7 @@ function program9(depth0,data) {
     + "</a>\n    </div>\n\n    ";
   stack1 = helpers['with'].call(depth0, (depth0 && depth0.module), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</nav>";
+  buffer += "\n";
   return buffer;
   });
 
@@ -5713,18 +5790,64 @@ this.mmooc.api = function() {
 		//////
         getCurrentModuleForItemOrTypeAndContentId: function(moduleItemId, typeAndContentId, callback, error) {
             this.getModulesForCurrentCourse(function(modules) {
+                var bCurrentItemFound = false;
+                var currentHeaderItem = null;
                 for (var i = 0; i < modules.length; i++) {
                     var module = modules[i];
                     var items = module.items;
+                    var noOfItemsBelongingToThisHeaderDone = 0;
+                    var noOfItemsBelongingToThisHeader = 0;
                     for (var j = 0; j < items.length; j++) {
                         var item = items[j];
+                        
                         //Need to check type and id for quiz and assignment items
                         var isCurrentModuleItem = item.id == moduleItemId || (typeAndContentId != null && typeAndContentId.contentId == item.content_id && typeAndContentId.type == item.type);
                         if (isCurrentModuleItem) {
                             item.isCurrent = true;
-                            callback(module);
-                            return;
+                            bCurrentItemFound = true;
+                            if(currentHeaderItem)
+                            {
+                                currentHeaderItem.isCurrentHeader = true;
+                            }
                         }
+                        //Need to check for subheaders to support collapsible elements in the menu.
+                        if (item.type == "SubHeader")
+                        {
+                            //Need to know if headeritem icon should be green.
+                            if(currentHeaderItem && (noOfItemsBelongingToThisHeader == noOfItemsBelongingToThisHeaderDone))
+                            {
+                                currentHeaderItem.done = true;
+                            }
+                            currentHeaderItem = item;
+                            noOfItemsBelongingToThisHeaderDone = 0;
+                            noOfItemsBelongingToThisHeader = 0;
+                        }
+                        else
+                        {
+                            noOfItemsBelongingToThisHeader++;
+                        }
+
+
+                        //Keep track of number of items passed.
+                        if(item.completion_requirement) 
+                        {
+                            if(item.completion_requirement.completed) 
+                            {
+                                noOfItemsBelongingToThisHeaderDone++;
+                            }
+                        }
+                    }
+                    //Have to check if the last header item is passed.
+                    if(currentHeaderItem && (noOfItemsBelongingToThisHeader == noOfItemsBelongingToThisHeaderDone))
+                    {
+                        currentHeaderItem.passed = true;
+                    }
+                    
+                    //Callback and return when we've found the current item.
+                    if(bCurrentItemFound)
+                    {
+                        callback(module);
+                        return;
                     }
                 }
 
@@ -7308,6 +7431,31 @@ this.mmooc.menu = function() {
                 if (document.getElementById("left-side")) {
                     document.getElementById('left-side').insertAdjacentHTML('afterbegin', html);
                 }
+                $(".mmooc-reveal-trigger").click(function(event) {
+					var $trigger = $(this);
+					var body = $trigger.attr("href");
+                    var i = $trigger.find("i");
+
+                    //Hvis elementet vises så lukker vi det
+					if ($(body).css("display") != "none") {
+						$(body).slideUp(400);
+						//Hvis det inneholder det aktive elementet så må vi vise det.
+						if($trigger.attr("id") == "mmooc-module-item-active-header")
+						{
+						    $trigger.attr("class", "active mmooc-reveal-trigger");
+						}
+                        i.attr("class", "icon-mini-arrow-right");
+						
+					} else {
+						$(body).slideDown(400);
+						if($trigger.attr("id") == "mmooc-module-item-active-header")
+						{
+						    $trigger.attr("class", "mmooc-reveal-trigger");
+						}
+                        i.attr("class", "icon-mini-arrow-down");
+					}
+					return(false);
+				});                
             });
         },
         showLeftMenu: function() {
@@ -7674,6 +7822,20 @@ this.mmooc.pages = function() {
               icon.removeClass("done");
             } else {
               icon.addClass("done");
+            }
+            
+            //Check if header title should/not be marked as done as well.
+            var activeHeader = $("#mmooc-module-item-active-header");
+            var activeListId = activeHeader.attr("href");
+            var activeList = $(activeListId);
+            var noOfItemsInActiveList = activeList.find("li").length;
+            var noOfItemsDoneInActiveList = activeList.find("li").find(".done").length;
+            var headerIcon = activeHeader.find("span:last-child");
+            if(noOfItemsDoneInActiveList < noOfItemsInActiveList)
+            {
+                headerIcon.removeClass("done");
+            } else {
+                headerIcon.addClass("done");
             }
           })
         },
@@ -9377,6 +9539,7 @@ jQuery(function($) {
         }
     });
 
+    //Disse rutene gjelder når man går inn på en diskusjon fra diskusjonslisten eller når lærer har redigert en diskusjon.
     mmooc.routes.addRouteForPath([/\/courses\/\d+\/discussion_topics\/\d+/, /\/courses\/\d+\/discussion_topics\/new/], function() {
         // For discussion pages we only want the title to be "<discussion>" instead of "Discussion: <discussion>"
         var title = mmooc.util.getPageTitleAfterColon();
