@@ -3042,6 +3042,9 @@ $(document).ready(function() {
 function uobAddComponents() {
 	onElementRendered("#content .user_content.enhanced,#content .show-content.enhanced", function($content) {
 
+        // Tooltip
+        var re = /\[(.*?)\]\((.*?)\)/g;
+        $content.html($content.html().replace(re, '<span class="tooltip">$1<span class="tooltiptext">$2</span></span>'));
 
 		// ================================================================================
 		// Show non-uob-component tables
