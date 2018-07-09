@@ -4970,16 +4970,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        <div class=\"mmooc-module\">\n            <div class=\"tooltip\">\n                <h2 class=\"light\"><a href=\""
+  buffer += "\n        <div class=\"mmooc-module\">\n                <h2 class=\"light tooltip\"><a href=\""
     + escapeExpression((helper = helpers.urlForFirstNoneCompleteItem || (depth0 && depth0.urlForFirstNoneCompleteItem),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.items), options) : helperMissing.call(depth0, "urlForFirstNoneCompleteItem", (depth0 && depth0.items), options)))
     + "\">";
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a></h2>\n                <div class=\"tooltiptext\">\n                    ";
+    + "</a>\n                    <div class=\"tooltiptext\">\n                        ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.items), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                </div>\n            </div>\n            ";
+  buffer += "\n                    </div>\n                </h2>\n            ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.items), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        </div>\n    ";
@@ -4988,20 +4988,20 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n                      ";
+  buffer += "\n                          ";
   stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), "SubHeader", options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.type), "SubHeader", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                    ";
+  buffer += "\n                        ";
   return buffer;
   }
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                        ";
+  buffer += "\n                            ";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "<br/>\n                      ";
+    + "<br/>\n                          ";
   return buffer;
   }
 
