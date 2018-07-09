@@ -3044,7 +3044,7 @@ function uobAddComponents() {
 
         // Tooltip
         var re = /\[(.*?)\]\((.*?)\)/g;
-        $content.html($content.html().replace(re, '<span class="tooltip">$1<span class="tooltiptext">$2</span></span>'));
+        $content.html($content.html().replace(re, '<span class="tooltip tooltip-underline">$1<span class="tooltiptext">$2</span></span>'));
 
 		// ================================================================================
 		// Show non-uob-component tables
@@ -4970,20 +4970,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n        <div class=\"mmooc-module\">\n            <h2 class=\"light\"><a class=\"tooltip\" href=\""
+  buffer += "\n        <div class=\"mmooc-module\">\n            <div class=\"tooltip\">\n                <h2 class=\"light\"><a href=\""
     + escapeExpression((helper = helpers.urlForFirstNoneCompleteItem || (depth0 && depth0.urlForFirstNoneCompleteItem),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.items), options) : helperMissing.call(depth0, "urlForFirstNoneCompleteItem", (depth0 && depth0.items), options)))
     + "\">";
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "<div class=\"tooltiptext\"><h2 class=\"light\">";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h2>\n            ";
+    + "</a></h2>\n                <div class=\"tooltiptext\">\n                    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.items), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </div></a></h2>\n            ";
+  buffer += "\n                </div>\n            </div>\n            ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.items), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        </div>\n    ";
@@ -4992,20 +4988,20 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n              ";
+  buffer += "\n                      ";
   stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), "SubHeader", options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.type), "SubHeader", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            ";
+  buffer += "\n                    ";
   return buffer;
   }
 function program3(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n                ";
+  buffer += "\n                        ";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "<br/>\n              ";
+    + "<br/>\n                      ";
   return buffer;
   }
 
@@ -5045,7 +5041,7 @@ function program8(depth0,data) {
 function program10(depth0,data) {
   
   var buffer = "", stack1, helper, options;
-  buffer += "\n                             <li class=\"mmooc-module-item-icon\">\n                             <a class=\"tooltip mmooc-module-items-icons-";
+  buffer += "\n                             <li class=\"mmooc-module-item-icon\">\n                             <div class=\"tooltip\">\n                             <a class=\"mmooc-module-items-icons-";
   if (helper = helpers.type) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.type); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -5062,11 +5058,11 @@ function program10(depth0,data) {
     + "\"></i>\n                                 ";
   stack1 = (helper = helpers.ifItemTypeDiscussion || (depth0 && depth0.ifItemTypeDiscussion),options={hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.type), options) : helperMissing.call(depth0, "ifItemTypeDiscussion", (depth0 && depth0.type), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                                 <div class=\"tooltiptext\">";
+  buffer += "\n                            </a>\n                             <div class=\"tooltiptext\">";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</div>\n                            </a>\n                            </li>\n                      ";
+    + "</div>\n                             </div>\n                            </li>\n                      ";
   return buffer;
   }
 function program11(depth0,data) {
