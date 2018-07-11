@@ -10004,12 +10004,11 @@ jQuery(function($) {
 //	$(".ic-Layout-contentMain").css("visibility", "visible");
 	
     mmooc.routes.addRouteForPath(/\/$/, function() {
-        mmooc.menu.hideRightMenu();
         var parentId = 'content'
         if (document.location.search === "?mmpf") {
             mmooc.powerFunctions.show(parentId);
         } else {
-            mmooc.courseList.listCourses(parentId, mmooc.courseList.showAddCourseButton);
+            window.location.href = "/courses";
         }
     });
 
