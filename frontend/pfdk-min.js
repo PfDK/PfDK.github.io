@@ -6171,6 +6171,28 @@ this.mmooc.api = function() {
                 "params":   { per_page: 999 }
             });
         },       
+        getPagesForCourse: function(courseId, callback) {
+            this._get({
+                "callback": callback,
+                "uri":      "/courses/" + courseId + "/pages",
+                "params":   { per_page: 999 }
+            });
+        },
+
+        getDiscussionTopicsForCourse: function(courseId, callback) {
+            this._get({
+                "callback": callback,
+                "uri":      "/courses/" + courseId + "/discussion_topics",
+                "params":   { per_page: 999 }
+            });
+        },
+        getQuizzesForCourse: function(courseId, callback) {
+            this._get({
+                "callback": callback,
+                "uri":      "/courses/" + courseId + "/quizzes",
+                "params":   { per_page: 999 }
+            });
+        },
         
         // /api/v1/courses/54/assignments/369/submissions/1725
         getSingleSubmissionForUser : function(courseId, assignmentId, user_id, callback, error) {
