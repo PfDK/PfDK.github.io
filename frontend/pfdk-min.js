@@ -4033,14 +4033,28 @@ function program1(depth0,data) {
   if (helper = helpers.created_at) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.created_at); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></a></li>\n";
+    + "</span></a></li>\n    ";
+  stack1 = helpers['if'].call(depth0, (data == null || data === false ? data : data.last), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
   return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  return " \n        <a href=\"#\" id=\"mmooc-notifications-showall\">Vis alle</a>\n    ";
+  }
+
+function program4(depth0,data) {
+  
+  
+  return "\n    <li>Ingen varsler</li>\n";
   }
 
   buffer += "<ul id=\"mmooc-notifications\">\n";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.activities), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.activities), {hash:{},inverse:self.program(4, program4, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n</ul>\n\n<a href=\"#\" id=\"mmooc-notifications-showall\">Vis alle</a>";
+  buffer += "\n\n</ul>\n\n";
   return buffer;
   });
 
@@ -5503,11 +5517,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<ul id=\"user-menu\">\n    <li class=\"mmooc-menu-item\">\n        <a href=\"#\" class=\"mmooc-menu-item-title\">Varsler <i class=\"icon-mini-arrow-down\"></i><span id=\"mmooc-notification-count\"></span></a>\n        <div class=\"mmooc-menu-item-drop\" id=\"mmooc-activity-stream\">\n        </div>\n    </li>\n    <li class=\"mmooc-menu-item\">\n        <a href=\"/conversations\" class=\"mmooc-menu-item-title\">Innboks <span id=\"mmooc-unread-messages-count\"></span></a>\n    </li>\n    <li class=\"mmooc-menu-item profile-settings\">\n        <a href=\"#\" class=\"mmooc-menu-item-title\">\n            <div class=\"ic-avatar\" aria-hidden=\"true\">\n                <img src=\""
+  buffer += "<ul id=\"user-menu\">\n    <li class=\"mmooc-menu-item\" id=\"mmooc-menu-item-varsler\">\n        <a href=\"#\" class=\"mmooc-menu-item-title\" >Varsler <i class=\"icon-mini-arrow-down\"></i><span id=\"mmooc-notification-count\"></span></a>\n        <div class=\"mmooc-menu-item-drop\" id=\"mmooc-activity-stream\">\n        </div>\n    </li>\n    <li class=\"mmooc-menu-item\">\n        <a href=\"/conversations\" class=\"mmooc-menu-item-title\">Innboks <span id=\"mmooc-unread-messages-count\"></span></a>\n    </li>\n    <li class=\"mmooc-menu-item profile-settings\" id=\"mmooc-menu-item-profile-settings\">\n        <a href=\"#\" class=\"mmooc-menu-item-title\">\n            <div class=\"ic-avatar\" aria-hidden=\"true\">\n                <img src=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.avatar_image_url)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" alt=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" />\n            </div>\n            <i class=\"icon-mini-arrow-down\"></i>\n        </a>\n        <div class=\"mmooc-menu-item-drop\">\n            <ul>\n                <li><a href=\"/profile/settings\">Innstillinger</a></li>\n                <li class=\"helpMenu\"><a href=\"#\">Hjelp</a></li>\n                <li><a href=\"/logout\">Logg ut</a></li>\n            </ul>\n        </div>\n    </li>\n</ul>\n";
+    + "\" />\n            </div>\n            <i class=\"icon-mini-arrow-down\"></i>\n        </a>\n        <div class=\"mmooc-menu-item-drop\" id=\"mmooc-profile-settings\">\n            <ul>\n                <li><a href=\"/profile/settings\">Innstillinger</a></li>\n                <li class=\"helpMenu\"><a href=\"#\">Hjelp</a></li>\n                <li><a href=\"/logout\">Logg ut</a></li>\n            </ul>\n        </div>\n    </li>\n</ul>\n";
   return buffer;
   });
 
@@ -7972,6 +7986,18 @@ this.mmooc.menu = function() {
             $("li.helpMenu").hide();
         }
     }
+    function handleMenuClick(menuSelectId, menuId)
+    {
+        if ($(menuId).css("display") != "none") {
+            $(menuId).slideUp(400);
+            $(menuSelectId).off("mouseleave");
+        } else {
+            $(menuId).slideDown(400);
+            $(menuSelectId).mouseleave(function() {
+                $(menuId).slideUp(400);
+            });
+        }
+    }
      
     var stylesheet = createStyleSheet();
 
@@ -8073,7 +8099,13 @@ this.mmooc.menu = function() {
             if (menu !=  null) {
                 var html = mmooc.util.renderTemplateWithData("usermenu", {user: mmooc.api.getUser()});
                 menu.insertAdjacentHTML('afterend', html);
-                
+
+                $("#mmooc-menu-item-varsler").click(function(event) {
+                    handleMenuClick("#mmooc-menu-item-varsler", "#mmooc-activity-stream");
+                });
+                $("#mmooc-menu-item-profile-settings").click(function(event) {
+                    handleMenuClick("#mmooc-menu-item-profile-settings", "#mmooc-profile-settings");
+                });
                 var msgBadge = $("#mmooc-unread-messages-count");
                 if (mmooc.api.getUnreadMessageSize() === 0) {
                   msgBadge.hide();
@@ -8109,12 +8141,6 @@ this.mmooc.menu = function() {
                 document.getElementById('mmooc-activity-stream').innerHTML = mmooc.util.renderTemplateWithData("activitystream", {activities: activities});
 
                 var notifications = $("#mmooc-notifications").find("li");
-                if (notifications.size() == 0) {
-                    $("#mmooc-notifications").hide();
-                } else {
-                    $("#mmooc-notifications").show();
-                }
-
                 var showAllItems = $("#mmooc-notifications-showall");
                 if (notifications.size() > 10) {
                     notifications.slice(10).addClass("hidden");
