@@ -4511,29 +4511,44 @@ function program1(depth0,data) {
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" class=\"mmooc-size-1of3\">\n                <div class=\"mmooc-course-list-item\">\n                    <div class=\"mmooc-course-list-heading\">\n                        <h2><a href=\""
+    + "\" class=\"mmooc-size-1of3\">\n                <div class=\"mmooc-course-list-item\">\n                    <div class=\"mmooc-course-list-heading\">\n                        <h2\n                            ";
+  stack1 = (helper = helpers.ifHasRole || (depth0 && depth0.ifHasRole),options={hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.enrollments), "ObserverEnrollment", options) : helperMissing.call(depth0, "ifHasRole", (depth0 && depth0.enrollments), "ObserverEnrollment", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                            ><a href=\""
     + escapeExpression((helper = helpers.urlForCourseId || (depth0 && depth0.urlForCourseId),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.id), options) : helperMissing.call(depth0, "urlForCourseId", (depth0 && depth0.id), options)))
-    + "\">";
+    + "\">\n                                ";
   if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a></h2>\n                    </div>\n\n                    <div class=\"mmooc-course-list-description\">\n						";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.syllabus_body), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+    + "\n                                ";
+  stack1 = (helper = helpers.ifHasRole || (depth0 && depth0.ifHasRole),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.enrollments), "ObserverEnrollment", options) : helperMissing.call(depth0, "ifHasRole", (depth0 && depth0.enrollments), "ObserverEnrollment", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                            </a>					\n                        </h2>\n                    </div>\n\n                    <div class=\"mmooc-course-list-description\">\n						";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.syllabus_body), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n                    </div>\n					";
   if (helper = helpers.debug) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.debug); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\n                    \n					";
-  stack1 = (helper = helpers.ifHasRole || (depth0 && depth0.ifHasRole),options={hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.enrollments), "StudentEnrollment", options) : helperMissing.call(depth0, "ifHasRole", (depth0 && depth0.enrollments), "StudentEnrollment", options));
+    + "\n                    \n                    <div class=\"mmooc-course-list-progress\">\n					";
+  stack1 = (helper = helpers.ifHasRole || (depth0 && depth0.ifHasRole),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.enrollments), "StudentEnrollment", options) : helperMissing.call(depth0, "ifHasRole", (depth0 && depth0.enrollments), "StudentEnrollment", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					";
-  stack1 = (helper = helpers.ifHasRole || (depth0 && depth0.ifHasRole),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.enrollments), "ObserverEnrollment", options) : helperMissing.call(depth0, "ifHasRole", (depth0 && depth0.enrollments), "ObserverEnrollment", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                </div>\n            </div>\n		";
+  buffer += "\n                    </div>\n                </div>\n            </div>\n		";
   return buffer;
   }
 function program2(depth0,data) {
+  
+  
+  return "\n                                class=\"tooltip\"\n        					";
+  }
+
+function program4(depth0,data) {
+  
+  
+  return "\n                                     - Observatør\n                                    <div class=\"tooltiptext\">\n                                    Som observatør kan du se innholdet i emner der du ikke er registrert som student.\n                                    </div>\n                                ";
+  }
+
+function program6(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\n\n							";
@@ -4544,45 +4559,39 @@ function program2(depth0,data) {
   return buffer;
   }
 
-function program4(depth0,data) {
+function program8(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n						<div class=\"mmooc-course-list-progress\">\n							";
-  stack1 = helpers['with'].call(depth0, (depth0 && depth0.course_progress), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  buffer += "\n							";
+  stack1 = helpers['with'].call(depth0, (depth0 && depth0.course_progress), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n						</div>\n					";
+  buffer += "\n					";
   return buffer;
   }
-function program5(depth0,data) {
+function program9(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n								";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.requirement_count), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.requirement_count), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n							";
   return buffer;
   }
-function program6(depth0,data) {
+function program10(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n									<div class=\"mmooc-progress-bar";
-  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.requirement_completed_count), (depth0 && depth0.requirement_count), options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.requirement_completed_count), (depth0 && depth0.requirement_count), options));
+  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.requirement_completed_count), (depth0 && depth0.requirement_count), options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.requirement_completed_count), (depth0 && depth0.requirement_count), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\">\n										<div class=\"mmooc-progress-bar-inner\" style=\"width:"
     + escapeExpression((helper = helpers.percentage || (depth0 && depth0.percentage),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.requirement_completed_count), (depth0 && depth0.requirement_count), options) : helperMissing.call(depth0, "percentage", (depth0 && depth0.requirement_completed_count), (depth0 && depth0.requirement_count), options)))
     + "%\">\n										</div>\n									</div>\n								";
   return buffer;
   }
-function program7(depth0,data) {
+function program11(depth0,data) {
   
   
   return " mmooc-progress-bar-done";
-  }
-
-function program9(depth0,data) {
-  
-  
-  return "\n						<div class=\"mmooc-observer\">\n							OBSERVATØR\n						</div>					\n					";
   }
 
   buffer += "<div class=\"mmooc-course-list\">\n<h2 class=\"mmooc-course-category-title\">";
@@ -5103,6 +5112,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 
   return "<a href=\"/profile/communication\" class=\"edit_settings_link btn button-sidebar-wide\"><i class=\"icon-edit\"></i> Rediger varslingsinnstillinger</a>\n";
+  });
+
+this["mmooc"]["templates"]["observer"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"fixed_bottom\">\n    <div id=\"masquerade_bar\" class=\"ic-alert-masquerade-student-view\">\n      <div class=\"ic-alert-masquerade-student-view-module ic-alert-masquerade-student-view-module--header\">\n        <div class=\"ic-image-text-combo\">\n          <i class=\"icon-student-view\"></i>\n          <div class=\"ic-image-text-combo__text\">Du er inne i dette emnet som observatør</div>\n        </div>\n      </div>\n      <div class=\"button-explanation ic-alert-masquerade-student-view-module ic-alert-masquerade-student-view-module--description\">\n        Du vil ikke kunne levere inn oppgaver, bidra i diskusjoner eller se hva andre har bidratt med.\n      </div>\n    </div>\n</div>";
   });
 
 this["mmooc"]["templates"]["powerfunctions/account-picker"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -5789,6 +5807,7 @@ this.mmooc.api = function() {
 
             return null;
         },
+
 
         getCourse: function(courseId, callback, error) {
             this._get({
@@ -8472,7 +8491,12 @@ this.mmooc.pages = function() {
                 }
             }, 100);
         },
-
+        
+        showObserverInformationPane : function()
+        {
+			var paneHTML = mmooc.util.renderTemplateWithData("observer", {});
+			document.getElementById('wrapper').insertAdjacentHTML('afterend', paneHTML);
+		},
         // changeTranslations : function() {
         //     $("a.submit_assignment_link").text('Lever besvarelse');
         // },
@@ -9395,6 +9419,7 @@ this.mmooc.routes = function() {
                     for (var j = 0; j < route.paths.length; j++) {
                         if (route.paths[j].test(path) && !route.isAlreadyHandled) {
                             route.isAlreadyHandled = true;
+                            console.log("Handle route: " + route.paths[j]);
                             route.handler();
                         }
                     }
@@ -9404,6 +9429,7 @@ this.mmooc.routes = function() {
                     for (var k = 0; k < route.queryStrings.length; k++) {
                         if (route.queryStrings[k].test(queryString) && !route.isAlreadyHandled) {
                             route.isAlreadyHandled = true;
+                            console.log("Handle query string: " + route.queryStrings[k]);
                             route.handler();
                             return;
                         }
@@ -9806,7 +9832,10 @@ this.mmooc.util = function () {
                 && (roles.indexOf('teacher') != -1
                     || roles.indexOf('admin') != -1);
         },
-
+        isObserver: function(course) {
+            return course.enrollments[0].type == "observer";
+        },
+        
         setGlobalPeerReviewButtonState: function () {
             if(mmooc.settings.disablePeerReviewButton == true) {
                 $(".assignments #right-side :submit").prop("disabled",true);
@@ -9902,17 +9931,17 @@ if (typeof this.mmooc.i18n === 'undefined') {
         this.mmooc.i18n = {
             'DropCourseDialogText' : 'Trykk OK for å melde deg av kurset ', 
             'JoinCourseDialogText' : 'Du kan melde deg på kurset igjen seinare om du vil ', 
-            'DropCourse' : 'Meld deg av kurset', 
+            'DropCourse' : 'Meld deg av emnet', 
             'CreateAccountTitle' : 'Har du ikkje konto?', 
             'CreateAccountSubtitle' : 'Klikk her for å lage ein', 
-             'Course' : 'Kurs', 
-             'CourseDefinite' : 'Kurset', 
-             'CoursePlural' : 'Kurs', 
-             'CourseProgressionTitle' : 'Din kursprogresjon:', 
+             'Course' : 'Emne', 
+             'CourseDefinite' : 'Emnet', 
+             'CoursePlural' : 'Emne', 
+             'CourseProgressionTitle' : 'Din progresjon i emnet:', 
              'GoToCourse' : 'Gå til kursside', 
              'GoToModule' : 'Gå til modul', 
-             'BackToCoursePage' : 'Tilbake til kursforsida', 
-             'AddACourse' : 'Legg til eit kurs', 
+             'BackToCoursePage' : 'Tilbake til emneforsida', 
+             'AddACourse' : 'Legg til eit emne', 
              'Module' : 'Modul', 
              'ModulePlural' : 'Modular', 
              'CourseModules' : 'Kursmodular', 
@@ -9951,7 +9980,7 @@ if (typeof this.mmooc.i18n === 'undefined') {
              'eventsAndDeadlinesTitle' : 'Viktige datoar', 
              'WeHaveAQuestionToTeacherInTheDiscussion' : 'Vi har eit spørsmål til rettleiar i diskusjonen', 
              'NoTeacherFeedbackLink' : 'No teacher_feedback link. Does the help menu have a link to send feedback to the teacher?', 
-             'NoEnrollments' : 'Velkommen til vår kursplattform. Du er ikkje påmeldt nokon kurs endå. Klikk på knappen nedanfor for å sjå tilgjengelege kurs.', 
+             'NoEnrollments' : 'Velkommen til vår emneplattform. Du er ikkje påmeldt nokon emne endå. Klikk på knappen nedanfor for å sjå tilgjengelege emne.', 
              'OutOf' : 'av', 
              'Months' : ["januar", 
              "februar", 
@@ -9975,17 +10004,17 @@ if (typeof this.mmooc.i18n === 'undefined') {
             'DropCourse' : 'Meld deg av kurset',
             'CreateAccountTitle' : 'Har du ikke konto?',
             'CreateAccountSubtitle' : 'Klikk her for å lage en',
-            'Course' : 'Kurs',
-            'CourseDefinite' : 'Kurset',
-            'CoursePlural' : 'Kurs',
-            'CourseProgressionTitle' : 'Din kursprogresjon:',
-            'GoToCourse' : 'Gå til kursside',
+            'Course' : 'Emne',
+            'CourseDefinite' : 'Emnet',
+            'CoursePlural' : 'Emner',
+            'CourseProgressionTitle' : 'Din progresjon i emnet:',
+            'GoToCourse' : 'Gå til emneside',
             'GoToModule' : 'Gå til modul',
-            'BackToCoursePage' : 'Tilbake til kursforsiden',
-            'AddACourse' : 'Legg til et kurs',
+            'BackToCoursePage' : 'Tilbake til emneforsiden',
+            'AddACourse' : 'Legg til et emne',
             'Module' : 'Modul',
             'ModulePlural' : 'Moduler',
-            'CourseModules' : 'Kursmoduler',
+            'CourseModules' : 'Emnemoduler',
             'Assignment' : 'Oppgave',
             'Discussion' : 'Diskusjon',
             'Quiz' : 'Prøve',
@@ -10021,7 +10050,7 @@ if (typeof this.mmooc.i18n === 'undefined') {
             'eventsAndDeadlinesTitle' : 'Viktige datoer',
             'WeHaveAQuestionToTeacherInTheDiscussion' : 'Vi har et spørsmål til veileder i diskusjonen',
             'NoTeacherFeedbackLink' : 'No teacher_feedback link. Does the help menu have a link to send feedback to the teacher?',
-            'NoEnrollments' : 'Velkommen til vår kursplattform. Du er ikke påmeldt noen kurs enda. Klikk på knappen nedenfor for å se tilgjengelige kurs.',
+            'NoEnrollments' : 'Velkommen til vår emneplattform. Du er ikke påmeldt noen emner enda. Klikk på knappen nedenfor for å se tilgjengelige emner.',
             'OutOf' : 'av',
             'Months' : ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"]
         };
@@ -10055,6 +10084,18 @@ jQuery(function($) {
         mmooc.menu.hideRightMenu();
         mmooc.courseList.listCourses('content', mmooc.courseList.showAddCourseButton);
     });
+
+    mmooc.routes.addRouteForPath(/\/courses\/\d+/, function() {
+        var courseId = mmooc.api.getCurrentCourseId();
+        mmooc.api.getCourse(courseId, function(course) {
+            if(mmooc.util.isObserver(course))
+            {
+                mmooc.pages.showObserverInformationPane();
+            }
+        },  function(error) {
+            console.error("error calling mmooc.api.getCourse(" + courseId + ")", error);
+        });
+    });
     
     mmooc.routes.addRouteForPath(/\/courses\/\d+$/, function() {
         mmooc.groups.interceptLinksToGroupPage();
@@ -10069,10 +10110,12 @@ jQuery(function($) {
             var canvabadgesForCurrentCourse = '<iframe allowfullscreen="true" height="680" id="tool_content" mozallowfullscreen="true" name="tool_content" src="' + mmooc.settings.CanvaBadgeProtocolAndHost + '/badges/course/' + courseId + '" tabindex="0" webkitallowfullscreen="true" width="100%"></iframe>';
             $("#content").append(canvabadgesForCurrentCourse);
         } 
+/*
         else if(!(mmooc.util.isTeacherOrAdmin()) && $(".self_enrollment_link").length) //Route to list of all courses if student and not enrolled in course.
         {
             window.location.href = "/search/all_courses";
         }
+*/        
         else {
             mmooc.menu.showCourseMenu(courseId, mmooc.i18n.Course + 'forside', null);
             mmooc.coursePage.listModulesAndShowProgressBar();
