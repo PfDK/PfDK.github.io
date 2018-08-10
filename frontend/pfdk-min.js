@@ -4847,7 +4847,7 @@ function program4(depth0,data) {
   buffer += "\n                        </ul>\n                        <ul class=\"mmooc-module-items \n                        ";
   stack1 = helpers['if'].call(depth0, (data == null || data === false ? data : data.first), {hash:{},inverse:self.program(7, program7, data),fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n                        \"/>\n                            <li>\n                                <a class=\"mmooc-reveal-trigger\"\n                                    ";
+  buffer += "\n                        \"/>\n                            <li class=\"mmooc-module-item-reveal\">\n                                <a class=\"mmooc-reveal-trigger\"\n                                    ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.isCurrentHeader), {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "  \n                                    href=\"#mmooc-reveal-";
