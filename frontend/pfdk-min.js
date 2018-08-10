@@ -9551,12 +9551,19 @@ Handlebars.registerHelper('getSubmissionAssessmentText', function(peerReview) {
 });
 
 Handlebars.registerHelper('ifAtLeastOnePeerReviewIsComplete', function(peerReview, options) {
+    var atLeastOnePeerReviewComplete = false;
     $.each(peerReview, function (index, singlePeerReview) {
         if (singlePeerReview.workflow_state == 'completed') {
-            return options.fn(this); 
+            atLeastOnePeerReviewComplete = true;
         }
     });
-    return options.inverse(this);
+    if (atLeastOnePeerReviewComplete) { 
+        return options.fn(this); 
+    }
+    else
+    {        
+        return options.inverse(this);
+    }
 });
 
 
