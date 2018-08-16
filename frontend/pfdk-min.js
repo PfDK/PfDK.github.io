@@ -5035,7 +5035,7 @@ function program4(depth0,data) {
 function program5(depth0,data) {
   
   
-  return "\n                            <li class=\"mmooc-module-item-icon\">&nbsp;</i></li>\n                          ";
+  return "\n                          ";
   }
 
 function program7(depth0,data) {
