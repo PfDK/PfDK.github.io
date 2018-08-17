@@ -6930,7 +6930,7 @@ this.mmooc.coursesettings = function() {
                     printRedRowInTableId(tableId, "Trådtype:", d.discussion_type + "(Vi anbefaler side_comment.)");
                 }
                 var gid = d.group_category_id;
-                if(gid) {
+                if(!gid) {
                     printRedRowInTableId(tableId, "Gruppekategori:", "Mangler (Dette blir en diskusjon hvor samtlige studenter deltar. Vi anbefaler gruppediskusjoner dersom det er mange studenter.)");
                 }
             }
