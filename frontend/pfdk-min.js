@@ -7104,7 +7104,14 @@ this.mmooc.coursesettings = function() {
 
             contentHtml += "<td " + getBooleanOutput(item.published) + "</td>";
             var req = item.completion_requirement;
-            contentHtml += "<td " + getBooleanOutput(req);
+            if(item.type == "SubHeader")
+            {
+                contentHtml += "<td>";
+            }
+            else
+            {
+                contentHtml += "<td " + getBooleanOutput(req);
+            }
             if(req)
             {
                 var reqtype = req.type;
@@ -7234,7 +7241,8 @@ this.mmooc.coursesettings = function() {
                 var courseId = mmooc.api.getCurrentCourseId();
                 mmooc.api.getCourse(courseId, function(course) {
                     contentHtml += "<p><b>Kursnavn:</b> " + course.name + "</p>";
-                    contentHtml += "<p>Publisert: <span " + getBooleanOutput(course.published) + "</span></p>";
+                    var coursePublished = (course.workflow_state == "available");
+                    contentHtml += "<p>Publisert: <span " + getBooleanOutput(coursePublished) + "</span></p>";
 
                     contentHtml += createTable(PAGETYPE, "Løsrevne sider");
                     contentHtml += createTable(ASSIGNMENTTYPE, "Løsrevne oppgaver");
