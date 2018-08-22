@@ -5983,6 +5983,10 @@ this.mmooc.api = function() {
             return this._env.LOCALE;
         },
         
+        usesFrontPage : function() {
+            return this._env.COURSE.default_view == "wiki";
+        }, 
+        
         getRoles : function() {
             return this._env.current_user_roles;
         },
@@ -8091,6 +8095,9 @@ this.mmooc.menu = function() {
                 $("nav[aria-label='context']").show();
                 $("nav[aria-label='Emner-navigasjonsmeny']").show();
                 
+                //20180821ETH Venstremenyen heter noe annet for grupper.
+                $("nav[aria-label='Navigasjonsmeny for grupper ']").show();
+                
                 $("#edit_discussions_settings").show();
                 $("#availability_options").show();
                 $("#group_category_options").show();
@@ -10133,11 +10140,28 @@ jQuery(function($) {
 */        
         else {
             mmooc.menu.showCourseMenu(courseId, mmooc.i18n.Course + 'forside', null);
-            mmooc.coursePage.listModulesAndShowProgressBar();
+            
+            //20180822ETH Dersom man har valgt å bruke en wiki page som forside og man er lærer,
+            //            så viser vi wiki page. Hvis ikke 
+            if(mmooc.api.usesFrontPage())
+            {
+                if(!mmooc.util.isTeacherOrAdmin())
+                {
+                    var frontPage = $("#wiki_page_show");
+                    if(frontPage.length)
+                    {
+                        frontPage.hide();
+                    }
+                    mmooc.coursePage.listModulesAndShowProgressBar();
+                }
+            }
+            else //Hvis det ikke er wiki som forside så lister vi ut modulene på vanlig måte.
+            {
+                mmooc.coursePage.listModulesAndShowProgressBar();
+            }            
             mmooc.announcements.printAnnouncementsUnreadCount();
             mmooc.coursePage.replaceUpcomingInSidebar();
             mmooc.coursePage.overrideUnregisterDialog();
-            
             mmooc.coursePage.printDeadlinesForCourse();
         }
     });
@@ -10210,6 +10234,8 @@ jQuery(function($) {
     });
 
     //Path for showing a group discussion or creating a new discussion
+    //20180821ETH Some functionality moved to new path below and to module_item_id path below
+/*
     mmooc.routes.addRouteForPath([/\/groups\/\d+\/discussion_topics\/\d+$/, /\/groups\/\d+\/discussion_topics\/new$/], function() {
         mmooc.menu.showLeftMenu();
         mmooc.menu.listModuleItems();
@@ -10219,11 +10245,21 @@ jQuery(function($) {
         	mmooc.menu.hideSectionTabsHeader();
         }
     });
-
+    
     mmooc.routes.addRouteForPath([/\/groups\/\d+\/discussion_topics\/\d+$/], function() {
         mmooc.groups.moveSequenceLinks();
         if (!mmooc.util.isTeacherOrAdmin()) {
             mmooc.menu.hideRightMenu();
+        }
+    });
+*/
+    mmooc.routes.addRouteForPath([
+    /\/groups\/\d+\/discussion_topics\/\d+$/,
+    /\/groups\/\d+\/discussion_topics\/new$/], function() {
+        if (!mmooc.util.isTeacherOrAdmin()) 
+        {
+            mmooc.menu.hideRightMenu();
+        	mmooc.menu.hideSectionTabsHeader();
         }
     });
 
@@ -10255,14 +10291,20 @@ jQuery(function($) {
     mmooc.routes.addRouteForPathOrQueryString([
         /\/courses\/\d+\/assignments\/\d+/,
         /\/courses\/\d+\/pages\/.*$/, 
-        /\/courses\/\d+\/quizzes\/\d+/], 
+        /\/courses\/\d+\/quizzes\/\d+/,
+        /\/groups\/\d+\/discussion_topics\/\d+$/,
+        /\/groups\/\d+\/discussion_topics\/new$/], 
         /module_item_id=/, function() {
         mmooc.menu.showLeftMenu();
         mmooc.menu.listModuleItems();
         mmooc.pages.modifyMarkAsDoneButton();
         mmooc.pages.duplicateMarkedAsDoneButton();
         mmooc.util.callWhenElementIsPresent(".sikt-diploma-button", mmooc.greeting.enableGreetingButtonIfNecessary);
+        mmooc.menu.showDiscussionGroupMenu();
+        mmooc.groups.moveSequenceLinks();
+                
         // mmooc.pages.changeTranslations();
+
         if(mmooc.util.isTeacherOrAdmin())
         {
             mmooc.pages.addGotoModuleButton();
