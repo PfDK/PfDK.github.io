@@ -4318,32 +4318,53 @@ function program5(depth0,data) {
 
 function program7(depth0,data) {
   
-  
-  return "\n					<h3>Din vurdering</h3>\n				";
-  }
-
-function program9(depth0,data) {
-  
   var buffer = "", stack1;
-  buffer += "\n					";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isTeacherViewingStudentsSubmission), {hash:{},inverse:self.program(12, program12, data),fn:self.program(10, program10, data),data:data});
+  buffer += "\n            ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReviewFinished), {hash:{},inverse:self.program(10, program10, data),fn:self.program(8, program8, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					\n				";
+  buffer += "\n        ";
   return buffer;
   }
+function program8(depth0,data) {
+  
+  
+  return "\n                <div class=\"mmooc-peer-review-success\">\n                    <p class=\"mmooc-success singleLine\">\n                        Du har fullført hverandrevurderingen.\n                    </p>\n                </div>\n            ";
+  }
+
 function program10(depth0,data) {
   
   
-  return "\n						<h3>Vurdering av besvarelse</h3>\n					";
+  return "\n                <div class=\"mmooc-peer-review-warning\">\n                    <p class=\"mmooc-warning singleLine\">\n                        Denne oppgaven er ikke ferdig før du har fylt ut vurderingsskjemaet.\n                    </p>\n                </div>\n            ";
   }
 
 function program12(depth0,data) {
   
   
-  return "\n						<h3>Vurdering av din besvarelse</h3>	\n					";
+  return "\n					<h3>Din vurdering</h3>\n				";
   }
 
 function program14(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n					";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isTeacherViewingStudentsSubmission), {hash:{},inverse:self.program(17, program17, data),fn:self.program(15, program15, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n					\n				";
+  return buffer;
+  }
+function program15(depth0,data) {
+  
+  
+  return "\n						<h3>Vurdering av besvarelse</h3>\n					";
+  }
+
+function program17(depth0,data) {
+  
+  
+  return "\n						<h3>Vurdering av din besvarelse</h3>	\n					";
+  }
+
+function program19(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n				<p class=\"assessment\">Karakter: "
@@ -4354,63 +4375,42 @@ function program14(depth0,data) {
   return buffer;
   }
 
-function program16(depth0,data) {
+function program21(depth0,data) {
   
   var buffer = "", stack1;
   buffer += "\n					";
-  stack1 = helpers.unless.call(depth0, (depth0 && depth0.isPeerReviewFinished), {hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data});
+  stack1 = helpers.unless.call(depth0, (depth0 && depth0.isPeerReviewFinished), {hash:{},inverse:self.noop,fn:self.program(22, program22, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n					<a href=\"#\" class=\"open-assessment-dialog-button\">Vurderingsskjema</a>\n				";
   return buffer;
   }
-function program17(depth0,data) {
+function program22(depth0,data) {
   
   
   return "\n						<p class=\"assessment-warning\">Du har ikke vurdert denne oppgaven.</p>\n					";
   }
 
-function program19(depth0,data) {
+function program24(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n					<p class=\"assessment-text\">"
     + escapeExpression((helper = helpers.getSubmissionAssessmentText || (depth0 && depth0.getSubmissionAssessmentText),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.peerReview), options) : helperMissing.call(depth0, "getSubmissionAssessmentText", (depth0 && depth0.peerReview), options)))
     + "</p>\n					";
-  stack1 = (helper = helpers.ifAtLeastOnePeerReviewIsComplete || (depth0 && depth0.ifAtLeastOnePeerReviewIsComplete),options={hash:{},inverse:self.program(22, program22, data),fn:self.program(20, program20, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.peerReview), options) : helperMissing.call(depth0, "ifAtLeastOnePeerReviewIsComplete", (depth0 && depth0.peerReview), options));
+  stack1 = (helper = helpers.ifAtLeastOnePeerReviewIsComplete || (depth0 && depth0.ifAtLeastOnePeerReviewIsComplete),options={hash:{},inverse:self.program(27, program27, data),fn:self.program(25, program25, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.peerReview), options) : helperMissing.call(depth0, "ifAtLeastOnePeerReviewIsComplete", (depth0 && depth0.peerReview), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n				";
-  return buffer;
-  }
-function program20(depth0,data) {
-  
-  
-  return "\n    					<a href=\"#\" class=\"open-assessment-dialog-button\">Vis vurdering</a>\n    				";
-  }
-
-function program22(depth0,data) {
-  
-  
-  return "\n    				<br/>\n    				";
-  }
-
-function program24(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReviewFinished), {hash:{},inverse:self.program(27, program27, data),fn:self.program(25, program25, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n";
   return buffer;
   }
 function program25(depth0,data) {
   
   
-  return "\n        <div class=\"mmooc-peer-review-success\">\n            <p class=\"mmooc-success singleLine\">\n                Du har fullført hverandrevurderingen.\n            </p>\n        </div>\n    ";
+  return "\n    					<a href=\"#\" class=\"open-assessment-dialog-button\">Vis vurdering</a>\n    				";
   }
 
 function program27(depth0,data) {
   
   
-  return "\n        <div class=\"mmooc-peer-review-warning\">\n            <p class=\"mmooc-warning singleLine\">\n                Denne oppgaven er ikke ferdig før du har fylt ut vurderingsskjemaet.\n            </p>\n        </div>\n    ";
+  return "\n    				<br/>\n    				";
   }
 
 function program29(depth0,data) {
@@ -4460,19 +4460,19 @@ function program35(depth0,data) {
   buffer += "\n						";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.isTeacherViewingStudentsSubmission), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n					</span>\n				</li>\n			</ul>\n		</div>\n	</div>\n	<div class=\"mmooc-assignment-submission-rightside\">\n		<div class=\"mmooc-assignment-submission-assessment\">\n			<div class=\"mmooc-assignment-submission-assessment-header\">\n				";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),data:data});
+  buffer += "\n					</span>\n				</li>\n			</ul>\n		</div>\n        ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "		\n	</div>\n	<div class=\"mmooc-assignment-submission-rightside\">\n		<div class=\"mmooc-assignment-submission-assessment\">\n			<div class=\"mmooc-assignment-submission-assessment-header\">\n				";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.program(14, program14, data),fn:self.program(12, program12, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n			</div>\n			<div class=\"mmooc-assignment-submission-assessment-contents\">\n				";
-  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.submission)),stack1 == null || stack1 === false ? stack1 : stack1.grade), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.submission)),stack1 == null || stack1 === false ? stack1 : stack1.grade), {hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n				";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.program(19, program19, data),fn:self.program(16, program16, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.program(24, program24, data),fn:self.program(21, program21, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n			</div>\n		</div>\n	</div>\n</div>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n<div class=\"mmooc-assignment-submission-answers";
+  buffer += "\n			</div>\n		</div>\n	</div>\n</div>\n\n<div class=\"mmooc-assignment-submission-answers";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.isPeerReview), {hash:{},inverse:self.program(31, program31, data),fn:self.program(29, program29, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.submission)),stack1 == null || stack1 === false ? stack1 : stack1.grade), {hash:{},inverse:self.program(35, program35, data),fn:self.program(33, program33, data),data:data});
