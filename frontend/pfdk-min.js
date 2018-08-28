@@ -7965,7 +7965,7 @@ this.mmooc.menu = function() {
             menuItems[menuItems.length] = {"title": "Diskusjoner", url: "/courses/" + courseId + "/discussion_topics"};
             
             if (mmooc.util.isTeacherOrAdmin()) {
-                menuItems[menuItems.length] = {"title": "Faglærer", url: "/courses/?mmpf"};
+                menuItems[menuItems.length] = {"title": "Faglærer", url: "/courses/" + courseId + "/?mmpf"};
             }
             
             var badgeSafe = mmooc.menu.extractBadgesLinkFromPage();
@@ -10087,7 +10087,7 @@ jQuery(function($) {
 //	$(".ic-Layout-contentMain").css("visibility", "visible");
 	
     mmooc.routes.addRouteForPath(/\/$/, function() {
-        var parentId = 'content'
+        var parentId = 'wrapper'
         if (document.location.search === "?mmpf") {
             mmooc.powerFunctions.show(parentId);
         } else {
