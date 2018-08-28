@@ -3043,8 +3043,14 @@ function uobAddComponents() {
 	onElementRendered("#content .user_content.enhanced,#content .show-content.enhanced", function($content) {
 
         // Tooltip
-//        var re = /\[(.*?)\]\((.*?)\)/g;
-//        $content.html($content.html().replace(re, '<span class="tooltip tooltip-underline">$1<span class="tooltiptext">$2</span></span>'));
+        var re = /\[(.*?)\]\((.*?)\)/g;
+
+        //20180828ETH Bare bytt ut innholdet i første user content. I diskusjoner er det 
+        //en user content for hvert innlegg, og mange av innleggene blir lastet inn etter
+        //at koden vår har kjørt. Dersom vi skal støtte dette må vi ha en måte å vite når
+        //alle innleggene er lastet inn på. Da kan man kjøre $content.each iterasjon.
+        $content.first().html($content.first().html().replace(re, '<span class="tooltip tooltip-underline">$1<span class="tooltiptext">$2</span></span>'));
+
 
 		// ================================================================================
 		// Show non-uob-component tables
