@@ -6063,6 +6063,17 @@ this.mmooc.api = function() {
                 "params":   { }
             });
         },
+        getUsersForCourse: function(courseId, etype, callback, error) {
+            this._get({
+                "callback": callback,
+                "error":    error,
+                "uri":      "/courses/" + courseId + "/users",
+                "params":   {
+                    'enrollment_type[]': etype,
+                    per_page: 999
+                }
+            });
+        },
 
         getCoursesForAccount: function(account, callback, error) {
             this._get({
@@ -6285,6 +6296,26 @@ this.mmooc.api = function() {
             var jqxhr = $.post( enrollAction, function(data) {
                 callback(data)
             });
+        },
+/*
+uri = sprintf("/api/v1/courses/%d/enrollments", cid)
+dbg(uri)
+$canvas.post(uri, {'enrollment[user_id]' => user_id, 'enrollment[type]' => etype,
+	'enrollment[enrollment_state]' => "active"})
+*/        
+        enrollUserIdInSection: function(userId, sectionId, etype, callback, error) {
+            this._post({
+                "callback": callback,
+                "error":    error,
+                "uri":      "/sections/" + sectionId + "/enrollments/",
+                "params":   {
+                    'enrollment[user_id]': userId,
+                    'enrollment[type]': etype,
+                    'enrollment[enrollment_state]': 'active',
+                    'enrollment[limit_privileges_to_course_section]': true
+                }
+            });
+            return true;
         },
         createGroup: function(params, callback, error) {
             this._post({
@@ -7237,10 +7268,10 @@ this.mmooc.coursesettings = function() {
 
     return {
         addSanityCheckButton: function() {
-            $("#right-side table.summary").before("<a id='sanitycheck' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />Sanity check</a>");
+            $("#right-side table.summary").before("<a id='pfdksanitycheck' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />Sanity check</a>");
 
             //Når man trykker på knappen så kjører koden nedenfor.
-            $('#sanitycheck').on('click', function() {
+            $('#pfdksanitycheck').on('click', function() {
                 bCancel = false;
                 var contentarea = $('#content');
                 var contentHtml = "";
@@ -7281,6 +7312,52 @@ this.mmooc.coursesettings = function() {
                 }, error);
 
 
+            });
+        },
+
+        addListSectionsButton: function() {
+            $("#right-side table.summary").before("<a id='pfdklistsections' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />List sections</a>");
+
+            //Når man trykker på knappen så kjører koden nedenfor.
+            $('#pfdklistsections').on('click', function() {
+                var contentarea = $('#content');
+                contentarea.html('<h1>Seksjoner</h1>\<div id="resultarea"></div>');
+
+                var courseId = mmooc.api.getCurrentCourseId();
+                var params = { per_page: 999 };
+                mmooc.api.getSectionsForCourse(courseId, params, function(sections) {
+                    var resultHtml = "<table class='table'><tr><th>Section name</th><th>Section id</th></tr>"
+                    for (var i = 0; i < sections.length; i++) {
+                      resultHtml = resultHtml + "<tr><td>" + sections[i].name + "</td><td>" + sections[i].id + "</td></tr>";
+                    }
+                    resultHtml += "</table>";
+                    $("#resultarea").html(resultHtml);                    
+                });
+            });
+        },
+        addListUsersButton: function() {
+            $("#right-side table.summary").before("<a id='pfdklistusers' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />List users</a>");
+
+            //Når man trykker på knappen så kjører koden nedenfor.
+            $('#pfdklistusers').on('click', function() {
+                var contentarea = $('#content');
+                contentarea.html('<h1>Brukere</h1>\<div id="resultarea"></div>');
+
+                var courseId = mmooc.api.getCurrentCourseId();
+                var etype = "student";
+                mmooc.api.getUsersForCourse(courseId, etype, function(users) {
+                    var resultHtml = "<table class='table'><tr><th>Navn</th><th>Id</th><th>Login id</th><th>SIS id</th></tr>"
+                    for (var i = 0; i < users.length; i++) {
+                      resultHtml = resultHtml + "<tr><td>" + 
+                      users[i].name + "</td><td>" + 
+                      users[i].id + "</td><td>" + 
+                      users[i].login_id + "</td><td>" + 
+                      users[i].sis_user_id + "</td></tr>";
+                    }
+                    resultHtml += "</table>";
+
+                    $("#resultarea").html(resultHtml);                    
+                });
             });
         }
     }
@@ -10179,6 +10256,8 @@ jQuery(function($) {
 
     mmooc.routes.addRouteForPath(/\/courses\/\d+\/settings$/, function() {
         mmooc.coursesettings.addSanityCheckButton();
+        mmooc.coursesettings.addListSectionsButton();
+        mmooc.coursesettings.addListUsersButton();
     });
 
     mmooc.routes.addRouteForPath(/\/profile\/settings$/, function() {
