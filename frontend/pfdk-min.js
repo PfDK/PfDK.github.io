@@ -6063,18 +6063,6 @@ this.mmooc.api = function() {
                 "params":   { }
             });
         },
-        getUsersForCourse: function(courseId, etype, callback, error) {
-            this._get({
-                "callback": callback,
-                "error":    error,
-                "uri":      "/courses/" + courseId + "/users",
-                "params":   {
-                    'enrollment_type[]': etype,
-                    per_page: 999
-                }
-            });
-        },
-
         getCoursesForAccount: function(account, callback, error) {
             this._get({
                 "callback": callback,
@@ -6404,6 +6392,13 @@ $canvas.post(uri, {'enrollment[user_id]' => user_id, 'enrollment[type]' => etype
             this._get({
                 "callback": callback,
                 "uri":      "/courses/" + courseId + "/enrollments",
+                "params":   params
+            });
+        },
+        getEnrollmentsForSection: function(sectionId, params, callback) {
+            this._get({
+                "callback": callback,
+                "uri":      "/sections/" + sectionId + "/enrollments",
                 "params":   params
             });
         },
@@ -7277,6 +7272,10 @@ this.mmooc.coursesettings = function() {
 	{
 	    return "pfdkGroupCategory_" + id;
 	}
+	function getSectionTableId(id)
+	{
+	    return "pfdkSection_" + id;
+	}
 
     return {
         addSanityCheckButton: function() {
@@ -7356,21 +7355,35 @@ this.mmooc.coursesettings = function() {
                 contentarea.html('<h1>Brukere</h1>\<div id="resultarea"></div>');
 
                 var courseId = mmooc.api.getCurrentCourseId();
-                var etype = "student";
-                mmooc.api.getUsersForCourse(courseId, etype, function(users) {
-                    var resultHtml = "<table class='table'><tr><th>Navn</th><th>Id</th><th>Login id</th><th>SIS id</th></tr>"
-                    for (var i = 0; i < users.length; i++) {
-                      resultHtml = resultHtml + "<tr><td>" + 
-                      users[i].name + "</td><td>" + 
-                      users[i].id + "</td><td>" + 
-                      users[i].login_id + "</td><td>" + 
-                      users[i].sis_user_id + "</td></tr>";
-                    }
-                    resultHtml += "</table>";
 
-                    $("#resultarea").html(resultHtml);                    
-                });
-            });
+                var params = { per_page: 999 };
+                mmooc.api.getSectionsForCourse(courseId, params, function(sections) {
+                    var tableHtml = "";
+                    for (var i = 0; i < sections.length; i++) {
+                        var section = sections[i];
+                        var tableId =  getSectionTableId(section.id);                   
+                        tableHtml = "<h2>" + section.name + "</h2>" +
+                        "<table class='table' id='" +
+                        tableId +
+                        "'>";
+                        tableHtml += "<thead><tr><th>User id</th><th>SIS user id</th></tr></thead><tbody></tbody></table>";
+                        $("#resultarea").append(tableHtml); 
+
+                        var params = { per_page: 999 };
+                        mmooc.api.getEnrollmentsForSection(section.id, params, function(enrollments) {
+                            for (var j = 0; j < enrollments.length; j++) {
+                                var enrollment = enrollments[j];
+                                var tableId = getSectionTableId(enrollment.course_section_id);
+                                var rowHtml = "<tr><td>" + enrollment.user_id +
+                                "</td><td>" + 
+                                enrollment.sis_user_id +
+                                "</td></tr>";
+                                $("#" + tableId).append(rowHtml);
+                            }
+                        });
+                    } // end for all sections
+                }); //end getsectionsforcourse
+            }); //end pfdklistuser click button
         },
         addListGroupsButton: function() {
             $("#right-side table.summary").before("<a id='pfdklistgroups' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />List groups</a>");
