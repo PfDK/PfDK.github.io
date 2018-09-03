@@ -6317,16 +6317,23 @@ $canvas.post(uri, {'enrollment[user_id]' => user_id, 'enrollment[type]' => etype
             });
             return true;
         },
-        createGroup: function(params, callback, error) {
+        createGroup: function(categoryId, groupName, callback, error) {
             this._post({
                 "callback": callback,
                 "error":    error,
-                "uri":      "/group_categories/" + params.category + "/groups",
+                "uri":      "/group_categories/" + categoryId + "/groups",
                 "params":   {
-                    name: params.name,
-                    description: params.description,
-                    is_public: false,
-                    join_level: 'invitation_only'
+                    name: groupName
+                }
+            });
+        },
+        createSection: function(courseId, sectionName, callback, error) {
+            this._post({
+                "callback": callback,
+                "error":    error,
+                "uri":      "/api/v1/courses/" + courseId + "/sections",
+                "params":   {
+                    'course_section[name]': sectionName
                 }
             });
         },
@@ -7265,6 +7272,11 @@ this.mmooc.coursesettings = function() {
             printGreenRowInOrphanTable(pageType, "Ingen", "", "");
         }
 	}
+	
+	function getGroupCategoryTableId(id)
+	{
+	    return "pfdkGroupCategory_" + id;
+	}
 
     return {
         addSanityCheckButton: function() {
@@ -7359,7 +7371,43 @@ this.mmooc.coursesettings = function() {
                     $("#resultarea").html(resultHtml);                    
                 });
             });
-        }
+        },
+        addListGroupsButton: function() {
+            $("#right-side table.summary").before("<a id='pfdklistgroups' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />List groups</a>");
+
+            //Når man trykker på knappen så kjører koden nedenfor.
+            $('#pfdklistgroups').on('click', function() {
+                var contentarea = $('#content');
+                contentarea.html('<h1>Grupper</h1>\<div id="resultarea"></div>');
+
+                var courseId = mmooc.api.getCurrentCourseId();
+                mmooc.api.getGroupCategoriesForCourse(courseId, function(categories) {
+                    var tableHtml = "";
+                    for(var i = 0; i < categories.length; i++) {
+                        var category = categories[i];
+                        var tableId = getGroupCategoryTableId(category.id);
+                        tableHtml = "<h2>" + category.name + 
+                        "</h2>" + "<table class='table' id='" 
+                        + tableId 
+                        + "'>";
+                        tableHtml += "<thead><tr><th>Gruppenavn</th><th>Id</th></tr></thead><tbody></tbody></table>";
+                        $("#resultarea").append(tableHtml); 
+                        
+                        mmooc.api.getGroupsInCategory(category.id, function(groups) {
+                            for(var j = 0; j < groups.length; j++) {
+                                var group = groups[j];
+                                var tableId = getGroupCategoryTableId(group.group_category_id);
+                                var rowHtml = "<tr><td>" + group.name +
+                                "</td><td>" + 
+                                group.id +
+                                "</td></tr>";
+                                $("#" + tableId).append(rowHtml);
+                            }
+                        });
+                    }
+                }); //end getGroupCategoriesForCourse
+            }); //end pfdklistgroups button pressed
+        } //end addListGroupsButton
     }
 }();    
 this.mmooc = this.mmooc || {};
@@ -10258,6 +10306,7 @@ jQuery(function($) {
         mmooc.coursesettings.addSanityCheckButton();
         mmooc.coursesettings.addListSectionsButton();
         mmooc.coursesettings.addListUsersButton();
+        mmooc.coursesettings.addListGroupsButton();
     });
 
     mmooc.routes.addRouteForPath(/\/profile\/settings$/, function() {
@@ -10297,7 +10346,6 @@ jQuery(function($) {
         });
         mmooc.announcements.printAnnouncementsUnreadCount();
     });
-
     mmooc.routes.addRouteForPath(/\/courses\/\d+\/users$/, function() {
         var courseId = mmooc.api.getCurrentCourseId();
         mmooc.menu.showCourseMenu(courseId, '', mmooc.util.getPageTitleBeforeColon());
