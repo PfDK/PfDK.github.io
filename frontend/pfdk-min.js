@@ -6331,7 +6331,7 @@ $canvas.post(uri, {'enrollment[user_id]' => user_id, 'enrollment[type]' => etype
             this._post({
                 "callback": callback,
                 "error":    error,
-                "uri":      "/api/v1/courses/" + courseId + "/sections",
+                "uri":      "/courses/" + courseId + "/sections",
                 "params":   {
                     'course_section[name]': sectionName
                 }
