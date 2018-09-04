@@ -4800,7 +4800,7 @@ function program1(depth0,data) {
 
   buffer += "<div class=\"mmooc-back-button\">\n    <a href=\""
     + escapeExpression((helper = helpers.urlForCourseId || (depth0 && depth0.urlForCourseId),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.courseId), options) : helperMissing.call(depth0, "urlForCourseId", (depth0 && depth0.courseId), options)))
-    + "/groups\">Tilbake til kursgrupper</a>\n</div>\n<div id=\"mmooc-group-header\">\n    <div id=\"mmooc-group-members\">\n        <p><b>Gruppemedlemmer</b></p>\n\n        <div class=\"mmooc-group-members-list\">\n            ";
+    + "/groups\">Tilbake til gruppeliste</a>\n</div>\n<div id=\"mmooc-group-header\">\n    <div id=\"mmooc-group-members\">\n        <p><b>Gruppemedlemmer</b></p>\n\n        <div class=\"mmooc-group-members-list\">\n            ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.members), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        </div>\n    </div>\n    <div id=\"mmooc-group-links\">\n        <p>\n            <a target=\"_new\" href=\"https://connect.uninett.no/uit-videorom-matematikkmooc-";
@@ -5805,11 +5805,19 @@ this.mmooc.api = function() {
             } else if ($("#discussion_container").size() > 0) {
                 // Group subpages contains course id only in a link
                 //#discussion_topic > div.entry-content > header > div > div.pull-left > span > a
-                var tmp = $("#discussion_topic div.entry-content header div div.pull-left span a").attr("href").split("/");
-                if (tmp.length == 3) {
-                    return parseInt(tmp[2], 10);
+                //20180904ETH Student self created group discussion does not have this element.
+                //            Add checking to avoid exception.
+                var tmp = $("#discussion_topic div.entry-content header div div.pull-left span a");
+                if(tmp.length) {
+                    var tmpHref = tmp.attr("href");
+                    if(tmpHref.length) {
+                        var tmpHrefArr = tmpHref.split("/");
+                        if (tmpHrefArr.length == 3) {
+                            return parseInt(tmpHrefArr[2], 10);
+                        }
+                    }
                 }
-            }
+            } 
 
             return null;
         },
@@ -8397,7 +8405,8 @@ this.mmooc.menu = function() {
                 
                 // Get help from teacher by clicking a button
                 var getHelpButtonFromteacherButtonHTML = mmooc.util.renderTemplateWithData("groupdiscussionGetHelpFromTeacher", {});
-                document.getElementById('content').insertAdjacentHTML('afterbegin', getHelpButtonFromteacherButtonHTML);
+                //document.getElementById('content').insertAdjacentHTML('afterbegin', getHelpButtonFromteacherButtonHTML);
+                $("#discussion-managebar > div > div > div.pull-right").append(getHelpButtonFromteacherButtonHTML);
                 _addClickEventOnGetHelpFromTeacherButton();
             }
 
@@ -10377,7 +10386,7 @@ jQuery(function($) {
                 mmooc.api.getGroup(groupId,function(group) {
                     var courseId = group.course_id;
                     mmooc.menu.showCourseMenu(courseId, 'Grupper', mmooc.util.getPageTitleAfterColon());
-                    mmooc.groups.showGroupHeader(groupId, courseId);
+                    mmooc.groups.showGroupHeader(group.id, courseId);
                 });
             }
         }
@@ -10411,6 +10420,24 @@ jQuery(function($) {
     mmooc.routes.addRouteForPath([
     /\/groups\/\d+\/discussion_topics\/\d+$/,
     /\/groups\/\d+\/discussion_topics\/new$/], function() {
+        mmooc.menu.showDiscussionGroupMenu();
+        var courseId = mmooc.api.getCurrentCourseId();
+        
+        //If courseId was found, it is a group discussion created by a teacher.
+        if(courseId) {
+            mmooc.menu.showBackButton("/courses/" + courseId + "/discussion_topics", "Tilbake til diskusjoner");                
+        }
+        else {
+            var groupId = mmooc.api.getCurrentGroupId();
+            if(null != groupId)
+            {
+                mmooc.api.getGroup(groupId,function(group) {
+                    var courseId = group.course_id;
+                    mmooc.menu.showBackButton("/groups/" + group.id + "/discussion_topics", "Tilbake til gruppeside");                
+                });
+            }
+        }
+        
         if (!mmooc.util.isTeacherOrAdmin()) 
         {
             mmooc.menu.hideRightMenu();
@@ -10438,7 +10465,7 @@ jQuery(function($) {
         } else if (mmooc.api.getCurrentModuleItemId() == null) {
             // Only show course menu if this discussion is not a module item
             // Note detection if this is a module item is based on precense of query parameter
-            mmooc.menu.showCourseMenu(courseId, 'Diskusjoner', title);
+//            mmooc.menu.showCourseMenu(courseId, 'Diskusjoner', title);
             mmooc.menu.showBackButton("/courses/" + courseId + "/discussion_topics", "Tilbake til diskusjoner");
         }
     });
@@ -10446,9 +10473,7 @@ jQuery(function($) {
     mmooc.routes.addRouteForPathOrQueryString([
         /\/courses\/\d+\/assignments\/\d+/,
         /\/courses\/\d+\/pages\/.*$/, 
-        /\/courses\/\d+\/quizzes\/\d+/,
-        /\/groups\/\d+\/discussion_topics\/\d+$/,
-        /\/groups\/\d+\/discussion_topics\/new$/], 
+        /\/courses\/\d+\/quizzes\/\d+/], 
         /module_item_id=/, function() {
         mmooc.menu.showLeftMenu();
         mmooc.menu.listModuleItems();
