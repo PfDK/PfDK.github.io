@@ -8055,6 +8055,12 @@ this.mmooc.groups = function() {
                 var href= $(this).attr("href");
                 interceptLinkToGroupPageForHref(href, event);
             });
+
+            //20180906ETH Vi ønsker diskusjonsvisning som default for lærere også.
+            $("#content-wrapper").on('click', '.visit-group', function(event) {
+                var href= $(this).attr("href");
+                interceptLinkToGroupPageForHref(href, event);
+            });            
         },
 
         showGroupHeader: function(groupId, courseId) {
