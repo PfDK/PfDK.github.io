@@ -8250,7 +8250,8 @@ this.mmooc.menu = function() {
                 $("nav[aria-label='Emner-navigasjonsmeny']").show();
                 
                 //20180821ETH Venstremenyen heter noe annet for grupper.
-                $("nav[aria-label='Navigasjonsmeny for grupper ']").show();
+                //20180906ETH Men vi ønsker ikke vise den.
+//                $("nav[aria-label='Navigasjonsmeny for grupper ']").show();
                 
                 $("#edit_discussions_settings").show();
                 $("#availability_options").show();
