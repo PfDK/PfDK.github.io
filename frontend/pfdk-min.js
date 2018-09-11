@@ -10497,7 +10497,8 @@ jQuery(function($) {
         mmooc.pages.modifyMarkAsDoneButton();
         mmooc.pages.duplicateMarkedAsDoneButton();
         mmooc.util.callWhenElementIsPresent(".sikt-diploma-button", mmooc.greeting.enableGreetingButtonIfNecessary);
-        mmooc.menu.showDiscussionGroupMenu();
+//20180911ETH showDiscussionGroupMenu is handled by group discussion path above.
+//        mmooc.menu.showDiscussionGroupMenu();
         mmooc.groups.moveSequenceLinks();
                 
         // mmooc.pages.changeTranslations();
