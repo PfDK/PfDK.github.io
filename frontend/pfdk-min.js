@@ -6984,6 +6984,10 @@ this.mmooc.coursesettings = function() {
                 if(!gid) {
                     printRedRowInTableId(tableId, "Gruppekategori:", "Mangler (Dette blir en diskusjon hvor samtlige studenter deltar. Vi anbefaler gruppediskusjoner dersom det er mange studenter.)");
                 }
+                else
+                {
+                    printGreenRowInTableId(tableId, "Gruppekategori:", gid);
+                }
             }
         }(tableId)));
     }
