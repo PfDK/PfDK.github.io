@@ -10471,6 +10471,10 @@ jQuery(function($) {
             mmooc.menu.hideRightMenu();
         	mmooc.menu.hideSectionTabsHeader();
         }
+        else
+        {
+            mmooc.groups.interceptLinksToTeacherGroupPage();
+        }
     });
 
     //Disse rutene gjelder når man går inn på en diskusjon fra diskusjonslisten eller når lærer har redigert en diskusjon.
