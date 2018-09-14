@@ -6017,7 +6017,6 @@ this.mmooc.api = function() {
                 "params":   { }
             });
         },
-
         getActivityStreamForUser: function(callback, error) {
             this._get({
                 "callback": callback,
@@ -6039,18 +6038,15 @@ this.mmooc.api = function() {
             }
         },
 
-        getUnreadMessageSize: function() {
-            
-            var $oldUIUnreadMessages = $('.unread-messages-count');
-            var $newUIUnreadMessages = $('#global_nav_conversations_link .menu-item__badge');           
-            
-            if ($oldUIUnreadMessages.length) {
-                return parseInt($oldUIUnreadMessages.text()); //returns number of unread messages for old UI.
-            } else if ($newUIUnreadMessages.length) {
-                return parseInt($newUIUnreadMessages.text()); //returns number of unread messages for new UI.
-            } else {
-                return 0;
-            }
+        //20180914ETH Inbox unread count used the DOM, but Canvas updates the DOM asynchronously, causing
+        //            the value to be 0 if our code ran to early. Use the API instead.
+        getUnreadMessageSize: function(callback, error) {
+            this._get({
+                "callback": callback,
+                "error":    error,
+                "uri":      "/conversations/unread_count",
+                "params":   { }
+            });
         },
 
         getAccounts: function(callback, error) {
@@ -7397,6 +7393,48 @@ this.mmooc.coursesettings = function() {
                 }); //end getsectionsforcourse
             }); //end pfdklistuser click button
         },
+        addListAssignmentsButton: function() {
+            $("#right-side table.summary").before("<a id='pfdklistassignments' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />List assignments</a>");
+
+            //Når man trykker på knappen så kjører koden nedenfor.
+            $('#pfdklistassignments').on('click', function() {
+                var contentarea = $('#content');
+                contentarea.html('<h1>Oppgaver</h1>\<div id="resultarea"></div>');
+
+                var courseId = mmooc.api.getCurrentCourseId();
+
+                var params = { per_page: 999 };
+                mmooc.api.getAssignmentsForCourse(courseId, function(assignments) {
+                    if(!assignments.length)
+                    {
+                        $("#resultarea").append("Ingen oppgaver");
+                    }
+                    else {
+                        var tableHtml = "<table class='table' id='pfdkassignmentstable'>";
+                        tableHtml += "<thead><tr><th>Oppgave id</th><th>Beskrivelse</th><th>Hverandrevurdering</th></tr></thead><tbody></tbody></table>";
+                        $("#resultarea").append(tableHtml); 
+                        for (var i = 0; i < assignments.length; i++) {
+                            var assignment = assignments[i];
+                            var peerReview = "NEI";
+                        
+                            if(assignment.peer_reviews) {
+                                peerReview = "JA";
+                            }
+
+                            var rowHtml = "<tr><td>" + assignment.id +
+                                    "</td><td><a href='" +
+                                    assignment.html_url + "' target='_blank'>"
+                                     + 
+                                    assignment.name +
+                                    "</a></td><td>" + peerReview +
+                                    "</td></tr>";
+                            $("#pfdkassignmentstable").append(rowHtml);
+                        } //end for all assignments
+                    } // endif any assignments
+                }); //end getAssignmentsForCourse
+            }); //end addListAssignmentsButton click button
+        },
+       
         addListGroupsButton: function() {
             $("#right-side table.summary").before("<a id='pfdklistgroups' class='Button Button--link Button--link--has-divider Button--course-settings' href='#'><i class='icon-student-view' />List groups</a>");
 
@@ -8305,13 +8343,18 @@ this.mmooc.menu = function() {
                 $("#mmooc-menu-item-profile-settings").click(function(event) {
                     handleMenuClick("#mmooc-menu-item-profile-settings", "#mmooc-profile-settings");
                 });
-                var msgBadge = $("#mmooc-unread-messages-count");
-                if (mmooc.api.getUnreadMessageSize() === 0) {
-                  msgBadge.hide();
-                } else {
-                  msgBadge.html(mmooc.api.getUnreadMessageSize());
-                  msgBadge.show();
-                }
+                mmooc.api.getUnreadMessageSize(function(conversations) {
+                    var msgBadge = $("#mmooc-unread-messages-count");
+                    if(conversations.unread_count != "0")
+                    {
+                      msgBadge.html(conversations.unread_count);
+                      msgBadge.show();
+                    }
+                    else
+                    {
+                      msgBadge.hide();
+                    }
+                });
                 this.updateNotificationsForUser();
                 
                 $(document).on("click", ".helpMenu", openHelpDialog);
@@ -10344,6 +10387,7 @@ jQuery(function($) {
         mmooc.coursesettings.addListSectionsButton();
         mmooc.coursesettings.addListUsersButton();
         mmooc.coursesettings.addListGroupsButton();
+        mmooc.coursesettings.addListAssignmentsButton();
     });
 
     mmooc.routes.addRouteForPath(/\/profile\/settings$/, function() {
