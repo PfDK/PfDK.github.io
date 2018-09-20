@@ -6048,6 +6048,56 @@ this.mmooc.api = function() {
                 "params":   { }
             });
         },
+//api/v1/search/recipients?search=&per_page=20&permissions[]=send_messages_all&messageable_only=true&synthetic_contexts=true&context=course_1_sections
+//[{"id":"section_4","name":"Test 1","avatar_url":"http://localhost/images/messages/avatar-group-50.png","type":"context","user_count":2,"permissions":{"send_messages_all":true,"send_messages":true}}]
+        getSectionRecipient: function(courseId, callback, error) {
+            var recipientsContext = "course_" + courseId + "_sections";
+            this._get({
+                "callback": callback,
+                "error":    error,
+                "uri":      "/search/recipients",
+                "params":   {
+                    permissions: ["send_messages_all"],
+                    messageable_only: true,
+                    synthetic_contexts: true,
+                    context: recipientsContext
+                 }
+            });
+        },
+
+        /*
+        from_conversation_id: 
+mode: async
+scope: 
+filter: 
+group_conversation: true
+course: course_1
+context_code: course_1
+recipients[]: section_6
+subject: Test
+bulk_message: 0
+user_note: 0
+media_comment_id: 
+media_comment_type: 
+body: test
+*/
+
+
+        postMessageToSection: function(courseId, sectionRecipient, callback, error) {
+            var courseContext = "course_" + courseId;
+            this._post({
+                "callback": callback,
+                "error":    error,
+                "uri":      "/conversations",
+                "params":   {
+                    course: courseContext,
+                    recipients: [sectionRecipient],
+                    subject: "Testmessage",
+                    body: "Testbody"
+                }
+            });
+        },
+
 
         getAccounts: function(callback, error) {
             this._get({
@@ -6273,6 +6323,7 @@ this.mmooc.api = function() {
                 "params":   {"include": ["user"]}
             });
         },
+        
  
         createPeerReview: function(courseID, assignmentID, submissionID, userID, callback, error) {
             this._post({
