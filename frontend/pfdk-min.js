@@ -4754,10 +4754,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["mmooc"]["templates"]["groupdiscussionGetHelpFromTeacher"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  return "<div class=\"getTeachersHelpContainer\">\n    <button type=\"button\" id=\"mmooc-get-teachers-help\" class=\"btn btn-primary getTeachersHelp\">Tilkall veileder</button>\n</div>";
+  buffer += "<div class=\"getTeachersHelpContainer\">\n    <div class=\"tooltip_below\">\n        <button type=\"button\" id=\"mmooc-get-teachers-help\" class=\"btn btn-primary getTeachersHelp\">Tilkall veileder</button>\n        <div class=\"tooltiptext\">\n        ";
+  if (helper = helpers.hoverOverText) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.hoverOverText); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\n        </div>\n    </div>\n</div>    \n    ";
+  return buffer;
   });
 
 this["mmooc"]["templates"]["groupdiscussionheader"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -5545,7 +5550,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.avatar_image_url)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" alt=\""
     + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.user)),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" />\n            </div>\n            <i class=\"icon-mini-arrow-down\"></i>\n        </a>\n        <div class=\"mmooc-menu-item-drop\" id=\"mmooc-profile-settings\">\n            <ul>\n                <li><a href=\"/profile/settings\">Innstillinger</a></li>\n                <li class=\"helpMenu\"><a href=\"#\">Hjelp</a></li>\n                <li><a href=\"/logout\">Logg ut</a></li>\n            </ul>\n        </div>\n    </li>\n</ul>\n";
+    + "\" />\n            </div>\n            <i class=\"icon-mini-arrow-down\"></i>\n        </a>\n        <div class=\"mmooc-menu-item-drop\" id=\"mmooc-profile-settings\">\n            <ul>\n                <li><a href=\"/profile/settings\">Innstillinger</a></li>\n                <li><a href=\"/logout\">Logg ut</a></li>\n            </ul>\n        </div>\n    </li>\n</ul>\n";
   return buffer;
   });
 
@@ -6050,7 +6055,7 @@ this.mmooc.api = function() {
         },
 //api/v1/search/recipients?search=&per_page=20&permissions[]=send_messages_all&messageable_only=true&synthetic_contexts=true&context=course_1_sections
 //[{"id":"section_4","name":"Test 1","avatar_url":"http://localhost/images/messages/avatar-group-50.png","type":"context","user_count":2,"permissions":{"send_messages_all":true,"send_messages":true}}]
-        getSectionRecipient: function(courseId, callback, error) {
+        getSectionRecipients: function(courseId, callback, error) {
             var recipientsContext = "course_" + courseId + "_sections";
             this._get({
                 "callback": callback,
@@ -6083,7 +6088,7 @@ body: test
 */
 
 
-        postMessageToSection: function(courseId, sectionRecipient, callback, error) {
+        postMessageToConversation: function(courseId, recipient, subject, body, callback, error) {
             var courseContext = "course_" + courseId;
             this._post({
                 "callback": callback,
@@ -6091,9 +6096,9 @@ body: test
                 "uri":      "/conversations",
                 "params":   {
                     course: courseContext,
-                    recipients: [sectionRecipient],
-                    subject: "Testmessage",
-                    body: "Testbody"
+                    recipients: [recipient],
+                    subject: subject,
+                    body: body
                 }
             });
         },
@@ -6217,7 +6222,6 @@ body: test
             });
         },
         
-        // /api/v1/group_categories/users/self/groups
         getUserGroups: function(callback, error) {
             this._get({
                 "callback": callback,
@@ -6225,6 +6229,21 @@ body: test
                 "uri":      "/users/self/groups",
                 "params":   { per_page: 999 }
             });
+        },        
+        getUserGroupsForCourse: function(courseId, callback, error) {
+            this.getUserGroups(function(courseId) {
+                return function(groups) {
+                    var usersGroups = [];
+                    for (var i = 0; i < groups.length; i++) {
+                        var group = groups[i];
+                        if(group.course_id == courseId)
+                        {
+                            usersGroups.push(group);
+                        }
+                    }
+                    callback(usersGroups);
+                }
+            }(courseId));
         },        
         
         // /api/v1/courses/:course_id/sections
@@ -8408,8 +8427,9 @@ this.mmooc.menu = function() {
                 });
                 this.updateNotificationsForUser();
                 
-                $(document).on("click", ".helpMenu", openHelpDialog);
-                hideHelpMenuElementIfNotActivated();
+                //20180921ETH Vi bruker ikke hjelpemenyen lenger.
+//                $(document).on("click", ".helpMenu", openHelpDialog);
+//                hideHelpMenuElementIfNotActivated();
             }
         },
 
@@ -8476,46 +8496,85 @@ this.mmooc.menu = function() {
 
             function _addGetHelpFromteacherButton(group) {
                 
-                function _selectCourseAndPrefillMessageInDialogBox() {
-                
-                    var $teacherFeedbackBody = $("#help_tray textarea");
-                    var courseId = mmooc.api.getCurrentCourseId();
+                //Match gruppenavn mot seksjon i seksjonsliste.
+                function _getSectionRecipientFromGroupName(sectionRecipients, groupName)
+                {
+                    for(var i = 0; i < sectionRecipients.length; i++) {
+                        var r = sectionRecipients[i];
+                        if(r.name == groupName)
+                        {
+                            return r.id;
+                        }
+                    }
+                    return null;
+                }
 
-                    mmooc.api.getCourse(courseId, function(course) {
-                        var courseName = course.name;
-                        var discussionUrl = window.location.href;
-                        var discussionAndGroupTitle = $(".discussion-title").text();
-                        var discussionTitle = strLeft(discussionAndGroupTitle, " - ");
-                        var newLine = "\n";
-                        //Canvas now uses React for their help dialog, so we need to set the selected value slightly different.
-                        var selectValue = $('#help_tray form fieldset label select option:contains("' + courseName + '")').prop('value');
-                        $('#help_tray form fieldset label select').prop('value', selectValue);
-                        var teacherFeedbackBodyHtml = mmooc.i18n.ThisIsGroup + ' "' + group.name + '".' + newLine + newLine + mmooc.i18n.WeHaveAQuestionToTeacherInTheDiscussion + ' "' + discussionTitle + '":' + newLine + discussionUrl;
-                        $teacherFeedbackBody.val(teacherFeedbackBodyHtml);
+                function _tilkallVeilederFeilet()
+                {
+                    $("#mmooc-get-teachers-help").addClass("btn-failure");
+                    $("#mmooc-get-teachers-help").html("Tilkall veileder feilet");
+                }
+
+                function _sendMessageToSectionTeachers() {
+                    var courseId = mmooc.api.getCurrentCourseId();
+                    mmooc.api.getUserGroupsForCourse(courseId, function(groups) {
+                        if((groups.length == 0) || (groups.length > 1) ) {
+                            _tilkallVeilederFeilet();
+                            alert("Det er noe galt med gruppeoppsettet ditt.\nDu er medlem i " + groups.length + " grupper.");
+                        }
+                        else
+                        {
+                            var group = groups[0]; 
+                            var groupName = group.name;
+                            var groupCourseId = group.course_id;
+                            mmooc.api.getSectionRecipients(groupCourseId, (function(courseId) {
+                                return function(recipients) {
+                                    var sectionRecipient = _getSectionRecipientFromGroupName(recipients, groupName);
+                                    if(sectionRecipient == null)
+                                    {
+                                        _tilkallVeilederFeilet();
+                                        alert("Det er noe galt med gruppeoppsettet ditt.\nFant ikke seksjonen til " + groupName);
+                                    }
+                                    else
+                                    {
+                                        var sectionRecipientTeachers = sectionRecipient + "_teachers";
+                                        var subject = mmooc.i18n.ThisIsGroup + " " + groupName;
+                                        var discussionUrl = window.location.href;
+                                        var discussionAndGroupTitle = $(".discussion-title").text();
+                                        var discussionTitle = strLeft(discussionAndGroupTitle, " - ");
+                                        var newLine = "\n";
+
+                                        var body = mmooc.i18n.WeHaveAQuestionToTeacherInTheDiscussion 
+                                            + ' "' + discussionTitle + '":' + newLine + discussionUrl;
+
+                                        $("#mmooc-get-teachers-help").html("Sender melding...");
+
+                                        mmooc.api.postMessageToConversation(courseId, sectionRecipientTeachers, subject, body, function(result) {
+                                            console.log(result);
+                                            $("#mmooc-get-teachers-help").addClass("btn-done");
+                                            $("#mmooc-get-teachers-help").html("Veileder tilkalt");
+                                        }, function(error) {
+                                            _tilkallVeilederFeilet();
+                                            alert("Tilkall veileder feilet. Gruppen har ingen veileder.");
+                                            console.log(error);
+                                        });
+                                    }
+                                }
+                            }(groupCourseId)));
+                        }
                     });
                 }
 
-                function _openTeacherFeedbackLink() {
-                    var $teacherFeedbackLink = $("#help_tray a[href='#teacher_feedback']");
-                    if (!$teacherFeedbackLink.length) {
-                        console.log(mmooc.i18n.NoTeacherFeedbackLink);
-                        return false;
-                    }
-                    //Ref. https://stackoverflow.com/questions/7999806/jquery-how-to-trigger-click-event-on-href-element
-                    $teacherFeedbackLink[0].click();
-                    setTimeout(_selectCourseAndPrefillMessageInDialogBox, 600); //Need to wait for the get teacher help contents to be loaded
-                    
-                }
-
                 function _addClickEventOnGetHelpFromTeacherButton() {
-                    $(document).on("click", "#mmooc-get-teachers-help", function(event) {
-                        $('#global_nav_help_link').click();
-                        setTimeout(_openTeacherFeedbackLink, 600); //Need to wait for the help dialog contents to be loaded
+                    $("#mmooc-get-teachers-help").click(function() {
+                        $("#mmooc-get-teachers-help").off("click");
+                        $("#mmooc-get-teachers-help").html("Finner veileder...");
+                        _sendMessageToSectionTeachers();
                     });
                 }
                 
                 // Get help from teacher by clicking a button
-                var getHelpButtonFromteacherButtonHTML = mmooc.util.renderTemplateWithData("groupdiscussionGetHelpFromTeacher", {});
+                var getHelpButtonFromteacherButtonHTML = mmooc.util.renderTemplateWithData("groupdiscussionGetHelpFromTeacher", {hoverOverText: mmooc.i18n.CallForInstructorHoverOverText});
                 //document.getElementById('content').insertAdjacentHTML('afterbegin', getHelpButtonFromteacherButtonHTML);
                 $("#discussion-managebar > div > div > div.pull-right").append(getHelpButtonFromteacherButtonHTML);
                 _addClickEventOnGetHelpFromTeacherButton();
@@ -10263,6 +10322,7 @@ if (typeof this.mmooc.i18n === 'undefined') {
              'ThisIsGroup' : 'Dette er gruppe', 
              'eventsAndDeadlinesTitle' : 'Viktige datoar', 
              'WeHaveAQuestionToTeacherInTheDiscussion' : 'Vi har eit spørsmål til rettleiar i diskusjonen', 
+             'CallForInstructorHoverOverText' : 'Sender en melding til veileder om at dere trenger hjelp i denne konkrete gruppediskusjonen. Trenger du personlig veiledning: send melding til din veileder i innboks.',
              'NoTeacherFeedbackLink' : 'No teacher_feedback link. Does the help menu have a link to send feedback to the teacher?', 
              'NoEnrollments' : 'Velkommen til vår emneplattform. Du er ikkje påmeldt nokon emne endå. Klikk på knappen nedanfor for å sjå tilgjengelege emne.', 
              'OutOf' : 'av', 
@@ -10333,6 +10393,7 @@ if (typeof this.mmooc.i18n === 'undefined') {
             'ThisIsGroup' : 'Dette er gruppe',
             'eventsAndDeadlinesTitle' : 'Viktige datoer',
             'WeHaveAQuestionToTeacherInTheDiscussion' : 'Vi har et spørsmål til veileder i diskusjonen',
+            'CallForInstructorHoverOverText' : 'Sender ei melding til rettleiar om at de treng hjelp i denne konkrete gruppediskusjonen. Treng du personleg rettleiing: send melding til din rettleiar i innboks.',
             'NoTeacherFeedbackLink' : 'No teacher_feedback link. Does the help menu have a link to send feedback to the teacher?',
             'NoEnrollments' : 'Velkommen til vår emneplattform. Du er ikke påmeldt noen emner enda. Klikk på knappen nedenfor for å se tilgjengelige emner.',
             'OutOf' : 'av',
