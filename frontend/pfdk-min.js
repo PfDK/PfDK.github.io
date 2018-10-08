@@ -6065,7 +6065,8 @@ this.mmooc.api = function() {
                     permissions: ["send_messages_all"],
                     messageable_only: true,
                     synthetic_contexts: true,
-                    context: recipientsContext
+                    context: recipientsContext,
+                    per_page: 999
                  }
             });
         },
@@ -8538,7 +8539,7 @@ this.mmooc.menu = function() {
                                     else
                                     {
                                         var sectionRecipientTeachers = sectionRecipient + "_teachers";
-                                        var subject = mmooc.i18n.ThisIsGroup + " " + groupName;
+                                        var subject = groupName + " " + mmooc.i18n.GroupGetInTouchSubject;
                                         var discussionUrl = window.location.href;
                                         var discussionAndGroupTitle = $(".discussion-title").text();
                                         var discussionTitle = strLeft(discussionAndGroupTitle, " - ");
@@ -10319,7 +10320,7 @@ if (typeof this.mmooc.i18n === 'undefined') {
              'SubmissionIsAssessedByOne' : 'Vurderinga er klar', 
              'SubmissionIsAssessedByAll' : 'Alle vurderingar er klare', 
              'SubmissionAssessmentsAreReady' : 'vurderingar er klare', 
-             'ThisIsGroup' : 'Dette er gruppe', 
+             'GroupGetInTouchSubject' : 'ønsker kontakt', 
              'eventsAndDeadlinesTitle' : 'Viktige datoar', 
              'WeHaveAQuestionToTeacherInTheDiscussion' : 'Vi har eit spørsmål til rettleiar i diskusjonen', 
              'CallForInstructorHoverOverText' : 'Sender ei melding til rettleiar om at de treng hjelp i denne konkrete gruppediskusjonen. Treng du personleg rettleiing: send melding til din rettleiar i innboks.',
@@ -10390,7 +10391,7 @@ if (typeof this.mmooc.i18n === 'undefined') {
             'SubmissionIsAssessedByOne' : 'Vurderingen er klar',
             'SubmissionIsAssessedByAll' : 'Alle vurderinger er klare',
             'SubmissionAssessmentsAreReady' : 'vurderinger er klare',
-            'ThisIsGroup' : 'Dette er gruppe',
+            'GroupGetInTouchSubject' : 'ønsker kontakt',
             'eventsAndDeadlinesTitle' : 'Viktige datoer',
             'WeHaveAQuestionToTeacherInTheDiscussion' : 'Vi har et spørsmål til veileder i diskusjonen',
             'CallForInstructorHoverOverText' : 'Sender en melding til veileder om at dere trenger hjelp i denne konkrete gruppediskusjonen. Trenger du personlig veiledning: send melding til din veileder i innboks.',
