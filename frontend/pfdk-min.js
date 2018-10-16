@@ -4666,11 +4666,57 @@ function program5(depth0,data) {
   }
 function program6(depth0,data,depth1) {
   
-  var buffer = "", stack1, helper, options;
-  buffer += "\n                <li class=\"mmooc-course-tab ";
-  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), (depth1 && depth1.selectedMenuItem), options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.title), (depth1 && depth1.selectedMenuItem), options));
+  var buffer = "", stack1;
+  buffer += "\n                ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.toolList)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.programWithDepth(12, program12, data, depth1),fn:self.programWithDepth(7, program7, data, depth1),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\"><a href=\"";
+  buffer += "\n            ";
+  return buffer;
+  }
+function program7(depth0,data,depth2) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n                    <li class=\"mmooc-course-tab ";
+  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.url), (depth2 && depth2.selectedMenuItem), options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.url), (depth2 && depth2.selectedMenuItem), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" id=\"mmooc-menu-item-verktoy\">\n                            <a href=\"#\">";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\n                                <i class=\"icon-mini-arrow-down\"></i>\n                            </a>\n                            <div class=\"mmooc-course-tab-menu-item-drop\" id=\"mmooc-verktoy-list\">\n                                <ul class=\"mmooc-course-tab-menu-item-list\">\n                                ";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.toolList), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n                                </ul>\n                            </div>\n                    </li>\n                ";
+  return buffer;
+  }
+function program8(depth0,data) {
+  
+  
+  return "selected";
+  }
+
+function program10(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n                                       <li class=\"mmooc-course-tab-menu-item-list-item\"><a href=\"";
+  if (helper = helpers.href) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.href); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a></li>\n                                ";
+  return buffer;
+  }
+
+function program12(depth0,data,depth2) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n                    <li class=\"mmooc-course-tab ";
+  stack1 = (helper = helpers.ifEquals || (depth0 && depth0.ifEquals),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), (depth2 && depth2.selectedMenuItem), options) : helperMissing.call(depth0, "ifEquals", (depth0 && depth0.title), (depth2 && depth2.selectedMenuItem), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n                        <a href=\"";
   if (helper = helpers.url) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.url); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -4678,13 +4724,8 @@ function program6(depth0,data,depth1) {
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a></li>\n            ";
+    + "</a>\n                    </li>\n                ";
   return buffer;
-  }
-function program7(depth0,data) {
-  
-  
-  return "selected";
   }
 
   buffer += "<div id=\"mmooc-course-tabs-container\"";
@@ -8237,6 +8278,11 @@ this.mmooc.menu = function() {
             menuItems[menuItems.length] = {"title": "Grupper", url: "/courses/" + courseId + "/groups"};
             menuItems[menuItems.length] = {"title": "Diskusjoner", url: "/courses/" + courseId + "/discussion_topics"};
             
+            //SelectedMenuItem contains the path if we are called by the external path route.
+            var tools = mmooc.util.getToolsInLeftMenu(selectedMenuItem);            
+            
+            menuItems[menuItems.length] = {"title": tools.activeToolName, toolList: tools.toolList, url: tools.activeToolPath};
+            
             if (mmooc.util.isTeacherOrAdmin()) {
                 menuItems[menuItems.length] = {"title": "Faglærer", url: "/courses/" + courseId + "/?mmpf"};
             }
@@ -8257,6 +8303,10 @@ this.mmooc.menu = function() {
             {
                 _insertCourseMenuHtml(course, selectedMenuItem, title, menuItems);
             }
+            $("#mmooc-menu-item-verktoy").click(function(event) {
+                handleMenuClick("#mmooc-menu-item-verktoy", "#mmooc-verktoy-list");
+            });
+            
         }
     }
 
@@ -9755,6 +9805,7 @@ this.mmooc.routes = function() {
                         if (route.paths[j].test(path) && !route.isAlreadyHandled) {
                             //20180911ETH Need to know if there is a query string to decide how to handle a discussion.
                             route.hasQueryString = queryString.length;
+                            route.path = path;
                             route.isAlreadyHandled = true;
                             console.log("Handle route: " + route.paths[j]);
                             route.handler();
@@ -10248,6 +10299,40 @@ this.mmooc.util = function () {
                 category = courseCode.substring(0, courseCode.indexOf("::"));
             }
             return category;            
+        },
+        getToolsInLeftMenu : function(path) {
+            var modulesFound = false;
+            var toolList = [];
+            var activeToolName = "Verktøy";
+            var activeToolPath = "";
+            
+            $("#section-tabs .section > a").each(function() {
+                var currentClass = $(this).attr("class");
+                if(modulesFound && (currentClass != "settings")) {
+                    var href = $(this).attr("href");
+                    var title = $(this).attr("title");
+                    var activeTool = false;
+                    if(href == path)
+                    {
+                        activeTool = true;
+                        activeToolName = title;
+                        activeToolPath = href;
+                    }
+                    toolList.push({
+                        activeTool: activeTool,
+                        href: href,
+                        title: title
+                    });
+                }
+                else if(currentClass == "modules") {
+                    modulesFound = true;
+                }
+            });
+            return {
+                activeToolName: activeToolName,
+                activeToolPath: activeToolPath,
+                toolList: toolList
+            };
         }
     };
 }();
@@ -10529,6 +10614,10 @@ jQuery(function($) {
             mmooc.discussionTopics.printDiscussionUnreadCount(modules, "discussionslist");
         });
         mmooc.announcements.printAnnouncementsUnreadCount();        
+    });
+    mmooc.routes.addRouteForPath(/\/courses\/\d+\/external_tools/, function() {
+        var courseId = mmooc.api.getCurrentCourseId();
+        mmooc.menu.showCourseMenu(courseId, this.path, "Verktøy");
     });
 
     mmooc.routes.addRouteForPath(/\/courses\/\d+\/groups$/, function() {
