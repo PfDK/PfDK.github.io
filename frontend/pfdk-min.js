@@ -9033,22 +9033,6 @@ this.mmooc.pages = function() {
 
             function _updateDomAfterSaveRubricButtonClick(event) {
                 console.log('_updateDomAfterSaveRubricButtonClick is running');
-                function _arePointsGivenInRubric() {
-                    
-                    var criterion_descriptionsCompleted = $('#rubric_holder table.rubric_table tr.criterion:not(.blank) td.criterion_description.completed').length;
-                    var criterion_descriptions = $('#rubric_holder table.rubric_table tr.criterion:not(.blank) td.criterion_description').length;
-                    var totalPoints = $('#rubric_holder table.rubric_table tr.summary .rubric_total').text();
-                    
-                    var pointsAreGiven = false;
-                    if (totalPoints != "") {
-                        if (criterion_descriptionsCompleted == criterion_descriptions) { //If all criteria are filled in 
-                            pointsAreGiven = true;
-                        }
-                    }
-                    
-                    return pointsAreGiven; 
-                }
-
                 function _appendCompletedPeerReviewHtml(assignment, submission, peerReview) {
                     var submissionTitle = _getSubmissionTitle();
                     var isTeacherViewingStudentsSubmission = _isTeacherViewingStudentsSubmission();
@@ -9074,18 +9058,16 @@ this.mmooc.pages = function() {
                 // Unfortunately we don't have any info about the peer review from the API because as a user you don't have access to that data it seems.
                 // In order to solve this we check that the user has submitted data by checking the DOM. Then the SubmissionObject used in the template (assignmentSubmission) is changed so the peer review looks completed (which it also is).  
 
-                if (_arePointsGivenInRubric()) {
-                    mmooc.api.getSingleAssignment(courseId, assignmentId, function(assignment) {
-                        mmooc.api.getSingleSubmissionForUser(courseId, assignmentId, submission_user_id, function(submission) {
-                            var submission_id = submission.id;
+                mmooc.api.getSingleAssignment(courseId, assignmentId, function(assignment) {
+                    mmooc.api.getSingleSubmissionForUser(courseId, assignmentId, submission_user_id, function(submission) {
+                        var submission_id = submission.id;
 
-                            mmooc.api.getPeerReviewsForSubmissionId(courseId, assignmentId, submission_id, function(peerReview) {
-                                _logDataToConsole(assignment, submission, peerReview);
-                                _appendCompletedPeerReviewHtml(assignment, submission, peerReview);
-                            });
+                        mmooc.api.getPeerReviewsForSubmissionId(courseId, assignmentId, submission_id, function(peerReview) {
+                            _logDataToConsole(assignment, submission, peerReview);
+                            _appendCompletedPeerReviewHtml(assignment, submission, peerReview);
                         });
                     });
-                }
+                });
             }
 
             function _isPeerReview() {
