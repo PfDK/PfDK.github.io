@@ -1,0 +1,134 @@
+<!--
+Author: Kjetil Liestøl Nielsen
+Email: kjetil.l.nielsen@usn
+Licence: CC BY-NC-SA 4.0
+-->
+
+<!doctype html>
+<html  lang="no">
+<head>
+    <meta charset = "UTF-8">
+    <title>PfDK i Realfag</title>
+</head>
+<body onload="initLoop()">
+<script type="text/javascript">
+"use strict"
+
+var canvas = document.createElement("canvas");
+canvas.style.border = "2px solid black";
+canvas.width = 640;
+canvas.height = 480;
+
+document.body.appendChild(canvas);
+var ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
+
+var keydown = {};
+var keyup = {};
+var mousedown = {};
+var mouseup = {};
+var mousehold = {};
+var keyhold = {};
+var mouse = {x: 0, y: 0};
+var events = [];
+var eventTypes = {keydown: 1, keyup: 2, mousedown: 3, mouseup: 4};
+
+function mouseButton(list, code, bool){
+    switch(code){
+        case 0: list.left = bool; break;
+        case 1: list.middle = bool; break;
+        case 2: list.right = bool; break;
+    }
+}
+
+document.addEventListener("keydown", function(event) {
+    keyhold[event.code] = true;
+    var event = {
+        type: eventTypes.keydown,
+        code: event.code,
+        repeat: event.repeat
+    };
+    events.push(event);
+});
+
+document.addEventListener("keyup", function(event) {
+    keyhold[event.code] = false;
+
+    var event = {
+        type: eventTypes.keyup,
+        code: event.code,
+    };
+     events.push(event);
+});
+
+document.addEventListener('mousemove', function(event) {
+    var rect = canvas.getBoundingClientRect();
+    mouse.x = event.clientX - rect.left;
+    mouse.y = event.clientY - rect.top;
+});
+
+document.addEventListener('mousedown', function(event) {
+    mouseButton(mousehold, event.button, true);
+    var event = {
+        type: eventTypes.mousedown,
+        button: event.button
+    };
+    events.push(event);
+});
+
+document.addEventListener('mouseup', function(event) {
+    mouseButton(mousehold, event.button, false);
+    var event = {
+        type: eventTypes.mouseup,
+        button: event.button
+    };
+    events.push(event);
+});
+
+function initLoop() {
+    if(typeof(loop) == "function") {
+        var oldtime = window.performance.now()
+        var dt;
+        function mainLoop(){
+            var newtime = window.performance.now();
+            dt = Math.min(1/30, (newtime - oldtime) / 1000);
+
+            keydown = {};
+            keyup = {};
+            mousedown = {};
+            mouseup = {};
+
+            var event;
+            while(events.length > 0) {
+                event = events[events.length - 1];
+                switch(event.type) {
+                    case eventTypes.keydown: {
+                        if(!event.repeat){
+                            keydown[event.code] = true;
+                        }
+                    } break;
+                    case eventTypes.keyup: {
+                        keyup[event.code] = true;
+                    } break;
+                    case eventTypes.mousedown: {
+                        mouseButton(mousedown, event.button, true);
+                    } break;
+                    case eventTypes.mouseup: {
+                        mouseButton(mouseup, event.button, true);
+                    } break;
+                }
+                events.splice(0,1);
+            }
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            loop(dt);
+
+            oldtime = newtime;
+            window.requestAnimationFrame(mainLoop);
+        };
+        window.requestAnimationFrame(mainLoop);
+    }
+}
+</script>
+<script type="text/javascript" src="index.js"></script>
+</body>
+</html>
