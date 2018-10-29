@@ -10375,11 +10375,14 @@ if (typeof this.mmooc.i18n === 'undefined') {
              'Badgesafe': 'Utmerkingar', 
              'PeerReview' : 'Kvarandrevurdering', 
              
-             //Teksten nedenfor brukes til å gjenkjenne om man er på en hverandrevurderingsside.
-             'PeerReviewer' : 'hverandrevurdering', 
+             //Teksten nedenfor brukes til å gjenkjenne 
+             //om man er på en hverandrevurderingsside.
+             //http://localhost/courses/1/assignments/1/submissions/3
+             //http://localhost/courses/1/assignments/1
+             'PeerReviewer' : 'Fagfellevurdering', 
 
              //Teksten nedenfor brukes til å undersøke om man viser sin egen innlevering
-             'Delivery' : 'innlevering', 
+             'Delivery' : 'Innleveringsdetaljar', 
 
              'DetailsAboutYourDelivery' : 'Detaljar om innleveringa di', 
              'DetailsAboutDelivery' : 'Detaljar om innlevering', 
