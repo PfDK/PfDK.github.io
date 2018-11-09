@@ -8792,14 +8792,14 @@ this.mmooc.pages = function() {
             var courseId = mmooc.api.getCurrentCourseId();
             var targetHref = "/courses/" + courseId + "/modules#context_module_item_" + moduleItemId;
             var buttonHtml = "<a class='btn' href='" + targetHref + "'>Gå til modul</a>";
-            addButton(buttonHtml);
+            $("#sidebar_content").prepend(buttonHtml);
         },
         addStudentViewButton: function() {
             var courseId = mmooc.api.getCurrentCourseId();
             var buttonHtml = '<a class="btn student_view_button" ';
             buttonHtml += 'rel="nofollow" data-method="post" href="/courses/' + ENV.COURSE_ID + '/student_view">';
             buttonHtml += '<i class="icon-student-view"></i>Studentvisning</a>';
-            addButton(buttonHtml);
+            $("#sidebar_content").prepend(buttonHtml);
         },
 
 
