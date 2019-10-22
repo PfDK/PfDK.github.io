@@ -10427,15 +10427,15 @@ this.mmooc=this.mmooc||{};
 this.mmooc.settings = {
     'CanvaBadgeProtocolAndHost' : 'https://canvabadges-beta-iktsenteret.bibsys.no',
     'useCanvaBadge' : false,
-    'defaultNumberOfReviews' : 2, // Default number of peer reviews per student in power function
-    'disablePeerReviewButton' : false,
+    'defaultNumberOfReviews' : 1, // Default number of peer reviews per student in power function
+    'disablePeerReviewButton' : true,
     'removeGlobalGradesLink' : true,
-    'displayDiscussionsTab' : false,
-    'displayGroupsTab' : false,
+    'displayDiscussionsTab' : true,
+    'displayGroupsTab' : true,
     'help' : true,
     'removeGroupsLink' : true,
-    'privacyPolicyLink' : 'https://kurs-iktsenteret.github.io/privacypolicy.html',
-    'platformName' : 'kurs.iktsenteret.no'
+    'privacyPolicyLink' : 'http://matematikk-mooc.github.io/privacypolicy.html',
+    'platformName' : 'usn.instructure.com'
 };
 
 this.mmooc=this.mmooc||{};
