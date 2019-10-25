@@ -9142,7 +9142,7 @@ this.mmooc.pages = function() {
                 // 20062018 Erlend: Canvas har endret designet og jeg måtte endre litt på selector.
                 //                  Årsaken til at vi må hente ut informasjon om peer review på denne måten 
                 //                  er at studenter ikke får denne informasjonen via api'et.
-                var $peerReviewLinks = $("#right-side .details .content > h4 + ul.unstyled_list a");
+                var $peerReviewLinks = $("#right-side .details .content > ul.unstyled_list a");
                 var _peerReview = []; //Peer review api is unfortunately not displaying the info we want (only info about the persons beeing peer reviewers for my submission), so we have to do this by using jquery
                 var workflow_state;
                 var peerReviewLinkClass;
@@ -9166,7 +9166,7 @@ this.mmooc.pages = function() {
             }
 
             function _appendPeerReviewWarningInContentsColumn(submission, peerReview) {
-                var $peerReviewLinksWarnings = $("#right-side .details .content > h4 + ul.unstyled_list a.warning");
+                var $peerReviewLinksWarnings = $("#right-side .details .content > ul.unstyled_list a.warning");
                 if ($peerReviewLinksWarnings.length) { //If any warnings display peer review warning in the contents column after the assignment meta data
                     var peerReviewWarningHtml = mmooc.util.renderTemplateWithData("assignmentPageWithPeerReviewWarning", { submission : submission, peerReview:peerReview });
                     $("body.assignments #application.ic-app ul.student-assignment-overview" ).after(peerReviewWarningHtml);
