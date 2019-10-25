@@ -9297,7 +9297,7 @@ this.mmooc.pages = function() {
             function _isPeerReview() {
                 var returnValue = false;
                 var peerReviewText = mmooc.i18n.PeerReviewer;
-                var originalSubmissionHeader = "body.assignments #application.ic-app #content .submission_details h2.submission_header";
+                var originalSubmissionHeader = "body.assignments #application.ic-app #content .submission_details .submission_header";
                 if ($(originalSubmissionHeader + ":contains('" + peerReviewText + "')").length) {
                     returnValue = true;
                 }
@@ -9307,7 +9307,7 @@ this.mmooc.pages = function() {
             function _isOwnSubmission() {
                 var returnValue = false;
                 var deliveryText = mmooc.i18n.Delivery;
-                var originalSubmissionHeader = "body.assignments #application.ic-app #content .submission_details h2.submission_header";
+                var originalSubmissionHeader = "body.assignments #application.ic-app #content .submission_details .submission_header";
                 if ($(originalSubmissionHeader + ":contains('" + deliveryText + "')").length) {
                     returnValue = true;
                 }
