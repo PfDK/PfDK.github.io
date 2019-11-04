@@ -9432,12 +9432,20 @@ this.mmooc.pages = function() {
                 }
             }
 
-            if (_isCodeRunningInIframe()) {
-                return false; //The code is running in an iframe. Code should not be running.
-            }
             var courseId = mmooc.api.getCurrentCourseId();
             var assignmentId = mmooc.api.getCurrentTypeAndContentId().contentId;
             var isRubric = _isRubric();
+
+            //20191104 Erlend Thune: This test is also true for anonymous submissions. We enable standard design in this case.
+            if (_isCodeRunningInIframe()) {
+                $(".submission-details-header.submission_details").show();
+                if(!isRubric) {
+                    $(".submission-details-comments").show();
+                    $("#submission_comment.submission_comment_textarea").show();
+                }
+                return false;
+            }
+
             var isPeerReview = _isPeerReview();
             var isOwnSubmission = _isOwnSubmission();
             var submission_user_id = ENV.SUBMISSION.user_id;
@@ -10997,6 +11005,10 @@ jQuery(function($) {
 
     // Assignment submission which might be your own or someone else's: Peer review (hverandrevurdering)
     mmooc.routes.addRouteForPath(/\/courses\/\d+\/assignments\/\d+\/submissions\/\d+/, function() {
+        mmooc.pages.redesignPeerReviewAndOwnSubmissionDetailsPage();
+    });
+
+    mmooc.routes.addRouteForPath(/\/courses\/\d+\/assignments\/\d+\/anonymous_submissions\/\S+/, function() {
         mmooc.pages.redesignPeerReviewAndOwnSubmissionDetailsPage();
     });
     
