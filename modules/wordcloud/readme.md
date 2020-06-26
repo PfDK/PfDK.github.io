@@ -1,6 +1,6 @@
 # Wordcloud + google spreadsheet
 
-[Live example](https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbx1PUclOqxfO_Ac10Vs2E9MtI8DbCosiAm8a5nPy9Q1wzcpyiQ_/exec)
+[Live example](https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbw24Eoxm2lb0IL-PD53vdBaFrdeo6FOqZYct-v20Yd6BrT6_O4/exec)
 
 Follow these steps to create your own wordcloud:
 
@@ -22,16 +22,16 @@ Follow these steps to create your own wordcloud:
 ## Display your Wordcloud
 
 1. In a web browser, concatenate  ```https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=``` with the "Current web app url " you created above. This should give you an address like
-https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbx1PUclOqxfO_Ac10Vs2E9MtI8DbCosiAm8a5nPy9Q1wzcpyiQ_/exec
+https://script.google.com/macros/s/AKfycbw24Eoxm2lb0IL-PD53vdBaFrdeo6FOqZYct-v20Yd6BrT6_O4/exec
 2. Your wordcloud should now be displayed, and you can enter new words in the textbox above the wordcloud.
-3. If you do now want the wordcloud to display before you have entered a word, add ```&hide``` as parameter at the of the url, like this: https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbx1PUclOqxfO_Ac10Vs2E9MtI8DbCosiAm8a5nPy9Q1wzcpyiQ_/exec&hide
+3. If you do now want the wordcloud to display before you have entered a word, add ```&hide``` as parameter at the of the url, like this: https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbw24Eoxm2lb0IL-PD53vdBaFrdeo6FOqZYct-v20Yd6BrT6_O4/exec&hide
 
 ## Embed your Wordcloud in a web page
 
 1. In the page where you want your wordcloud, replace the url in the code below with the url you created above.
 ```
 <iframe
-src="https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbx1PUclOqxfO_Ac10Vs2E9MtI8DbCosiAm8a5nPy9Q1wzcpyiQ_/exec"  
+src="https://pfdk.github.io/modules/wordcloud/wordcloud.html?scriptUrl=https://script.google.com/macros/s/AKfycbw24Eoxm2lb0IL-PD53vdBaFrdeo6FOqZYct-v20Yd6BrT6_O4/exec"  
 width="100%"
 height="100%">
 </iframe>
