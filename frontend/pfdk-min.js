@@ -8844,11 +8844,14 @@ this.mmooc.menu = function() {
                     });
                 }
                 
-                // Get help from teacher by clicking a button
-                var getHelpButtonFromteacherButtonHTML = mmooc.util.renderTemplateWithData("groupdiscussionGetHelpFromTeacher", {hoverOverText: mmooc.i18n.CallForInstructorHoverOverText});
-                //document.getElementById('content').insertAdjacentHTML('afterbegin', getHelpButtonFromteacherButtonHTML);
-                $("#discussion-managebar > div > div > div.pull-right").append(getHelpButtonFromteacherButtonHTML);
-                _addClickEventOnGetHelpFromTeacherButton();
+                if(!mmooc.settings.disableGetHelpFromTeacherButton)
+                {
+                    // Get help from teacher by clicking a button
+                    var getHelpButtonFromteacherButtonHTML = mmooc.util.renderTemplateWithData("groupdiscussionGetHelpFromTeacher", {hoverOverText: mmooc.i18n.CallForInstructorHoverOverText});
+                    //document.getElementById('content').insertAdjacentHTML('afterbegin', getHelpButtonFromteacherButtonHTML);
+                    $("#discussion-managebar > div > div > div.pull-right").append(getHelpButtonFromteacherButtonHTML);
+                    _addClickEventOnGetHelpFromTeacherButton();
+                }
             }
 
             var groupId = mmooc.api.getCurrentGroupId();
@@ -10527,7 +10530,7 @@ this.mmooc.util = function () {
                 var currentClass = $(this).attr("class");
                 if(modulesFound && (currentClass != "settings")) {
                     var href = $(this).attr("href");
-                    var title = $(this).attr("title");
+                    var title = $(this).html();
                     var activeTool = false;
                     if(href == path)
                     {
@@ -10566,6 +10569,7 @@ this.mmooc.settings = {
     'removeGlobalGradesLink' : true,
     'displayDiscussionsTab' : true,
     'displayGroupsTab' : true,
+    'disableGetHelpFromTeacherButton' : true,
     'help' : true,
     'removeGroupsLink' : true,
     'privacyPolicyLink' : 'http://matematikk-mooc.github.io/privacypolicy.html',
