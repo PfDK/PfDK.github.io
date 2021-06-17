@@ -2,7 +2,7 @@ this.mmooc=this.mmooc||{};
 
 //https://medium.com/@pointbmusic/youtube-api-checklist-c195e9abaff1
 this.mmooc.youtube = function() {
-	var hrefPrefix = "https://video.google.com/timedtext?v=";
+	var hrefPrefix = "";
 	var transcriptIdPrefix = "videoTranscript";
 	var transcriptArr = [];
 	var initialized = false;
@@ -12,15 +12,7 @@ this.mmooc.youtube = function() {
 		var transcriptId = transcriptId;
 		var videoId = transcriptId.split(transcriptIdPrefix)[1];
 
-		var href = hrefPrefix + videoId;
-		if(language != "")
-		{
-		   href = href + "&lang=" + language;
-		}
-		if(name != "")
-		{
-		  href = href + "&name=" + name;
-		}
+		var href = hrefPrefix + videoId + ".vtt";
 
 			//Array of captions in video
 		var captionsLoaded = false;

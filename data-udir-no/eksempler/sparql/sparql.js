@@ -44,6 +44,6 @@ $.getJSON(queryURL,{}, function(data) {
     {
         html += presentLaereplanmaal(bindings[i]);
     }
-    #("body").html(html);
+    $("body").html(html);
 });
 

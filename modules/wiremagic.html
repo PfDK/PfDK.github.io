@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="pb3.js"></script>
+<body>
+    <pre id="srt"></pre>
+
+<script>
+fetch('https://www.youtube.com/api/timedtext?v=t2AH0T8Wa4U&exp=xftt&xorp=true&xoaf=5&hl=en&ip=0.0.0.0&ipbits=0&expire=1623984519&sparams=ip%2Cipbits%2Cexpire%2Cv%2Cexp%2Cxorp%2Cxoaf&signature=3DF3D92D6469554225644C7E6ACE2F6557ACFE53.EAD9BAD2FF3AD109194F96A802B580969344C389&key=yt8&lang=en&fmt=json3&xorb=2&xobt=3&xovt=3')
+  .then(response => response.json())
+  .then(data => {
+      var srtText = gtimedToSRT(data);
+      var srtDiv = document.getElementById("srt");
+      srtDiv.innerHTML = srtText;
+  });    
+</script>
+
+</body>
+</html>
