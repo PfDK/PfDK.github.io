@@ -6042,7 +6042,7 @@ this.mmooc.api = function() {
                 "callback": callback,
                 "error":    error,
                 "uri":      "/groups/" + groupId + "/users",
-                "params":   {"include": ["avatar_url"], "per_page": 999 }
+                "params":   {"include": ["avatar_url"], "exclude_inactive" : true, "per_page": 999 }
             });
         },
 
