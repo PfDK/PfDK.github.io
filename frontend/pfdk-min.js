@@ -5606,7 +5606,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"mmooc-pf-main\">\r\n	<h3>Teacher functions</h3>\r\n	<div class=\"mmooc-pf-list\">\r\n	  <div id=\"mmooc-pf-peer-review-btn\" class=\"item\">Peer review</div>\r\n	  <div id=\"mmooc-pf-student-progress-btn\" class=\"item\">Student progress</div>\r\n	</div>\r\n</div>\r\n";
+  return "<div class=\"mmooc-pf-main\">\r\n	<h3>Teacher functions</h3>\r\n	<div class=\"mmooc-pf-list\">\r\n	  <div id=\"mmooc-pf-peer-review-btn\" class=\"item\">Peer review</div>\r\n	  <div id=\"mmooc-pf-student-progress-for-sections-btn\" class=\"item\">Student progress for sections</div>\r\n	  <div id=\"mmooc-pf-student-progress-for-groups-btn\" class=\"item\">Student progress for groups</div>\r\n	</div>\r\n</div>\r\n";
   });
 
 this["mmooc"]["templates"]["powerfunctions/peer-review"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -5648,6 +5648,18 @@ function program4(depth0,data) {
   stack1 = helpers.unless.call(depth0, (depth0 && depth0.courses), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n      </select>\n    <li class=\"step-2\">\n      <select id=\"mmpf-category-select\" name=\"category\">\n          <option value=\"\" disabled>No group sets defined for course</option>\n      </select>\n    <li class=\"step-3\">\n      <select id=\"mmpf-group-select\" name=\"group\" multiple>\n          <option value=\"\" disabled>No groups defined for course</option>\n      </select>\n    <li class=\"step-4\">\n      <select id=\"mmpf-assignment-select\" name=\"assignment\">\n          <option value=\"\" disabled>No assignments defined for course</option>\n      </select>\n  </ol>\n  <div class=\"assignment-info\"></div>\n  <div class=\"progress-info\"></div>\n  <div id=\"progress\">\n  	<div id=\"bar\"></div>\n  </div>\n  <div class=\"peer-review-list\"></div>\n  <div class=\"peer-review-create\"></div>\n</form>\n";
+  return buffer;
+  });
+
+this["mmooc"]["templates"]["powerfunctions/student-progress-groups"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<form>\n  <h1>"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.course)),stack1 == null || stack1 === false ? stack1 : stack1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</h1>\n  <ol>\n    <li class=\"step-2\">\n      <select id=\"mmpf-category-select\" name=\"category\">\n          <option value=\"\">No group categories defined for course</option>\n      </select>\n    </li>\n    <li class=\"step-3\">\n      <select id=\"mmpf-group-select\" name=\"group\">\n          <option value=\"\" disabled>No groups defined for course</option>\n      </select>\n    </li>\n    <li class=\"step-4\">\n      <select id=\"mmpf-module-select\" name=\"module\">\n          <option value=\"\">No modules defined for course</option>\n      </select>\n    </li>\n  </ol>\n  <div id=\"progress\">\n  	<div id=\"bar\"></div>\n  </div>\n  <div class=\"student-progress-table\"></div>\n</form>\n";
   return buffer;
   });
 
@@ -8395,7 +8407,7 @@ this.mmooc=this.mmooc||{};
 
 
 this.mmooc.groups = function() {
-    function interceptLinkToGroupPageForHref(href, event) {
+    function interceptLinkToGroupPageForHref(href, event){
         if (/\/groups\/\d+$/.test(href)) {
             event.preventDefault();
             location.href = href + '/discussion_topics';
@@ -9835,8 +9847,134 @@ this.mmooc.powerFunctions = function() {
       }
     };
   }
+  function ListStudentProgressForGroups() {
+    var error = function(error) {
+        console.error("error calling api", error);
+    };
+    	
+    function _renderView() {    
+	  var courseID = mmooc.api.getCurrentCourseId();
+      mmooc.api.getCourse(courseID, function(course) {
+        _render("powerfunctions/student-progress-groups",
+                "List student progress by groups",
+                {course: course});
+		mmooc.api.getGroupCategoriesForCourse(courseID, function(categories) {
+			$('.step-2').css('display', 'list-item');
+			$('.step-3').css('display', 'none');
+			$('.step-4').css('display', 'none');
+			$(".student-progress-table").html("");
+			var html = html + "<option value=''>Choose a group set</option>";
+			for (var i = 0; i < categories.length; i++) {
+				html = html + "<option value=" + categories[i].id + ">" + categories[i].name + "</option>";
+			}
+			$("#mmpf-category-select").html(html);
+		});
+        $('#mmpf-category-select').change(function () {
+			var categoryID = $('#mmpf-category-select option:selected').val();
+			if(categoryID == "") {
+				$('.step-3').css('display', 'none');
+				$('.step-4').css('display', 'none');
+				$(".student-progress-table").html("");
+			} else {
+				mmooc.api.getGroupsInCategory(categoryID, function(groups) {
+				$('.step-3').css('display', 'list-item');
+				$('.step-4').css('display', 'none');
+				$(".student-progress-table").html("");
+				var html = html + "<option value=''>Choose groups</option>";
+				for (var i = 0; i < groups.length; i++) {
+					html = html + "<option value=" + groups[i].id + ">" + groups[i].name + "</option>";
+				}
+				$("#mmpf-group-select").html(html);
+				});
+			  }
+		});
+        $('#mmpf-group-select').change(function () {
+			var groupId = $('#mmpf-group-select option:selected').val();
+			if(groupId == "") {
+				$('.step-4').css('display', 'none');
+				$(".student-progress-table").html("");
+			} else {
+				mmooc.api.getModulesForCourseId(function(modules) {
+				$('.step-4').css('display', 'list-item');
+				$(".student-progress-table").html("");
+				var html = html + "<option value=''>Choose a module</option>";
+				for (var i = 0; i < modules.length; i++) {
+					html = html + "<option value=" + modules[i].id + ">" + modules[i].name + "</option>";
+				}
+				$("#mmpf-module-select").html(html);
+				$(".student-progress-table").html("");
+				}, error, courseID);
+			}
+		});
+	
+		$('#mmpf-module-select').change(function () {
+			_printStudentProgressForGroup(courseID);
+			$(".student-progress-table").html("");
+		});
+      });
+    }
+    
+    function _printStudentProgressForGroup(courseID) {
+	    $("#progress").hide();
+	    var moduleID = $('#mmpf-module-select option:selected').val();
+	    var groupId = $('#mmpf-group-select option:selected').val();
+	    var moduleParams = { per_page: 999 };
+	    var html = "<table><tr><th>Navn</th>";
+	    var asyncsDone = 0;
+	    mmooc.api.getItemsForModuleId(function(items) {
+		    for (var i = 0; i < items.length; i++) {
+			    html = html + "<th>" + items[i].title + "</th>";
+		    }
+		    html = html + "</tr>";
+			mmooc.api.getGroupMembers(groupId, function(students) {
+			    if(students.length < 1) {
+				    $(".student-progress-table").html("Ingen studenter funnet i gruppen");
+			    }    
+			    for (var j = 0; j < students.length; j++) {				    
+				    moduleParams = { student_id: students[j].id, per_page: 999 };
+				    mmooc.api.getItemsForModuleId(function(itemsForStudent) {
+    				    for(var l = 0; l < students.length; l++) {
+        				    if (students[l].id == itemsForStudent[0].student_id) {
+            				    html = html + "<tr><td>" + students[l].name + "</td>";
+        				    }
+    				    }
+					    if(itemsForStudent.length < 1) {
+						    html = html + "<td>Ingen krav</td>";
+					    }
+					    for (var k = 0; k < itemsForStudent.length; k++) {
+						    if("completion_requirement" in itemsForStudent[k]) {
+							    if(itemsForStudent[k].completion_requirement.completed) {
+							    	html = html + "<td class='ok' />";
+							    }else {
+								    html = html + "<td class='nok' />";
+							    }
+						    }else {
+							    html = html + "<td>Ingen krav</td>";
+						    }
+					    }
+					    asyncsDone++;
+					    var width = ((100 / students.length) * asyncsDone + "%");
+					    $("#bar").width(width);
+					    $("#progress").show();
+					    if(asyncsDone == students.length) {
+						    $("#progress").hide();
+						    $(".student-progress-table").html(html + "</table>");
+					    }
+				    }, error, courseID, moduleID, moduleParams);
+				    html = html + "</tr>";
+			    }
+			    
+		    });
+	    }, error, courseID, moduleID, moduleParams);
+    }
+    return {
+		run: function() {
+		  _renderView();
+		}
+	  };
+	}
   
-  function ListStudentProgress() {
+  function ListStudentProgressForSections() {
     var error = function(error) {
         console.error("error calling api", error);
     };
@@ -9948,8 +10086,11 @@ this.mmooc.powerFunctions = function() {
       $("#mmooc-pf-peer-review-btn").click(function() {
         new AssignPeerReviewsForGroup().run();
       });
-      $("#mmooc-pf-student-progress-btn").click(function() {
-        new ListStudentProgress().run();
+      $("#mmooc-pf-student-progress-for-sections-btn").click(function() {
+        new ListStudentProgressForSections().run();
+      });
+      $("#mmooc-pf-student-progress-for-groups-btn").click(function() {
+        new ListStudentProgressForGroups().run();
       });
     }
 
@@ -10724,6 +10865,14 @@ jQuery(function($) {
 	
     mmooc.routes.addRouteForPath(/\/$/, function() {
         var parentId = 'wrapper'
+        if (document.location.search === "?mmpf") {
+            mmooc.powerFunctions.show(parentId);
+        } else {
+            window.location.href = "/courses";
+        }
+    });
+    mmooc.routes.addRouteForPath(/\/frontpage.html$/, function() {
+        var parentId = 'content'
         if (document.location.search === "?mmpf") {
             mmooc.powerFunctions.show(parentId);
         } else {
