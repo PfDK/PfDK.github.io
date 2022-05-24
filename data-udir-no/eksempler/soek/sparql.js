@@ -5,28 +5,28 @@
 function getSparQLquery(sokeOrd)
 {
     var queryTemplate    = (function(){ /*
-prefix u: <http://psi.udir.no/ontologi/kl06/> 
-prefix r: <http://psi.udir.no/ontologi/kl06/reversert/>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?kmkode ?trinn ?kmtekst ?laereplantittel ?lareplan ?laereplan WHERE {
-?kompetansemaal rdf:type u:kompetansemaal ;
-u:tittel ?kmtekst ;
-u:kode ?kmkode ;
-r:har-kompetansemaal ?kms .
-?kms r:har-kompetansemaalsett ?lareplan ;
-u:har-etter-aarstrinn ?aarstrinn .
-?aarstrinn u:rekkefoelge ?rekkefoelge ;
-u:tittel ?trinn .
-?lareplan u:tittel ?laereplantittel ;
-u:kode ?laereplan .
-FILTER (lang(?trinn) = "")
-FILTER regex(?kmtekst, "{{sokeOrd}}", "i")
-FILTER (lang(?kmtekst) = "")
-FILTER (lang(?laereplantittel) = "") .
-?lareplan u:status ?status .
-FILTER regex(?status, "publisert", "i")
-} ORDER BY ?trinn ?laereplan ?kmkode
-*/}).toString().split('\n').slice(1, -1).join('\n');    
+PREFIX u: <http://psi.udir.no/ontologi/kl06/>
+PREFIX st: <https://data.udir.no/kl06/v201906/status/status_>
+select distinct ?type ?kmKode ?trinn ?kmTekst ?laereplanTittel ?laereplanKode where { 
+	?s a u:opplaeringsfag ;
+       u:tilhoerende-kompetansemaalsett ?kms .
+    ?kms u:kompetansemaal ?kompetansemaal ;
+         u:etter-aarstrinn ?aarstrinn.
+    ?aarstrinn u:rekkefoelge ?rekkefoelge ;
+               u:tittel ?trinn . 
+    ?kompetansemaal u:kode ?kmKode ;
+                    u:tilhoerer-laereplan ?laereplan ;
+                    u:tittel ?kmTekst .
+    ?laereplan u:tittel ?laereplanTittel ;
+               u:grep-type ?type ;
+               u:kode ?laereplanKode ;
+               u:status st:publisert  .
+    FILTER (lang(?kmTekst) = "default")
+    FILTER (lang(?trinn) = "default")
+    FILTER (lang(?laereplanTittel) = "default")
+    FILTER regex (str(?kmTekst), "{{sokeOrd}}", "i")
+} 
+ORDER BY ?trinn ?laereplan ?kmKode	*/}).toString().split('\n').slice(1, -1).join('\n');    
                 
     query = queryTemplate.replace("{{sokeOrd}}", sokeOrd);
     console.log(query);
@@ -56,6 +56,7 @@ function sparqlQuery()
 	return;
   }
 	var query = getSparQLquery(sokeOrd);
+	console.log("Query:" + query);
 
 	updateResultDiv('<img width="50" src="https://pfdk.github.io/data-udir-no/eksempler/loading.gif"/>');
 
@@ -70,7 +71,15 @@ function updateResultDiv(html)
 function presentLaereplan(binding)
 {
 	//Her har jeg satt inn http://www.udir.no/kl06/ foran læreplankoden som jeg har har kalt ?laereplan i spørringen.
-  var s = "<tr><td><a target=top href='http://www.udir.no/kl06/" + binding.laereplan.value + "'>" + binding.kmkode.value + ":" + binding.laereplantittel.value + "</a></td>";
+
+  var lpPrefix = "";
+  if(binding.type.value == "http://psi.udir.no/ontologi/kl06/laereplan") {
+	lpPrefix = "http://www.udir.no/kl06/"
+  } else {
+	lpPrefix = "http://www.udir.no/lk20/"
+  }
+   
+  var s = "<tr><td><a target=top href='" + lpPrefix + binding.laereplanKode.value + "'>" + binding.laereplanTittel.value + "</a></td>";
   console.log(s);
   return s;
 }
@@ -83,7 +92,7 @@ function presentAarstrinn(binding)
 
 function presentLaereplanmaal(binding)
 {
-  var s ="<td>" + binding.kmtekst.value + "</td></tr>";
+  var s ="<td>" + binding.kmTekst.value + "</td></tr>";
   console.log(s);
   return s;
 }
@@ -98,7 +107,7 @@ function present(data)
 
 	for(var i = 0; i< bindings.length; i++)
 	{
-		laereplan = bindings[i].laereplan.value;
+		laereplan = bindings[i].laereplanTittel.value;
 		console.log(laereplan);
 		html += "<tr>";
 		if(previousLaereplan != laereplan)

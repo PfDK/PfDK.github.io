@@ -100,55 +100,22 @@ var GrepAPI = (function() {
         //callback funksjonen når resultatet er klart.
         sparqlQuery : function (query, callback)
         {
-/*http://sandkasse-data.udir.no:7200/sparql?name=&infer=false&sameAs=true&query=prefix+u%3A+%3Chttp%3A%2F%2Fpsi.udir.no%2Fontologi%2Fkl06%2F%3E%0Aprefix+rdf%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0ASELECT+%3Ftittel+%3Fkode+WHERE+%7B%0A%3Ffagkode+rdf%3Atype+u%3Afagkode+%3B%0Au%3Atittel+%3Ftittel+%3B%0Au%3Aurl-data+%3Fkode+%3B%0Au%3Amerkelapper+%3Fmerkelapp+.%0AFILTER+regex(str(%3Fmerkelapp)%2C+%22avvik%22%2C+%22i%22)%0AFILTER+(lang(%3Ftittel)+%3D+%22default%22)%0A%7D+ORDER+BY+%3Fkode
-*/            
-            //var baseURL="https://data.udir.no/kl06/sparql";
-            var baseURL="http://sandkasse-data.udir.no:7200/repositories/NavnFiksing";
-            
-            var	format="application/json";
-            var debug="on";
-            var timeout="0"
+            var baseURL="https://sparql-data.udir.no/repositories/201906?query=";
 
-            var params={
-                "query": query,
-                "debug": debug, 
-                "timeout": timeout, 
-                "format": format
-            };
+            var encodedQuery = encodeURIComponent(query);
+            console.log(encodedQuery);
 
-            var querypart="";
-            for(var k in params) {
-                querypart+=k+"="+encodeURIComponent(params[k])+"&";
-            }
-            var queryURL=baseURL + '?' + querypart;
-
-            var sandkasse ='prefix u: <http://psi.udir.no/ontologi/kl06/>\
-            prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\
-            SELECT ?tittel ?kode WHERE {\
-            ?fagkode rdf:type u:fagkode ;\
-            u:tittel ?tittel ;\
-            u:url-data ?kode ;\
-            u:merkelapper ?merkelapp .\
-            FILTER regex(str(?merkelapp), "avvik", "i")\
-            FILTER (lang(?tittel) = "default")\
-            } ORDER BY ?kode;\
-            ';
-            var uri = "http://sandkasse-data.udir.no:7200/repositories/NavnFiksing";
             $.ajax({
-                url: uri,
-                type: 'POST',
-                data: {query:sandkasse},
-                success(response) {
-                  callback(response);
+                beforeSend: function(request) {
+                    request.setRequestHeader("Accept", 'application/json');
                 },
-                error(XMLHttpRequest, textStatus, errorThrown) {
-                  console.log('Error during PUT');
+                dataType: "json",
+                url: baseURL + encodedQuery,
+                success: function(data) {
+                    console.log(data);
+                    callback(data);
                 }
-              });
-            /*
-            $.getJSON(queryURL,{}, function(data) {
-             callback(data);
-            });*/
+            });
         },
 
         //Lag en sparqlquery for en læreplan for et trinn.
