@@ -68,7 +68,7 @@ function printWordcloud()
 	var fill = d3.scale.category20();
 
 	var layout = d3.layout.cloud()
-		.size([500, 500])
+		.size([300, 300])
 		.words(words)
 		.padding(5)
 		.rotate(function() { return 0; })
@@ -181,7 +181,7 @@ function getWordcloudWords()
 function printWordcloudInput(wordcloudInput)
 {
    html = '<input id="name" type="text" size="120" data-role="tagsinput"></input>';
-   html +=' <button id="send" class="button-success">Submit Now</button>';
+   html +=' <button id="send" class="button-success">Submit</button>';
 
    wordcloudInput.html(html);
 }
