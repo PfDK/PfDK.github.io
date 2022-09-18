@@ -56,7 +56,7 @@ function printWordcloud()
     if (words.length) {
   	  startDomain = words[0].size;
 	  stopDomain = words[words.length - 1].size;
-    }	
+    }
     var calculateFontSize = d3.scale.linear()
 		.domain([startDomain, stopDomain])
 		.range([10, 100]);
@@ -159,7 +159,7 @@ function getWordcloudWords()
 			}
 			var wordObject = {text: word, size: size};
 			words.push(wordObject);
-		
+
 			words.sort(function(item1, item2){
 				if (item1.size < item2.size)
 				  return -1;
@@ -181,7 +181,7 @@ function getWordcloudWords()
 function printWordcloudInput(wordcloudInput)
 {
    html = '<input id="name" type="text" size="50" data-role="tagsinput"></input>';
-   html +=' <button id="send" class="button-success">Submit</button>';
+   html +=' <button id="send" class="button-success">Submit Now</button>';
 
    wordcloudInput.html(html);
 }
@@ -250,7 +250,7 @@ function displayLoadingIcon()
   $("#wordcloud").html('<img width="30" src="loading.gif"/>');
 }
 
-function handleSend(event) { 
+function handleSend(event) {
   displayLoadingIcon();
   var data = $("#name").val();
   var data2 =   encodeURIComponent( data );
@@ -284,4 +284,3 @@ function handleSend(event) {
 		}
 	});
 }
-
