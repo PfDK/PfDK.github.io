@@ -4,22 +4,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">    
+	<link rel="stylesheet" href="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="d3.js" charset="utf-8"></script>
     <script src="d3.layout.cloud.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src='wordcloud.js'></script>  
+	<script src='wordcloud.js'></script>
 	<style>
-	.svg-container { 
+  .input-area {
+    display: inline-block;
+  	position: relative;
+  	width: 100%;
+  }
+
+	.svg-container {
 	display: inline-block;
 	position: relative;
 	width: 100%;
-	padding-bottom: 100%; 
-	vertical-align: middle; 
-	overflow: hidden; 
+	padding-bottom: 100%;
+	vertical-align: top;
+	overflow: hidden;
 }
-.svg-content { 
+.svg-content {
 	display: inline-block;
 	position: absolute;
 	top: 0;
@@ -29,11 +35,9 @@
 </head>
 
 <body style="background-color:transparent">
-<div id="wordcloudInput"></div>
+<div id="wordcloudInput" class="input-area"></div>
 <div id="wordcloud" class="svg-container"></div>
 <script src="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 
 </body>
 </html>
-
-
